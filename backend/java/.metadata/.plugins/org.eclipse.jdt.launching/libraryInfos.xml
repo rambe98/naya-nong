@@ -2,6 +2,7 @@
 <libraryInfos>
     <libraryInfo home="C:\Users\오규한\Desktop\util\eclipse-jee-2024-06-R-win32-x86_64\eclipse\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.3.v20240426-1530\jre" version="21.0.3"/>
     <libraryInfo home="C:\Program Files\Java\jdk17.0.13_11" version="17.0.13"/>
+    <libraryInfo home="C:\Users\user\Desktop\Project\util\eclipse\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.3.v20240426-1530\jre" version="21.0.3"/>
     <libraryInfo home="C:\Users\오규한\Desktop\util\eclipse-jee-2024-06-R-win32-x86_64\eclipse\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.3.v20240426-1530" version="21.0.3">
         <bootpath>
             <entry path="null"/>
@@ -13,4 +14,16 @@
             <entry path="null"/>
         </endorsedDirs>
     </libraryInfo>
+    <libraryInfo home="C:\Users\user\Desktop\Project\util\eclipse\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.3.v20240426-1530" version="21.0.3">
+        <bootpath>
+            <entry path="null"/>
+        </bootpath>
+        <extensionDirs>
+            <entry path="null"/>
+        </extensionDirs>
+        <endorsedDirs>
+            <entry path="null"/>
+        </endorsedDirs>
+    </libraryInfo>
+    <libraryInfo home="C:\Program Files\Amazon Corretto\jdk17.0.13_11" version="17.0.13"/>
 </libraryInfos>

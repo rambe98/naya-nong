@@ -17,6 +17,11 @@ public class WebService {
 	@Autowired
 	private WebRepository repository;
 	
+	//전체 데이터 조회
+	public List<WebEntity> findAll(){
+		return repository.findAll();
+	}
+	
 	public void vaildate(WebEntity entity) {
 		
 		if(entity == null) {

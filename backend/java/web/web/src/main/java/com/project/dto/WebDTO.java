@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WebDTO {
 	
-	private Integer id;
+	private int id;
 	private Integer userId;
 	private String name;
 	private String title;
 	
-	
+	//Entity -> dto
 	public WebDTO(WebEntity entity) {
 		
 		this.id = entity.getId();
@@ -28,7 +28,8 @@ public class WebDTO {
 		
 	}
 	
-public static WebEntity toEntity(WebDTO dto) {
+	//dtp -> entity
+	public static WebEntity toEntity(WebDTO dto) {
 		
 		return WebEntity.builder()
 						.id(dto.getId())

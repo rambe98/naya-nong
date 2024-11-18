@@ -21,7 +21,8 @@ import lombok.NoArgsConstructor;
 public class WebEntity {
 
 	@Id
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 	private Integer userId;
 	private String name;
 	private String title;

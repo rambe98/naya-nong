@@ -20,6 +20,7 @@ public class ProductDTO {
     private int price;   
     private LocalDateTime adddate;
     private LocalDateTime editdate; 
+    
     // Entity -> DTO 변환
     public ProductDTO(ProductEntity entity) {
         this.id = entity.getId();

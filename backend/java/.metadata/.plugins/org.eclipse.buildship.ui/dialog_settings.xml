@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.buildship.ui.wizard.project.import">
-		<item key="project_location" value="C:\Users\user\Desktop\Project\naya\naya-nong\backend\java\products\products"/>
+		<item key="project_location" value="C:\Users\오규한\Desktop\naya-nong\backend\java\products\products"/>
 		<section name="ProjectImportWizard.dialogBounds">
 			<item key="DIALOG_X_ORIGIN" value="206"/>
 			<item key="DIALOG_Y_ORIGIN" value="137"/>
-			<item key="DIALOG_WIDTH" value="799"/>
-			<item key="DIALOG_HEIGHT" value="890"/>
-			<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
+			<item key="DIALOG_WIDTH" value="900"/>
+			<item key="DIALOG_HEIGHT" value="876"/>
+			<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-30|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
 		</section>
 	</section>
 </section>

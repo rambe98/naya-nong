@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INDEX VERSION 1.134+C:\Users\오규한\Desktop\naya-nong\backend\java\.metadata\.plugins\org.eclipse.jdt.core
 4265508005.index
 2370294281.index
@@ -93,3 +94,131 @@ INDEX VERSION 1.134+C:\Users\오규한\Desktop\naya-nong\backend\java\.metadata\
 2748609347.index
 2453955877.index
 69668856.index
+=======
+INDEX VERSION 1.134+C:\Users\user\Desktop\Project\naya\naya-nong\backend\java\.metadata\.plugins\org.eclipse.jdt.core
+<<<<<<< Updated upstream
+3266335005.index
+3203363376.index
+=======
+3203363376.index
+3266335005.index
+>>>>>>> Stashed changes
+3996150847.index
+640443239.index
+3751475135.index
+524409098.index
+1408104726.index
+3984886376.index
+<<<<<<< Updated upstream
+1448113335.index
+=======
+>>>>>>> Stashed changes
+2727942128.index
+1090589566.index
+1565605606.index
+1914643328.index
+2568427015.index
+4146232502.index
+657410314.index
+3449782744.index
+1709651965.index
+1705269234.index
+158529550.index
+1336267086.index
+2270257585.index
+740735024.index
+3591002288.index
+448184548.index
+918756102.index
+4069467329.index
+3061456973.index
+97813219.index
+358908348.index
+1458316421.index
+4077076322.index
+2719304291.index
+3240200251.index
+2291513370.index
+3830834993.index
+2646189518.index
+4115216319.index
+<<<<<<< Updated upstream
+3347181608.index
+1087175919.index
+1537422251.index
+542046852.index
+2384203469.index
+3581163120.index
+=======
+1087175919.index
+3347181608.index
+1537422251.index
+542046852.index
+2384203469.index
+>>>>>>> Stashed changes
+3134886095.index
+2223800367.index
+450530445.index
+991540604.index
+951110106.index
+<<<<<<< Updated upstream
+3735051522.index
+3176268215.index
+1990338968.index
+717325514.index
+1333903033.index
+1945717560.index
+3716768296.index
+=======
+1990338968.index
+1333903033.index
+717325514.index
+1945717560.index
+>>>>>>> Stashed changes
+4166737405.index
+1938253473.index
+4010716546.index
+787483375.index
+1993506195.index
+3433409937.index
+1353086081.index
+1201539521.index
+3679795539.index
+4198216659.index
+4067767341.index
+1552012388.index
+331905751.index
+3263802146.index
+4222028645.index
+2823328788.index
+3773739030.index
+697138844.index
+1357450961.index
+<<<<<<< Updated upstream
+1502183229.index
+3624875583.index
+1546193618.index
+2767660031.index
+2511568721.index
+=======
+3624875583.index
+2511568721.index
+1546193618.index
+1502183229.index
+2767660031.index
+>>>>>>> Stashed changes
+2895110035.index
+402544708.index
+2382549040.index
+3336510691.index
+3825053997.index
+3249122982.index
+3864280888.index
+<<<<<<< Updated upstream
+=======
+1865797976.index
+>>>>>>> Stashed changes
+2091307062.index
+1638135812.index
+3645379236.index
+>>>>>>> 2de4f20d10a7ded3f6eccef8f603d45e82777b5c

@@ -1,1 +1,0 @@
-INDEX VERSION 1.134+C:\Users\오규한\Desktop\naya-nong\backend\java\.metadata\.plugins\org.eclipse.jdt.core

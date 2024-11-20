@@ -19,7 +19,6 @@ public class NongDTO {
    private String userEmail;
    private String userPnum;
    private String userName;
-   private String userNick;
    
 
    //Entity - > dto
@@ -31,7 +30,6 @@ public class NongDTO {
       this.userEmail = entity.getUserEmail();
       this.userPnum = entity.getUserPnum();
       this.userName = entity.getUserName();
-      this.userNick = entity.getUserNick();
    }
    
    //dto -> Entity
@@ -44,7 +42,6 @@ public class NongDTO {
                    .userEmail(dto.getUserEmail())
                    .userPnum(dto.getUserPnum())
                    .userName(dto.getUserName())
-                   .userNick(dto.getUserNick())
                    .build();
    }
    

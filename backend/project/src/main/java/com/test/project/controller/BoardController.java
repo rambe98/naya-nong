@@ -6,54 +6,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.test.project.dto.NongDTO;
-import com.test.project.entity.NongEntity;
-import com.test.project.service.NongService;
+import com.test.project.dto.BoardDTO;
+import com.test.project.service.BoardService;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping
 @RequiredArgsConstructor
-public class NongConteroller {
-	
+public class BoardController {
+
 	@Autowired
-	private  NongService service;
+	private BoardService service;
 	
 	@GetMapping
-	public ResponseEntity<List<NongDTO>> showAllUsers(){
-		List<NongDTO> products = service.showAllUsers();
+	public ResponseEntity<List<BoardDTO>> showAllBoard(){
+		List<BoardDTO> products = service.showAllBoard();
 		return ResponseEntity.ok(products);
-	}//showAllusers end
+	}//showAllBoard end
+	
 	
 	@PostMapping
-	public ResponseEntity<?> adduser(@RequestBody NongDTO dto){
-		NongDTO users = service.adduser(dto);
+	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto){
+		BoardDTO users = service.addBoard(dto);
 		return ResponseEntity.ok().body(users); 
-	}//adduser end
-	
+	}//addBoard end
 	
 	
 	@PutMapping
-	public ResponseEntity<List<NongDTO>> updateUsers(@RequestBody NongDTO dto){
+	public ResponseEntity<List<BoardDTO>> updateBoard(@RequestBody BoardDTO dto){
 	      
-	      List<NongDTO> users = service.updateUsers(dto);
+	     List<BoardDTO> users = service.updateBoard(dto);
 	      
 	      return ResponseEntity.ok().body(users);
 	   }//updateUsers end
-	   
+
+	
 	@DeleteMapping("/{clientNum}")
-	public ResponseEntity<?> deleteUsers(NongDTO dto){
+	public ResponseEntity<?> deleteBoard(BoardDTO dto){
 	      
-	      boolean isDeleted = service.deleteUsers(dto);
+	      boolean isDeleted = service.deleteBoard(dto);
 	      try {
 	         if(isDeleted) {
 	            return ResponseEntity.ok("회원이 탈퇴되었습니다.");
@@ -67,5 +65,15 @@ public class NongConteroller {
 }//deleteUsers end
 	
 	
-	
-}//class end
+}
+
+
+
+
+
+
+
+
+
+
+

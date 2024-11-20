@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.project.dto.BoardDTO;
-import com.test.project.service.BoardService;
+import com.test.project.service.BoardService; 
 
 import lombok.RequiredArgsConstructor;
 

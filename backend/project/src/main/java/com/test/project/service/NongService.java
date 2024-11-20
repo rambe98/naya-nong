@@ -51,7 +51,8 @@ public class NongService {
 	         nong.setUserId(entity.getUserId());
 	         nong.setUserPwd(entity.getUserPwd());
 	         nong.setUserEmail(entity.getUserEmail());
-	         nong.setUserPnum(entity.getUserPnum());      
+	         nong.setUserPnum(entity.getUserPnum());    
+	         nong.setUserNick(entity.getUserNick());
 	         repository.save(nong);      
 	      }//if end
 	      

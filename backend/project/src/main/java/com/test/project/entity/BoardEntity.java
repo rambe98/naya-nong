@@ -32,7 +32,7 @@ public class BoardEntity {
 	
 	@ManyToOne
 	@JoinColumn(name="userNick", nullable = false)
-	private String userNick;
+	private NongEntity project;
 	
 	@CreationTimestamp
 	private LocalDateTime writeDate;

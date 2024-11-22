@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,7 @@ import com.test.project.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping
+@RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -31,32 +32,37 @@ public class BoardController {
 		return ResponseEntity.ok(products);
 	}//showAllBoard end
 	
+	@GetMapping("/{userNick}")
+	 public ResponseEntity<List<BoardDTO>> getBoardsByUserNick(@PathVariable("userNick") String userNick) {
+		List<BoardDTO> boards = service.getBoardsByUserNick(userNick);
+        return ResponseEntity.ok(boards);
+    }
 	
 	@PostMapping
 	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto){
-		BoardDTO users = service.addBoard(dto);
-		return ResponseEntity.ok().body(users); 
+		BoardDTO addBoard = service.addBoard(dto);
+		return ResponseEntity.ok().body(addBoard); 
 	}//addBoard end
 	
 	
-	@PutMapping
-	public ResponseEntity<List<BoardDTO>> updateBoard(@RequestBody BoardDTO dto){
+	@PutMapping("/{bodNum}")
+	public ResponseEntity<?> updateBoard(@RequestBody BoardDTO dto){
 	      
-	     List<BoardDTO> users = service.updateBoard(dto);
+	     BoardDTO updateBoard = service.updateBoard(dto);
 	      
-	      return ResponseEntity.ok().body(users);
+	      return ResponseEntity.ok().body(updateBoard);
 	   }//updateUsers end
 
 	
-	@DeleteMapping("/{clientNum}")
+	@DeleteMapping("/{bodNum}")
 	public ResponseEntity<?> deleteBoard(BoardDTO dto){
 	      
 	      boolean isDeleted = service.deleteBoard(dto);
 	      try {
 	         if(isDeleted) {
-	            return ResponseEntity.ok("회원이 탈퇴되었습니다.");
+	            return ResponseEntity.ok("게시글이 삭제 되었습니다.");
 	         }else {
-	            return ResponseEntity.status(404).body("회원정보를 찾을 수 없습니다.");
+	            return ResponseEntity.status(404).body("게시글을 찾을 수 없습니다.");
 	         }
 	         
 	      } catch (Exception e) {

@@ -3,6 +3,7 @@ package com.test.project.dto;
 import java.time.LocalDateTime;
 
 import com.test.project.entity.BoardEntity;
+import com.test.project.entity.NongEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class BoardDTO {
 	private String userNick;
 	private LocalDateTime writeDate;
 	private int views;
-	private int like;
+	private int likeCount;
 	
 	
 	//Entity -> DTO
@@ -32,11 +33,14 @@ public class BoardDTO {
 		this.bodDtail = entity.getBodDtail();
 		this.writeDate = entity.getWriteDate();
 		this.views = entity.getViews();
-		this.like = entity.getLike();
+		this.likeCount = entity.getLikeCount();
+		this.userNick = entity.getProject().getUserNick();
+
 	}
 	
 	//DTO -> Entity
 	public static BoardEntity toEntity(BoardDTO dto) {
+		
 		
 		return BoardEntity.builder()
 						  .bodNum(dto.getBodNum())
@@ -44,7 +48,7 @@ public class BoardDTO {
 						  .bodDtail(dto.getBodDtail())
 						  .writeDate(dto.writeDate)
 						  .views(dto.views)
-						  .like(dto.getLike())
+						  .likeCount(dto.getLikeCount())
 						  .build();
 	}
 	

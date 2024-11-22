@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.test.project.dto.BoardDTO;
 import com.test.project.entity.BoardEntity;
+import com.test.project.entity.NongEntity;
 import com.test.project.persistence.BoardRepository;
+import com.test.project.persistence.NongRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,7 +21,10 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 	
 	@Autowired
-	private BoardRepository repository;
+	private BoardRepository boardRepository;
+	
+	@Autowired
+	private NongRepository nongRepository;
 	
 	private void validate(final BoardEntity entity) {
 	       if(entity == null) {
@@ -26,34 +32,60 @@ public class BoardService {
 	       }
 	   }//validate end
 	
-	
-	//추가
-	public BoardDTO addBoard(BoardDTO dto) {
-		BoardEntity entity = dto.toEntity(dto);
-		return new BoardDTO(repository.save(entity));
-	}//addBoard end
-	
-	
 	//조회
 	public List<BoardDTO> showAllBoard(){
-		return repository.findAll().stream().map(BoardDTO::new).collect(Collectors.toList());
+		return boardRepository.findAll().stream().map(BoardDTO::new).collect(Collectors.toList());
 		}//showAllBoard end
 	
 	
+	//사용자별게시판 조회
+	public List<BoardDTO> getBoardsByUserNick(String userNick) {
+        // BoardEntity에서 userNick에 해당하는 게시판 리스트를 조회
+        List<BoardEntity> boardEntities = boardRepository.findByProjectUserNick(userNick);
+
+        // 조회된 BoardEntity 리스트를 BoardDTO 리스트로 변환하여 반환
+        return boardEntities.stream()
+                            .map(BoardDTO::new)
+                            .collect(Collectors.toList());
+        
+    }//getBoardsByUserNick end
+	
+	
+	//추가
+	@Transactional
+	public BoardDTO addBoard(BoardDTO dto) {
+		NongEntity userEntity = nongRepository.findByUserNick(dto.getUserNick())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+		
+		BoardEntity entity = dto.toEntity(dto);
+		
+		entity.setProject(userEntity);
+		return new BoardDTO(boardRepository.save(entity));
+		
+	}//addBoard end
+	
+	
+	
+	
 	//수정
-	public List<BoardDTO> updateBoard(BoardDTO dto){
+	@Transactional
+	public BoardDTO updateBoard(BoardDTO dto){
+		
+		
 		BoardEntity entity =  dto.toEntity(dto);
 		      
-		Optional<BoardEntity> original = repository.findById(entity.getBodNum());
+		Optional<BoardEntity> original = boardRepository.findById(entity.getBodNum());
 		      
 		      if(original.isPresent()) {
-		    	  BoardEntity nong = original.get();
-		         nong.setBodTitle(entity.getBodTitle());
-		         nong.setBodDtail(entity.getBodDtail());
-		         repository.save(nong);      
+		    	  BoardEntity board = original.get();
+		    	  board.setBodTitle(entity.getBodTitle());
+		    	  board.setBodDtail(entity.getBodDtail());
+		         boardRepository.save(board);     
+		         
+		         return new BoardDTO();   
 		      }//if end
 		      
-		       return showAllBoard();      
+		          return null;
 		   }//updateBoard end
 	
 	
@@ -62,10 +94,10 @@ public class BoardService {
 	      
 		   BoardEntity entity = dto.toEntity(dto);
 	      
-	      Optional<BoardEntity> original = repository.findById(entity.getBodNum());
+	      Optional<BoardEntity> original = boardRepository.findById(entity.getBodNum());
 	      
 	      if(original.isPresent()) {
-	         repository.delete(entity);
+	    	  boardRepository.delete(entity);
 	         return true;
 	      }//if end
 	          

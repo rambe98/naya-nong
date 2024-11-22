@@ -34,6 +34,12 @@ public class NongConteroller {
 		return ResponseEntity.ok(products);
 	}//showAllusers end
 	
+	@GetMapping("/{clientNum}")
+	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clienteNum){
+		NongDTO user = service.showUser(clienteNum);
+		return ResponseEntity.ok(user);
+	}//showAllusers end
+	
 	@PostMapping
 	public ResponseEntity<?> adduser(@RequestBody NongDTO dto){
 		NongDTO users = service.adduser(dto);
@@ -42,10 +48,10 @@ public class NongConteroller {
 	
 	
 	
-	@PutMapping
-	public ResponseEntity<List<NongDTO>> updateUsers(@RequestBody NongDTO dto){
+	@PutMapping("/{clientNum}")
+	public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto){
 	      
-	      List<NongDTO> users = service.updateUsers(dto);
+	      NongDTO users = service.updateUsers(dto);
 	      
 	      return ResponseEntity.ok().body(users);
 	   }//updateUsers end

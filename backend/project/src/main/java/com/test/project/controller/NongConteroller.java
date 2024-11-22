@@ -22,14 +22,13 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class NongConteroller {
 	
 	@Autowired
 	private  NongService service;
 	
 	@GetMapping
-	public ResponseEntity<List<NongDTO>> showAllUsers(){
+	public ResponseEntity<?> showAllUsers(){
 		List<NongDTO> products = service.showAllUsers();
 		return ResponseEntity.ok(products);
 	}//showAllusers end

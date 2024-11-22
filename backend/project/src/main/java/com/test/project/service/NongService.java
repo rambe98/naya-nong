@@ -34,7 +34,7 @@ public class NongService {
  	
  	//개별 조회
  	public NongDTO showUser(int clientNum) {
- 		 NongEntity entity = repository.findByClientNum(clientNum)
+ 		 NongEntity entity = repository.findById(clientNum)
  	            .orElseThrow(() -> new RuntimeException("User not found"));
  		
  		return new NongDTO(entity);

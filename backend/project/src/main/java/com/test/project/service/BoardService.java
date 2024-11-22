@@ -89,6 +89,7 @@ public class BoardService {
 		   }//updateBoard end
 	
 	
+	
 	 //삭제
 	   public boolean deleteBoard(BoardDTO dto){
 	      

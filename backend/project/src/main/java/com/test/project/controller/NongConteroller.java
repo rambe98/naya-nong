@@ -28,10 +28,16 @@ public class NongConteroller {
 	@Autowired
 	private  NongService service;
 	
-	@GetMapping("/{clientNum}")
+	@GetMapping
 	public ResponseEntity<List<NongDTO>> showAllUsers(){
 		List<NongDTO> products = service.showAllUsers();
 		return ResponseEntity.ok(products);
+	}//showAllusers end
+	
+	@GetMapping("/{clientNum}")
+	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clienteNum){
+		NongDTO user = service.showUser(clienteNum);
+		return ResponseEntity.ok(user);
 	}//showAllusers end
 	
 	@PostMapping
@@ -43,9 +49,9 @@ public class NongConteroller {
 	
 	
 	@PutMapping("/{clientNum}")
-	public ResponseEntity<List<NongDTO>> updateUsers(@RequestBody NongDTO dto){
+	public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto){
 	      
-	      List<NongDTO> users = service.updateUsers(dto);
+	      NongDTO users = service.updateUsers(dto);
 	      
 	      return ResponseEntity.ok().body(users);
 	   }//updateUsers end

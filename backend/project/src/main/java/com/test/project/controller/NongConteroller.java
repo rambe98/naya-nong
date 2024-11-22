@@ -2,6 +2,7 @@ package com.test.project.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,21 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class NongConteroller {
-	private final NongService service;
+	
+	@Autowired
+	private  NongService service;
+	
+	@GetMapping
+	public ResponseEntity<List<NongDTO>> showAllUsers(){
+		List<NongDTO> products = service.showAllUsers();
+		return ResponseEntity.ok(products);
+	}//showAllusers end
+	
+	@GetMapping("/{clientNum}")
+	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clienteNum){
+		NongDTO user = service.showUser(clienteNum);
+		return ResponseEntity.ok(user);
+	}//showAllusers end
 	
 	@PostMapping
 	public ResponseEntity<?> adduser(@RequestBody NongDTO dto){
@@ -31,16 +46,12 @@ public class NongConteroller {
 		return ResponseEntity.ok().body(users); 
 	}//adduser end
 	
-	@GetMapping("/{clientNum}")
-	public ResponseEntity<List<NongDTO>> showAllUsers(){
-		List<NongDTO> products = service.showAllUsers();
-		return ResponseEntity.ok(products);
-	}//showAllusers end
+	
 	
 	@PutMapping("/{clientNum}")
-	public ResponseEntity<List<NongDTO>> updateUsers(@RequestBody NongDTO dto){
+	public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto){
 	      
-	      List<NongDTO> users = service.updateUsers(dto);
+	      NongDTO users = service.updateUsers(dto);
 	      
 	      return ResponseEntity.ok().body(users);
 	   }//updateUsers end

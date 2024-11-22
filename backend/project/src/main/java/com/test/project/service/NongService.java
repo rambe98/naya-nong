@@ -27,6 +27,19 @@ public class NongService {
        }
    }//validate end
    
+    //조회
+ 	public List<NongDTO> showAllUsers(){
+ 		return repository.findAll().stream().map(NongDTO::new).collect(Collectors.toList());
+ 	}//showAllUsers end
+ 	
+ 	//개별 조회
+ 	public NongDTO showUser(int clientNum) {
+ 		 NongEntity entity = repository.findByClientNum(clientNum)
+ 	            .orElseThrow(() -> new RuntimeException("User not found"));
+ 		
+ 		return new NongDTO(entity);
+ 	}
+   
    
    // 추가
 	public NongDTO adduser(NongDTO dto) {
@@ -35,13 +48,11 @@ public class NongService {
 	}//adduser end
 	
 	
-	//조회
-	public List<NongDTO> showAllUsers(){
-		return repository.findAll().stream().map(NongDTO::new).collect(Collectors.toList());
-	}//showAllUsers end
+	
+	
 	
 	//수정
-	public List<NongDTO> updateUsers(NongDTO dto){
+	public NongDTO updateUsers(NongDTO dto){
 	      NongEntity entity =  dto.toEntity(dto);
 	      
 	      Optional<NongEntity> original = repository.findById(entity.getClientNum());
@@ -51,11 +62,14 @@ public class NongService {
 	         nong.setUserId(entity.getUserId());
 	         nong.setUserPwd(entity.getUserPwd());
 	         nong.setUserEmail(entity.getUserEmail());
-	         nong.setUserPnum(entity.getUserPnum());      
-	         repository.save(nong);      
+	         nong.setUserPnum(entity.getUserPnum());    
+	         nong.setUserNick(entity.getUserNick());
+	         repository.save(nong);   
+	         
+	         return new NongDTO(nong); 
 	      }//if end
 	      
-	       return showAllUsers();      
+	        return null;  
 	   }//updateUsers end
 	
 	   

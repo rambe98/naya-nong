@@ -32,6 +32,24 @@ public class BoardService {
 	       }
 	   }//validate end
 	
+	//조회
+	public List<BoardDTO> showAllBoard(){
+		return boardRepository.findAll().stream().map(BoardDTO::new).collect(Collectors.toList());
+		}//showAllBoard end
+	
+	
+	//사용자별게시판 조회
+	public List<BoardDTO> getBoardsByUserNick(String userNick) {
+        // BoardEntity에서 userNick에 해당하는 게시판 리스트를 조회
+        List<BoardEntity> boardEntities = boardRepository.findByProjectUserNick(userNick);
+
+        // 조회된 BoardEntity 리스트를 BoardDTO 리스트로 변환하여 반환
+        return boardEntities.stream()
+                            .map(BoardDTO::new)
+                            .collect(Collectors.toList());
+        
+    }//getBoardsByUserNick end
+	
 	
 	//추가
 	@Transactional
@@ -43,32 +61,15 @@ public class BoardService {
 		
 		entity.setProject(userEntity);
 		return new BoardDTO(boardRepository.save(entity));
+		
 	}//addBoard end
 	
 	
-	//조회
-	public List<BoardDTO> showAllBoard(){
-		return boardRepository.findAll().stream().map(BoardDTO::new).collect(Collectors.toList());
-		}//showAllBoard end
-	
-	//사용자별게시판 조회
-	public List<BoardDTO> getBoardsByUserNick(String userNick) {
-        // BoardEntity에서 userNick에 해당하는 게시판 리스트를 조회
-        List<BoardEntity> boardEntities = boardRepository.findByProjectUserNick(userNick);
-
-        // 조회된 BoardEntity 리스트를 BoardDTO 리스트로 변환하여 반환
-        return boardEntities.stream()
-                            .map(BoardDTO::new)
-                            .collect(Collectors.toList());
-    }
-		
-		
-		
 	
 	
 	//수정
 	@Transactional
-	public List<BoardDTO> updateBoard(BoardDTO dto){
+	public BoardDTO updateBoard(BoardDTO dto){
 		
 		
 		BoardEntity entity =  dto.toEntity(dto);
@@ -76,13 +77,15 @@ public class BoardService {
 		Optional<BoardEntity> original = boardRepository.findById(entity.getBodNum());
 		      
 		      if(original.isPresent()) {
-		    	  BoardEntity nong = original.get();
-		         nong.setBodTitle(entity.getBodTitle());
-		         nong.setBodDtail(entity.getBodDtail());
-		         boardRepository.save(nong);      
+		    	  BoardEntity board = original.get();
+		    	  board.setBodTitle(entity.getBodTitle());
+		    	  board.setBodDtail(entity.getBodDtail());
+		         boardRepository.save(board);     
+		         
+		         return new BoardDTO();   
 		      }//if end
 		      
-		       return showAllBoard();      
+		          return null;
 		   }//updateBoard end
 	
 	

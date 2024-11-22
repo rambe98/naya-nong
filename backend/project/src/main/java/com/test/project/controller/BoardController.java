@@ -40,17 +40,17 @@ public class BoardController {
 	
 	@PostMapping
 	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto){
-		BoardDTO users = service.addBoard(dto);
-		return ResponseEntity.ok().body(users); 
+		BoardDTO addBoard = service.addBoard(dto);
+		return ResponseEntity.ok().body(addBoard); 
 	}//addBoard end
 	
 	
-	@PutMapping
-	public ResponseEntity<List<BoardDTO>> updateBoard(@RequestBody BoardDTO dto){
+	@PutMapping("/{bodNum}")
+	public ResponseEntity<?> updateBoard(@RequestBody BoardDTO dto){
 	      
-	     List<BoardDTO> users = service.updateBoard(dto);
+	     BoardDTO updateBoard = service.updateBoard(dto);
 	      
-	      return ResponseEntity.ok().body(users);
+	      return ResponseEntity.ok().body(updateBoard);
 	   }//updateUsers end
 
 	

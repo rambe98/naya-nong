@@ -18,14 +18,16 @@ import com.test.project.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping
+@RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
 
 	@Autowired
 	private BoardService service;
 	
-	@GetMapping
+	
+	
+	@GetMapping("/{user_nick}")
 	public ResponseEntity<List<BoardDTO>> showAllBoard(){
 		List<BoardDTO> products = service.showAllBoard();
 		return ResponseEntity.ok(products);
@@ -48,15 +50,15 @@ public class BoardController {
 	   }//updateUsers end
 
 	
-	@DeleteMapping("/{clientNum}")
+	@DeleteMapping("/{bodNum}")
 	public ResponseEntity<?> deleteBoard(BoardDTO dto){
 	      
 	      boolean isDeleted = service.deleteBoard(dto);
 	      try {
 	         if(isDeleted) {
-	            return ResponseEntity.ok("회원이 탈퇴되었습니다.");
+	            return ResponseEntity.ok("게시글이 삭제 되었습니다.");
 	         }else {
-	            return ResponseEntity.status(404).body("회원정보를 찾을 수 없습니다.");
+	            return ResponseEntity.status(404).body("게시글을 찾을 수 없습니다.");
 	         }
 	         
 	      } catch (Exception e) {

@@ -27,6 +27,19 @@ public class NongService {
        }
    }//validate end
    
+    //조회
+ 	public List<NongDTO> showAllUsers(){
+ 		return repository.findAll().stream().map(NongDTO::new).collect(Collectors.toList());
+ 	}//showAllUsers end
+ 	
+ 	//개별 조회
+ 	public NongDTO showUser(int clientNum) {
+ 		 NongEntity entity = repository.findByClientNum(clientNum)
+ 	            .orElseThrow(() -> new RuntimeException("User not found"));
+ 		
+ 		return new NongDTO(entity);
+ 	}
+   
    
    // 추가
 	public NongDTO adduser(NongDTO dto) {
@@ -35,10 +48,7 @@ public class NongService {
 	}//adduser end
 	
 	
-	//조회
-	public List<NongDTO> showAllUsers(){
-		return repository.findAll().stream().map(NongDTO::new).collect(Collectors.toList());
-	}//showAllUsers end
+	
 	
 	
 	//수정

@@ -34,6 +34,12 @@ public class NongConteroller {
 		return ResponseEntity.ok(products);
 	}//showAllusers end
 	
+	@GetMapping("/{clientNum}")
+	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clienteNum){
+		NongDTO user = service.showUser(clienteNum);
+		return ResponseEntity.ok(user);
+	}//showAllusers end
+	
 	@PostMapping
 	public ResponseEntity<?> adduser(@RequestBody NongDTO dto){
 		NongDTO users = service.adduser(dto);

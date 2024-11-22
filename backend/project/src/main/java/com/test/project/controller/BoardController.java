@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,14 +26,17 @@ public class BoardController {
 	@Autowired
 	private BoardService service;
 	
-	
-	
-	@GetMapping("/{user_nick}")
+	@GetMapping
 	public ResponseEntity<List<BoardDTO>> showAllBoard(){
 		List<BoardDTO> products = service.showAllBoard();
 		return ResponseEntity.ok(products);
 	}//showAllBoard end
 	
+	@GetMapping("/{userNick}")
+	 public ResponseEntity<List<BoardDTO>> getBoardsByUserNick(@PathVariable("userNick") String userNick) {
+		List<BoardDTO> boards = service.getBoardsByUserNick(userNick);
+        return ResponseEntity.ok(boards);
+    }
 	
 	@PostMapping
 	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto){

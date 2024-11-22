@@ -31,13 +31,13 @@ public class NongConteroller {
 		return ResponseEntity.ok().body(users); 
 	}//adduser end
 	
-	@GetMapping
+	@GetMapping("/{clientNum}")
 	public ResponseEntity<List<NongDTO>> showAllUsers(){
 		List<NongDTO> products = service.showAllUsers();
 		return ResponseEntity.ok(products);
 	}//showAllusers end
 	
-	@PutMapping
+	@PutMapping("/{clientNum}")
 	public ResponseEntity<List<NongDTO>> updateUsers(@RequestBody NongDTO dto){
 	      
 	      List<NongDTO> users = service.updateUsers(dto);

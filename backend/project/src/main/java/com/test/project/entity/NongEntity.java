@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NongEntity {
-	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private int clientNum;

@@ -42,10 +42,10 @@ public class NongConteroller {
 	
 	
 	
-	@PutMapping
-	public ResponseEntity<List<NongDTO>> updateUsers(@RequestBody NongDTO dto){
+	@PutMapping("/{clientNum}")
+	public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto){
 	      
-	      List<NongDTO> users = service.updateUsers(dto);
+	      NongDTO users = service.updateUsers(dto);
 	      
 	      return ResponseEntity.ok().body(users);
 	   }//updateUsers end

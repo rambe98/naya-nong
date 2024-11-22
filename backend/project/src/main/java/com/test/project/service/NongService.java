@@ -40,8 +40,9 @@ public class NongService {
 		return repository.findAll().stream().map(NongDTO::new).collect(Collectors.toList());
 	}//showAllUsers end
 	
+	
 	//수정
-	public List<NongDTO> updateUsers(NongDTO dto){
+	public NongDTO updateUsers(NongDTO dto){
 	      NongEntity entity =  dto.toEntity(dto);
 	      
 	      Optional<NongEntity> original = repository.findById(entity.getClientNum());
@@ -53,10 +54,12 @@ public class NongService {
 	         nong.setUserEmail(entity.getUserEmail());
 	         nong.setUserPnum(entity.getUserPnum());    
 	         nong.setUserNick(entity.getUserNick());
-	         repository.save(nong);      
+	         repository.save(nong);   
+	         
+	         return new NongDTO(nong); 
 	      }//if end
 	      
-	       return showAllUsers();      
+	        return null;  
 	   }//updateUsers end
 	
 	   

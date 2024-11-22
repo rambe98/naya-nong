@@ -28,7 +28,7 @@ public class NongConteroller {
 	@Autowired
 	private  NongService service;
 	
-	@GetMapping
+	@GetMapping("/{clientNum}")
 	public ResponseEntity<List<NongDTO>> showAllUsers(){
 		List<NongDTO> products = service.showAllUsers();
 		return ResponseEntity.ok(products);
@@ -42,7 +42,7 @@ public class NongConteroller {
 	
 	
 	
-	@PutMapping
+	@PutMapping("/{clientNum}")
 	public ResponseEntity<List<NongDTO>> updateUsers(@RequestBody NongDTO dto){
 	      
 	      List<NongDTO> users = service.updateUsers(dto);

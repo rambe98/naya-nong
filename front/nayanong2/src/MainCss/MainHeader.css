@@ -1,0 +1,44 @@
+/* 헤더 스타일 */
+.mainHeader {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+  border-bottom: 2px solid #D9CBB6; /* 연한 브라운 테두리 */
+  position: relative;
+}
+
+.mainLogo {
+  width: 150px;
+  height: auto;
+  border-radius: 99px;
+}
+
+.mainlogbtn{
+  position: absolute;
+  margin-left: 65%;
+}
+
+.mainlogin{
+  border: none;
+  background-color: #F5EFE6;
+  margin-right: 10px;
+  color: #C4A484;
+}
+
+.mainlogin:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.mainlogout{
+  border: none;
+  background-color: #F5EFE6;
+  color: #C4A484;;
+}
+
+.mainlogout:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}

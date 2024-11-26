@@ -74,3 +74,12 @@
   color: #A07C5A; /* 더 짙은 브라운 */
   text-decoration: underline;
 }
+
+
+.loginerrorText {
+  color:lightcoral; /* 빨간색 텍스트 */
+  font-size: 14px; /* 작은 글씨 크기 */
+  margin-top: 5px; /* 입력창과 간격 */
+  white-space: pre-line;
+  font-weight: bold;
+}

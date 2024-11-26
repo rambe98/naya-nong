@@ -81,92 +81,109 @@ const UserInfo = () => {
       <h2 className='userInfoHeader'>회원정보수정</h2>
 
       <form className="userInfoForm">
-        {edit ? (
-          <>
-            <div className="formGroup">
-              <label className="formLabel">아이디:</label>
-              <span className="formText">{userInfo.userId}</span>
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">이름:</label>
-              <span className="formText">{userInfo.userName}</span>
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">비밀번호:</label>
-              <input
-                className="formInput"
-                type="password"
-                name="userPwd"
-                value={userInfo.userPwd}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">닉네임:</label>
-              <input
-                className="formInput"
-                type="text"
-                name="userNick"
-                value={userInfo.userNick}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">이메일:</label>
-              <input
-                className="formInput"
-                type="text"
-                name="userEmail"
-                value={userInfo.userEmail}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">핸드폰번호:</label>
-              <span className="formText">{userInfo.userPnum}</span>
-            </div>
-            <button className="formButton primaryButton" type="button" onClick={handleSaveClick}>
-              저장
-            </button>
-            <button className="formButton secondaryButton" type="button" onClick={handleCancelClick}>
-              취소
-            </button>
-          </>
-        ) : (
-          <>
-            <div className="formGroup">
-              <label className="formLabel">아이디:</label>
-              <span className="formText">{userInfo.userId}</span>
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">이름:</label>
-              <span className="formText">{userInfo.userName}</span>
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">비밀번호:</label>
-              <span className="formText">{userInfo.userPwd}</span>
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">닉네임:</label>
-              <span className="formText">{userInfo.userNick}</span>
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">이메일:</label>
-              <span className="formText">{userInfo.userEmail}</span>
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">핸드폰번호:</label>
-              <span className="formText">{userInfo.userPnum}</span>
-            </div>
-            <button className="formButton primaryButton" type="button" onClick={handleEditClick}>
-              수정
-            </button>
-            <button className="formButton secondaryButton" type="button" onClick={() => navigate('/')}>
-              돌아가기
-            </button>
-          </>
-        )}
-      </form>
+  {edit ? (
+    <>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">아이디:</label>
+        <span className="userInfoFormText">{userInfo.userId}</span>
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">이름:</label>
+        <span className="userInfoFormText">{userInfo.userName}</span>
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">비밀번호:</label>
+        <input
+          className="userInfoFormInput"
+          type="password"
+          name="userPwd"
+          value={userInfo.userPwd}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">닉네임:</label>
+        <input
+          className="userInfoFormInput"
+          type="text"
+          name="userNick"
+          value={userInfo.userNick}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">이메일:</label>
+        <input
+          className="userInfoFormInput"
+          type="text"
+          name="userEmail"
+          value={userInfo.userEmail}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">핸드폰번호:</label>
+        <span className="userInfoFormText">{userInfo.userPnum}</span>
+      </div>
+      <button
+        className="userInfoFormButton"
+        type="button"
+        onClick={handleSaveClick}
+      >
+        저장
+      </button>
+      <button
+        className="userInfoFormButton userInfoFormCancelButton"
+        type="button"
+        onClick={handleCancelClick}
+      >
+        취소
+      </button>
+    </>
+  ) : (
+    <>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">아이디:</label>
+        <span className="userInfoFormText">{userInfo.userId}</span>
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">이름:</label>
+        <span className="userInfoFormText">{userInfo.userName}</span>
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">비밀번호:</label>
+        <span className="userInfoFormText">{userInfo.userPwd}</span>
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">닉네임:</label>
+        <span className="userInfoFormText">{userInfo.userNick}</span>
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">이메일:</label>
+        <span className="userInfoFormText">{userInfo.userEmail}</span>
+      </div>
+      <div className="userInfoFormGroup">
+        <label className="userInfoFormLabel">핸드폰번호:</label>
+        <span className="userInfoFormText">{userInfo.userPnum}</span>
+      </div>
+      <button
+        className="userInfoFormButton"
+        type="button"
+        onClick={handleEditClick}
+      >
+        수정
+      </button>
+      <button
+        className="userInfoFormButton userInfoFormCancelButton"
+        type="button"
+        onClick={() => navigate('/')}
+      >
+        돌아가기
+      </button>
+    </>
+  )}
+</form>
+
     </div>
   );
 };

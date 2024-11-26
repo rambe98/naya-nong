@@ -47,15 +47,15 @@ const MainHeader = () => {
             <div className="mainlogbtn">
                 {!loginsuccess ? (
                     <button className="mainlogin" onClick={() => navigate('/login')}>
-                        LogIn
+                        Signin
                     </button>
                 ) : (
                     <>
                         <button className="mainlogout" onClick={handleLogInfo}>
-                            userInfo
+                            UserInfo
                         </button>
                         <button className="mainlogout" onClick={handleLogout}>
-                            LogOut
+                            SignOut
                         </button>
                     </>
                 )}

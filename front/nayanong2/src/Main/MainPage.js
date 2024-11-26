@@ -1,31 +1,28 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import '../MainCss/MainPage.css';
-import MainHeader from './MainHeader';
+import { Link, useLocation } from 'react-router-dom';
+import '../MainCss/Qna.css';
 
-
-const MainPage = () => {
-    const navigate = useNavigate();
+const MainHeader = () => {
+  const location = useLocation(); // 현재 경로 가져오기
 
   return (
-    <div className="mainContainer">
-        <MainHeader/>
-
-      {/* 네비게이션 */}
-      <nav className="mainNav">
-        <Link to="/api" className="navLink">
-          메인 API
-        </Link>
-        <Link to="/board" className="navLink">
-          게시판
-        </Link>
-        <Link to="/qna" className="navLink">
-          Q&A
-        </Link>
+    <div className="mainHeader">
+      <nav>
+        <ul>
+          <li className={location.pathname === '/' ? 'active' : ''}>
+            <Link to="/">Home</Link>
+          </li>
+          <li className={location.pathname === '/board' ? 'active' : ''}>
+            <Link to="/board">게시판</Link>
+          </li>
+          <li className={location.pathname === '/qna' ? 'active' : ''}>
+            <Link to="/qna">QnA</Link>
+          </li>
+          {/* 다른 네비게이션 메뉴를 여기에 추가 */}
+        </ul>
       </nav>
     </div>
   );
 };
 
-export default MainPage;
+export default MainHeader;

@@ -95,7 +95,6 @@
 }
 
 .signupSection {
-  margin-bottom: 20px;
   width: 100%;
 }
 
@@ -110,4 +109,9 @@
   padding-bottom: 10px; /* 아래쪽 여백 */
   display: inline-block; /* 텍스트 크기에 맞게 너비 조정 */
   margin-top: 0px;
+}
+.errorText{
+  color: lightcoral;
+  margin-bottom:10px;
+  font-weight: bold;
 }

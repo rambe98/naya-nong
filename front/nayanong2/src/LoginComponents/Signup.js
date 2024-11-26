@@ -22,7 +22,7 @@ function Signup() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setMessage(error.response.data);
+    
   };
 
   const handleSubmit = (e) => {

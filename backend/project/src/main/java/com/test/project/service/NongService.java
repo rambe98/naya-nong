@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.test.project.dto.NongDTO;
@@ -42,11 +44,34 @@ public class NongService {
    
    
    // 추가
-	public NongDTO adduser(NongDTO dto) {
-		NongEntity entity = dto.toEntity(dto);
-		return new NongDTO(repository.save(entity));
-	}//adduser end
+ 	public NongDTO adduser(NongDTO dto) {
+        // DTO를 Entity로 변환
+        NongEntity entity = dto.toEntity(dto);
+
+        // 아이디 중복 체크
+        if (repository.existsByUserId(entity.getUserId())) {
+            throw new IllegalArgumentException("아이디가 이미 있습니다.");
+        }
+
+        // 별명 중복 체크
+        if (repository.existsByUserNick(entity.getUserNick())) {
+            throw new IllegalArgumentException("별명 이미 있습니다.");
+        }
+
+        // 이메일 중복 체크
+        if (repository.existsByUserEmail(entity.getUserEmail())) {
+            throw new IllegalArgumentException("이메일 이미 있습니다.");
+        }
+
+        // 중복이 없으면 새 사용자 저장
+        NongEntity savedEntity = repository.save(entity);
+        return new NongDTO(savedEntity);  // 저장된 엔티티를 DTO로 변환하여 반환
+    }
 	
+ 	public NongDTO getBycredentials(final String userId, final String userPwd) {
+ 		NongEntity entity = repository.findByUserIdAndUserPwd(userId, userPwd);
+ 		return new NongDTO(entity);
+ 	}
 	
 	
 	

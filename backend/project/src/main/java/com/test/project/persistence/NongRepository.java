@@ -23,7 +23,8 @@ public interface NongRepository extends JpaRepository<NongEntity,Integer>{
   //해당 userEmail이 존재하면 true 없으면 false로 바환
     Boolean existsByUserEmail(String userEmail);
     
+    Optional<NongEntity> findByUserId(String userId);
     //userId와 userPwd를 기준으로 UserEntity를 조회하는 메서드
-    NongEntity findByUserIdAndUserPwd(String userId, String userPwd);
+    Optional<NongEntity> findByUserIdAndUserPwd(String userId, String userPwd);
     
 }

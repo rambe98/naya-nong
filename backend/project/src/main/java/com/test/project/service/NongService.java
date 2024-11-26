@@ -68,13 +68,6 @@ public class NongService {
         return new NongDTO(savedEntity);  // 저장된 엔티티를 DTO로 변환하여 반환
     }
 	
- 	public NongDTO getBycredentials(final String userId, final String userPwd) {
- 		NongEntity entity = repository.findByUserIdAndUserPwd(userId, userPwd);
- 		return new NongDTO(entity);
- 	}
-	
-	
-	
 	
 	//수정
 	public NongDTO updateUsers(NongDTO dto){
@@ -117,5 +110,29 @@ public class NongService {
 
 	   
 	   }//deleteUsers end
+	   
+	   
+	   
+	   
+	   public NongEntity getBycredentials(String userId, String userPwd) {
+		    // 우선 userId로 해당 사용자가 있는지 확인
+		    Optional<NongEntity> userEntity = repository.findByUserId(userId);
+		    
+		    if (userEntity.isEmpty()) {
+		        // 아이디가 없으면 null 반환 또는 예외 던지기
+		        throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
+		    }
+
+		    // 아이디가 존재하면 비밀번호를 비교
+		    NongEntity entity = userEntity.get();
+		    
+		    if (!entity.getUserPwd().equals(userPwd)) {
+		        // 비밀번호가 틀리면 예외 던지기
+		        throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+		    }
+
+		    // 아이디와 비밀번호가 모두 맞으면 entity 반환
+		    return entity;
+		}
 	
 }//class end

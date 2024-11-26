@@ -16,12 +16,13 @@ function Signup() {
     userNick: "",
     userEmail: "",
     userPnum: "",
-    userPhoneCom: "",
+    PhoneCom: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setMessage(error.response.data);
   };
 
   const handleSubmit = (e) => {
@@ -40,7 +41,7 @@ function Signup() {
     userNick: "닉네임을 입력해주세요.",
     userEmail: "이메일을 입력해주세요.",
     userPnum: "전화번호를 입력해주세요.",
-    userPhoneCom: "통신사를 선택해주세요.",
+    PhoneCom: "통신사를 선택해주세요.",
   }
 
 
@@ -91,8 +92,7 @@ function Signup() {
       alert("회원이 추가되었습니다.");
       navigate("/")
     } catch (error) {
-      console.log("회원 추가 오류");
-      alert("회원이 추가되지 않았습니다, 다시 시도해주세요.");
+      setMessage(error.response.data);
     }
   };
 
@@ -156,8 +156,8 @@ function Signup() {
             className="signupInput"
           />
           <select
-            name="userPhoneCom"
-            value={formData.userPhoneCom}
+            name="PhoneCom"
+            value={formData.PhoneCom}
             onChange={handleChange}
             className="signupSelect"
           >

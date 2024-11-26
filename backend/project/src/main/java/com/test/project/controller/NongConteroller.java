@@ -3,6 +3,7 @@ package com.test.project.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,28 +23,32 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class NongConteroller {
 	
 	@Autowired
 	private  NongService service;
 	
 	@GetMapping
-	public ResponseEntity<List<NongDTO>> showAllUsers(){
+	public ResponseEntity<?> showAllUsers(){
 		List<NongDTO> products = service.showAllUsers();
 		return ResponseEntity.ok(products);
 	}//showAllusers end
 	
 	@GetMapping("/{clientNum}")
-	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clienteNum){
-		NongDTO user = service.showUser(clienteNum);
+	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clientNum){
+		NongDTO user = service.showUser(clientNum);
 		return ResponseEntity.ok(user);
 	}//showAllusers end
 	
 	@PostMapping
 	public ResponseEntity<?> adduser(@RequestBody NongDTO dto){
-		NongDTO users = service.adduser(dto);
-		return ResponseEntity.ok().body(users); 
+		
+		try {
+            NongDTO users = service.adduser(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(users); 
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());  
+        }
 	}//adduser end
 	
 	

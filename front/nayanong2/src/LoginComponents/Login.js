@@ -66,7 +66,7 @@ function Login({ setLoginSuccess, setClientNum }) {
 
   return (
     <div className="loginContainer">
-      <img src={logo} alt="Logo" className="loginLogo" />
+      <h2 className='loginH2'>로 그 인</h2>
       <form className="loginForm">
         <input
           type="text"

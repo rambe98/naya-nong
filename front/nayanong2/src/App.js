@@ -7,6 +7,7 @@ import FindUserId from './LoginComponents/FindUserId';
 import FindUserPwd from './LoginComponents/FindUserPwd';
 import Qna from './MainComponents/Qna';
 import Main from './Main/Main';
+import Board from './MainComponents/Board';
 
 function App() {
   const [loginsuccess, setLoginSuccess] = useState(false);
@@ -65,6 +66,7 @@ function App() {
           <Route path="/findUserId" element={<FindUserId />} />
           <Route path="/findUserPwd" element={<FindUserPwd />} />
           <Route path="/qna" element={<Qna />} />
+          <Route path="/board" element={<Board />} />
         </Routes>
       </div>
     </Router>

@@ -1,34 +1,25 @@
 import React, { useState } from 'react';
 import '../LoginCss/Login.css';
 import logo from '../assets/logo.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-function Login() {
+function Login({ setLoginSuccess, setClientNum }) {
   const [userId, setUserId] = useState('');
   const [userPwd, setUserPwd] = useState('');
-  const [clientNum, setClientNum] = useState(0);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-
+  const location = useLocation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // 아이디 검증
-    if (!userId.trim()) {
-      setError('아이디를 입력해주세요.');
+    // 아이디 및 비밀번호 검증
+    if (!userId.trim() || !userPwd.trim()) {
+      setError('아이디와 비밀번호를 모두 입력해주세요.');
       return;
     }
 
-    //비밀번호 검증
-    if(!userPwd.trim()){
-      setError('비밀번호를 입력해주세요.')
-      return;
-    }
-
-    // 중간 공백 검증
     if (userId.includes(' ') || userPwd.includes(' ')) {
       setError('아이디와 비밀번호는 공백을 포함할 수 없습니다.');
       return;
@@ -38,27 +29,40 @@ function Login() {
     setError('');
 
     const logindata = {
-      userId: userId.trim(),
-      userPwd: userPwd.trim(),
+      userId,
+      userPwd,
     };
 
     try {
-      const response = await axios.post(`http://localhost:7070/login`, logindata);
+      const response = await axios.post('http://localhost:7070/users/signin', logindata, {
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-      if (response.status === 200 && response.data.token) {
-        // 성공 처리
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userId', userId.trim());
-        navigate(`/`);
+      if (response.status >= 200 && response.status < 300) {
+        const user = response.data;
+
+        // 로컬 스토리지에 상태 저장
+        localStorage.setItem('loginsuccess', 'true');
+        localStorage.setItem('userId', user.userId);
+        localStorage.setItem('clientNum', user.clientNum);
+
+        // 부모 상태 업데이트
+        setLoginSuccess(true);
+        setClientNum(user.clientNum);
+
+        alert('로그인 성공');
+
+        // 이전 경로로 리다이렉트
+        const redirectPath = location.state?.from || '/';
+        navigate(redirectPath);
       } else {
-        setError('로그인 실패: 서버로부터 유효한 응답이 없습니다.');
+        throw new Error('Unexpected response status: ' + response.status);
       }
     } catch (error) {
       console.error('로그인 실패:', error);
-      setError('로그인에 실패했습니다.\n 아이디와 비밀번호를 확인해주세요.');
+      setError('로그인에 실패했습니다. 다시 시도해주세요.');
     }
   };
-
 
   return (
     <div className="loginContainer">
@@ -78,13 +82,29 @@ function Login() {
           onChange={(e) => setUserPwd(e.target.value)}
           className="loginInput"
         />
-        {error && <p className="loginerrorText" >{error}</p>}
-        <button type="button" className="loginButton" onClick={handleLogin}>로그인</button>
-        <button type="button" className="loginButton" onClick={() => navigate('/')}>이전</button>
+        {error && <p className="loginerrorText">{error}</p>}
+        <button type="button" className="loginButton" onClick={handleLogin}>
+          로그인
+        </button>
+        <button type="button" className="loginButton" onClick={() => navigate('/')}>
+          이전
+        </button>
       </form>
       <div className="loginLinkContainer">
-        <button type='button' className="loginLinkButton" onClick={() => navigate('/finduserId')}>아이디/비밀번호 찾기</button>
-        <button type='button' className="loginLinkButton" onClick={() => navigate('/signup')}>회원가입</button>
+        <button
+          type="button"
+          className="loginLinkButton"
+          onClick={() => navigate('/finduserId')}
+        >
+          아이디/비밀번호 찾기
+        </button>
+        <button
+          type="button"
+          className="loginLinkButton"
+          onClick={() => navigate('/signup')}
+        >
+          회원가입
+        </button>
       </div>
     </div>
   );

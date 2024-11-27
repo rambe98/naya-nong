@@ -16,13 +16,12 @@ function Signup() {
     userNick: "",
     userEmail: "",
     userPnum: "",
-    PhoneCom: "",
+    phoneCom: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
   };
 
   const handleSubmit = (e) => {
@@ -41,7 +40,7 @@ function Signup() {
     userNick: "닉네임을 입력해주세요.",
     userEmail: "이메일을 입력해주세요.",
     userPnum: "전화번호를 입력해주세요.",
-    PhoneCom: "통신사를 선택해주세요.",
+    phoneCom: "통신사를 선택해주세요.",
   }
 
 
@@ -83,7 +82,7 @@ function Signup() {
   }
 }
     try {
-      const response = await axios.post("http://localhost:7070/users", formData, {
+      const response = await axios.post("http://localhost:7070/users/signup", formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -92,7 +91,8 @@ function Signup() {
       alert("회원이 추가되었습니다.");
       navigate("/")
     } catch (error) {
-      setMessage(error.response.data);
+      console.log("회원 추가 오류");
+      alert("회원이 추가되지 않았습니다, 다시 시도해주세요.");
     }
   };
 
@@ -156,8 +156,8 @@ function Signup() {
             className="signupInput"
           />
           <select
-            name="PhoneCom"
-            value={formData.PhoneCom}
+            name="phoneCom"
+            value={formData.phoneCom}
             onChange={handleChange}
             className="signupSelect"
           >

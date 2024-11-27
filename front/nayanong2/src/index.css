@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'SSFlowerRoad';
+  src: url('./assets/SSFlowerRoad1family/SSFlowerRoadRegular.ttf') format('truetype'); /* 예: 'SSFlowerRoad.ttf' */
+  font-weight: normal;
+  font-style: normal;
+}

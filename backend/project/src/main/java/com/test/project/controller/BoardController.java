@@ -45,7 +45,8 @@ public class BoardController {
 	}//addBoard end
 	
 	
-	@PutMapping("/{bodNum}")
+	
+	@PutMapping("/n{bodNum}")
 	public ResponseEntity<?> updateBoard(@RequestBody BoardDTO dto){
 	      
 	     BoardDTO updateBoard = service.updateBoard(dto);

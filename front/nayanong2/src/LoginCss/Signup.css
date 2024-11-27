@@ -1,0 +1,117 @@
+.signupContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #F5EFE6; /* 연한 베이지 배경색 */
+}
+
+.signupLogo {
+  margin-bottom: 20px;
+  width: 150px;
+  height: auto;
+  border-radius: 99px;
+}
+
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: #EFE5D0; /* 부드러운 베이지 폼 배경 */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .signupForm {
+      padding: 15px;
+  }
+}
+
+.signupInput {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #D9CBB6; /* 연한 브라운 테두리 */
+  border-radius: 4px;
+  background-color: #FAF5EE; /* 아주 연한 베이지 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.signupInput:focus {
+  outline: none;
+  border-color: #C4A484; /* 강조된 브라운 테두리 */
+  box-shadow: 0 0 5px rgba(196, 164, 132, 0.5); /* 브라운 그림자 */
+}
+
+.signupSelect {
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #D9CBB6; /* 연한 브라운 테두리 */
+  border-radius: 4px;
+  background-color: #FAF5EE; /* 아주 연한 베이지 */
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C4A484' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 5px) center;
+  padding-right: 30px;
+}
+
+.signupSelect:focus {
+  outline: none;
+  border-color: #C4A484; /* 강조된 브라운 테두리 */
+  box-shadow: 0 0 5px rgba(196, 164, 132, 0.5); /* 브라운 그림자 */
+}
+
+.signupButton {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: #D9CBB6; /* 연한 브라운 버튼 */
+  margin-bottom: 10px;
+}
+
+.signupButton:hover {
+  background-color: #C4A484; /* 강조된 브라운 버튼 */
+}
+
+.signupDivider {
+  border: 0;
+  height: 1px;
+  background-color: #D9CBB6; /* 연한 브라운 */
+  margin: 20px 0;
+  margin-top: 0;
+  width: 100%;
+}
+
+.signupSection {
+  width: 100%;
+}
+
+.signupHeader {
+  font-size: 24px; /* 텍스트 크기 */
+  font-weight: bold; /* 굵은 텍스트 */
+  color: #C4A484; /* 강조된 브라운 */
+  text-align: center; /* 가운데 정렬 */
+  margin-bottom: 20px; /* 아래 여백 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 약간의 텍스트 그림자 */
+  border-bottom: 2px solid #D9CBB6; /* 연한 브라운 테두리 */
+  padding-bottom: 10px; /* 아래쪽 여백 */
+  display: inline-block; /* 텍스트 크기에 맞게 너비 조정 */
+  margin-top: 0px;
+}
+.errorText{
+  color: lightcoral;
+  margin-bottom:10px;
+  font-weight: bold;
+}

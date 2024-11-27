@@ -1,0 +1,113 @@
+.mainHeader {
+    display: flex;
+    justify-content: space-between; /* 양쪽 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    padding: 30px 30px;
+    background-color: #F5EFE6; /* 배경색 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+ /* 왼쪽: 로고 */
+.mainHeaderLeft {
+  display: flex; /* 로고와 텍스트를 가로로 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 10px; /* 로고와 텍스트 간격 */
+}
+
+.mainHeaderLeft .mainLogo {
+  height: 80px; /* 로고 크기 */
+  cursor: pointer;
+}
+
+.mainHeaderLeft .logoText {
+  font-size: 30px; /* 텍스트 크기 */
+  font-weight: bold;
+  color: #6D5A50; /* 텍스트 색상 */
+  font-family: 'SSFlowerRoad', sans-serif; /* 폰트 */
+  margin: 0; /* 기본 여백 제거 */
+  cursor:pointer;
+}
+
+  
+  /* 가운데: 네비게이션 */
+  .mainHeaderNav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .mainHeaderNav li {
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .mainHeaderNav li a {
+    text-decoration: none;
+    color: #6D5A50;
+  }
+  
+  .mainHeaderNav li.active a {
+    font-weight: bold;
+    color: #C4A484;
+  }
+  
+  /* 오른쪽: 버튼 */
+  .mainHeaderRight {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .mainButton {
+    padding: 8px 12px;
+    font-size: 20px;
+    background-color: #F5EFE6; /* 버튼 색 */
+    color: #D9CBB6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'SSFlowerRoad', sans-serif;
+  
+  }
+  
+  .mainButton:hover {
+    background-color: #A07C5A; /* 호버 색 */
+    text-decoration: underline;
+  }
+  
+  /* 기본 스타일 */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  cursor: pointer;
+  padding: 10px;
+  margin-left: 50px;
+  font-size: 16px;
+  color: #C4A484;
+  text-decoration: none;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 약간의 텍스트 그림자 */
+}
+
+nav li.active {
+  border-bottom: 2px solid #C4A484; /* 활성화된 메뉴에만 언더라인 추가 */
+  color: #C4A484;                  /* 활성화된 메뉴의 색상 변경 */
+  font-weight: bold;               /* 활성화된 메뉴 글씨 두껍게 */
+}
+
+nav li a {
+  text-decoration: none;
+  color: inherit;
+  font-family: 'SSFlowerRoad', sans-serif;
+  font-size: 18px;
+}
+
+nav li:hover {
+  color: #A07C5A; /* 마우스를 올릴 때 색상 변경 */
+}

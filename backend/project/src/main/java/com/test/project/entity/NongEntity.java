@@ -26,8 +26,7 @@ public class NongEntity {
 	private String userEmail;
 	private String userPnum;
 	private String userName;
-	
-	@Column(unique = true)
+	private String phoneCom;
 	private String userNick;
 }
 

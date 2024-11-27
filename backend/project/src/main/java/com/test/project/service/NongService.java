@@ -113,7 +113,7 @@ public class NongService {
 	   
 	   
 	   
-	   
+	   //로그인
 	   public NongEntity getBycredentials(String userId, String userPwd) {
 		    // 우선 userId로 해당 사용자가 있는지 확인
 		    Optional<NongEntity> userEntity = repository.findByUserId(userId);
@@ -134,5 +134,18 @@ public class NongService {
 		    // 아이디와 비밀번호가 모두 맞으면 entity 반환
 		    return entity;
 		}
+	   
+	   //비밀번호 확인
+	   public void verifyPassword(int clientNum, String userPwd) {
+		   Optional<NongEntity> userEntity = repository.findByClientNumAndUserPwd(clientNum, userPwd);
+		   
+		   if (userEntity.isEmpty() ) {
+		  
+		        throw new IllegalArgumentException("관리자에게 문의 하세요");
+		    } else if( !userEntity.get().getUserPwd().equals(userPwd)) {
+		    	throw new IllegalArgumentException("비밀번호가 틀립니다.");
+		    }
+		   
+	   }
 	
 }//class end

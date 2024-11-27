@@ -45,6 +45,7 @@ public class BoardController {
 	}//addBoard end
 	
 	
+	
 	@PutMapping("/n{bodNum}")
 	public ResponseEntity<?> updateBoard(@RequestBody BoardDTO dto){
 	      

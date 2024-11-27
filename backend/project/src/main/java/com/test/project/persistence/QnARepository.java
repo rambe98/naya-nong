@@ -1,16 +1,16 @@
 package com.test.project.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.test.project.entity.BoardEntity;
+import com.test.project.entity.QnAEntity;
 
 
 @Repository
-public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
-	// userNick을 기준으로 게시판을 조회하는 메서드
-	 List<BoardEntity> findByProjectUserNick(String userNick);
+public interface QnARepository extends JpaRepository<QnAEntity, Integer> {
+
 }

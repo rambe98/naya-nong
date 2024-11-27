@@ -27,4 +27,7 @@ public interface NongRepository extends JpaRepository<NongEntity,Integer>{
     //userId와 userPwd를 기준으로 UserEntity를 조회하는 메서드
     Optional<NongEntity> findByUserIdAndUserPwd(String userId, String userPwd);
     
+    //clientNum과 userPwd 기준으로 UserEntity를 조회하는 메서드
+    Optional<NongEntity> findByClientNumAndUserPwd(int clientNum, String userPwd);
+    
 }

@@ -139,12 +139,10 @@ public class NongService {
 	   public void verifyPassword(int clientNum, String userPwd) {
 		   Optional<NongEntity> userEntity = repository.findByClientNumAndUserPwd(clientNum, userPwd);
 		   
-		   if (userEntity.isEmpty() ) {
+		   if (userEntity.isEmpty()|| !userEntity.get().getUserPwd().equals(userPwd)) {
 		  
-		        throw new IllegalArgumentException("관리자에게 문의 하세요");
-		    } else if( !userEntity.get().getUserPwd().equals(userPwd)) {
-		    	throw new IllegalArgumentException("비밀번호가 틀립니다.");
-		    }
+		        throw new IllegalArgumentException();
+		    } 
 		   
 	   }
 	

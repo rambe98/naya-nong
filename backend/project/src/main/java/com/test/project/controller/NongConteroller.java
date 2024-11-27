@@ -69,8 +69,6 @@ public class NongConteroller {
             // 비밀번호가 틀린 경우
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀립니다.");
         }
-        
-        
     }
 
 	

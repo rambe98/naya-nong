@@ -90,6 +90,9 @@ public class BoardService {
 	
 	
 	
+	
+	
+	
 	 //삭제
 	   public boolean deleteBoard(BoardDTO dto){
 	      

@@ -27,102 +27,87 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/users")
 public class NongConteroller {
-	
+
 	@Autowired
-	private  NongService service;
-	
+	private NongService service;
+
 	@GetMapping
-	public ResponseEntity<?> showAllUsers(){
+	public ResponseEntity<?> showAllUsers() {
 		List<NongDTO> products = service.showAllUsers();
 		return ResponseEntity.ok(products);
-	}//showAllusers end
+	}// showAllusers end
 	
+
 	@GetMapping("/{clientNum}")
-	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clientNum){
+	public ResponseEntity<?> showUser(@PathVariable("clientNum") int clientNum) {
 		NongDTO user = service.showUser(clientNum);
 		return ResponseEntity.ok(user);
-	}//showAllusers end
+	}// showAllusers end
 	
-	@PostMapping("/signup")
-	public ResponseEntity<?> adduser(@RequestBody NongDTO dto){
-		
-		try {
-            NongDTO users = service.adduser(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(users); 
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());  
-        }
-	}//adduser end
-	
-	@PostMapping("/verifypassword") // 여기서 "/verify-password"가 매핑 이름
-    public ResponseEntity<?> verifyPassword(@RequestBody NongDTO dto) {
-        int clientNum = dto.getClientNum();
-        String userPwd = dto.getUserPwd();
-        
-        try {
-            // 서비스에서 비밀번호 확인
-            service.verifyPassword(clientNum, userPwd);
-            return ResponseEntity.ok("비밀번호 확인 완료했습니다.");
-        } catch (IllegalArgumentException e) {
-            // 비밀번호가 틀린 경우
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
 
+	@PostMapping("/signup")
+	public ResponseEntity<?> adduser(@RequestBody NongDTO dto) {
+		try {
+			NongDTO users = service.adduser(dto);
+			return ResponseEntity.status(HttpStatus.CREATED).body(users);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}// adduser end
 	
+
+	@PostMapping("/verifypassword")
+	public ResponseEntity<?> verifyPassword(@RequestBody NongDTO dto) {
+			int clientNum = dto.getClientNum();
+			String userPwd = dto.getUserPwd();
+		try {
+			// 서비스에서 비밀번호 확인
+			service.verifyPassword(clientNum, userPwd);
+			return ResponseEntity.ok("비밀번호 확인 완료했습니다.");
+		} catch (IllegalArgumentException e) {
+			// 비밀번호가 틀린 경우
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
+	}//verifyPassword end
 	
-	
+
 	@PutMapping("/{clientNum}")
-	public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto){
-	      
-	      NongDTO users = service.updateUsers(dto);
-	      
-	      return ResponseEntity.ok().body(users);
-	   }//updateUsers end
-	   
+	public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto) {
+		NongDTO users = service.updateUsers(dto);
+		return ResponseEntity.ok().body(users);
+	}// updateUsers end
+	
+
 	@DeleteMapping("/{clientNum}")
-	public ResponseEntity<?> deleteUsers(NongDTO dto){
-	      
-	      boolean isDeleted = service.deleteUsers(dto);
-	      try {
-	         if(isDeleted) {
-	            return ResponseEntity.ok("회원이 탈퇴되었습니다.");
-	         }else {
-	            return ResponseEntity.status(404).body("회원정보를 찾을 수 없습니다.");
-	         }
-	         
-	      } catch (Exception e) {
-	         return ResponseEntity.badRequest().body("데이터에러");
-	      }//catch end
-}//deleteUsers end
+	public ResponseEntity<?> deleteUsers(NongDTO dto) {
+		boolean isDeleted = service.deleteUsers(dto);
+		try {
+			if (isDeleted) {
+				return ResponseEntity.ok("회원이 탈퇴되었습니다.");
+			} else {
+				return ResponseEntity.status(404).body("회원정보를 찾을 수 없습니다.");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("데이터에러");
+		} // catch end
+	}// deleteUsers end
 	
-	
+
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticate(@RequestBody NongDTO dto) {
-	   
-		
-				String userId = dto.getUserId();
-				String userPwd = dto.getUserPwd();
+		String userId = dto.getUserId();
+		String userPwd = dto.getUserPwd();
+		if (userId == null || userPwd == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("아이디 또는 비밀번호를 찾을 수 없습니다.");
+		}
+		try {
+			// 서비스에서 자격 증명 확인
+			NongEntity user = service.getBycredentials(userId, userPwd);
+			return ResponseEntity.ok(new NongDTO(user));
 
-			if (userId == null || userPwd == null) {
-				 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("아이디 또는 비밀번호를 찾을 수 없습니다.");
-				 }
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
+	}//authenticate end
 
-			try {
-				// 서비스에서 자격 증명 확인
-			    NongEntity user = service.getBycredentials(userId, userPwd);
-			    return ResponseEntity.ok(new NongDTO(user));
-				
-				
-			} catch (IllegalArgumentException ex) {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
-			}
-		    
-
-	}
-	
-	
-	
-	
-	
-}//class end
+}// class end

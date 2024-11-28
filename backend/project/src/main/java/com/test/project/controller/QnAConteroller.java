@@ -27,17 +27,19 @@ public class QnAConteroller {
 		List<QnADTO> products = service.showAllQna();
 		return ResponseEntity.ok(products);
 	}// showAllusers end
+	
 
 	@GetMapping("/{qnaNum}")
 	public ResponseEntity<?> showQna(@PathVariable("qnaNum") int qnaNum) {
 		QnADTO qna = service.showQna(qnaNum);
 		return ResponseEntity.ok(qna);
 	}// showAllusers end
+	
 
 	@PostMapping
 	public ResponseEntity<?> addQna(@RequestBody QnADTO dto) {
 		QnADTO addqna = service.addQna(dto);
-		return ResponseEntity.ok().body(addqna); 
+		return ResponseEntity.ok().body(addqna);
 	}// adduser end
 
 }// class end

@@ -1,10 +1,5 @@
 package com.test.project.entity;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,23 +13,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "QnA")
+@Table
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QnAEntity {
+public class HeartEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int qnaNum;
-	private String qnaTitle;
-	private String qnaDtail;
+	private int heartNum;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_nick", referencedColumnName = "userNick")
-
-	private NongEntity nong;
+	@JoinColumn(name = "userNick", referencedColumnName = "userNick")
+    private NongEntity nong;
 	
-	@CreationTimestamp
-	private LocalDateTime writeDate;
+	@ManyToOne
+	@JoinColumn(name = "bodNum", referencedColumnName = "bodNum")
+    private BoardEntity board;
+	
+	
+
 }

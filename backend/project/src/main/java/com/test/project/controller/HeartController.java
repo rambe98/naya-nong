@@ -14,23 +14,24 @@ import com.test.project.service.HeartService;
 @RestController
 @RequestMapping("/heart")
 public class HeartController {
-	
+
 	@Autowired
 	private HeartService service;
-	
-	 @PostMapping("/{bodNum}/heart")
-	    public ResponseEntity<?> likePost(@RequestBody HeartDTO dto) {
-		 
-		 String userNick = dto.getUserNick();
-		 int bodNum = dto.getBodNum();
-		 
-		 
-	        try {
-	            service.likeBoard(userNick, bodNum);
-	            return ResponseEntity.ok("좋아요가 눌렸습니다.");
-	        } catch (IllegalArgumentException e) {
-	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-	        }
-	    }
+
+	@PostMapping
+	public ResponseEntity<?> likePost(@RequestBody HeartDTO dto) {
+		String userNick = dto.getUserNick();
+		int bodNum = dto.getBodNum();
+		try {
+			boolean liked = service.likeBoard(userNick, bodNum);
+			if (liked) {
+				return ResponseEntity.ok("좋아요가 추가되었습니다.");
+			} else {
+				return ResponseEntity.ok("좋아요가 취소되었습니다.");
+			}
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
+	}
 
 }

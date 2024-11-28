@@ -10,6 +10,7 @@ import com.test.project.persistence.BoardRepository;
 import com.test.project.persistence.HeartRepository;
 import com.test.project.persistence.NongRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,12 +28,14 @@ public class HeartService {
 	private BoardRepository boardRepository;
 	
 	
-	public void likeBoard(String userNick,int bodNum) {
+	@Transactional
+	public boolean likeBoard(String userNick,int bodNum) {
 		
 		boolean alreadyHearted = heartRepository.existsByNong_UserNickAndBoard_BodNum(userNick, bodNum);
 		
 		if(alreadyHearted) {
-			throw new IllegalArgumentException("이미 좋아요를 눌렀습니다.");
+			heartRepository.deleteByNong_UserNickAndBoard_BodNum(userNick, bodNum);
+			return false;
 		}
 		
 		BoardEntity boardEntity = boardRepository.findById(bodNum)
@@ -50,5 +53,6 @@ public class HeartService {
 	    
 	    // 좋아요 엔티티 저장
 	    heartRepository.save(heartEntity);
+	    return true;
 	}
 }

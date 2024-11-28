@@ -7,6 +7,11 @@ const Main = ({ loginsuccess, handleLogInfo, handleLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // const handleloginClick = () => {
+
+  //   navigate('/login')
+  // }
+
   return (
     <header className="mainHeader">
       <div className="mainHeaderLeft">
@@ -28,9 +33,14 @@ const Main = ({ loginsuccess, handleLogInfo, handleLogout }) => {
       </nav>
       <div className="mainHeaderRight">
         {!loginsuccess ? (
-          <button className="mainButton" onClick={() => navigate('/login')}>
-            Signin
-          </button>
+          <>
+            <button className="mainButton">
+              로그인
+            </button>
+            <button className="mainButton" onClick={() => navigate('/signup')}>
+              회원가입
+            </button>
+          </>
         ) : (
           <>
             <button className="mainButton" onClick={() => handleLogInfo(navigate)}>

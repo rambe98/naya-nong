@@ -8,6 +8,7 @@ import FindUserPwd from './LoginComponents/FindUserPwd';
 import Qna from './MainComponents/Qna';
 import Main from './Main/Main';
 import Board from './MainComponents/Board';
+import WritePost from './MainComponents/WritePost';
 
 function App() {
   const [loginsuccess, setLoginSuccess] = useState(false);
@@ -62,11 +63,12 @@ function App() {
             }
           />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/userinfo/:clientNum" element={<UserInfo />} />
+          <Route path="/userinfo/:clientNum" element={<UserInfo/>} />
           <Route path="/findUserId" element={<FindUserId />} />
           <Route path="/findUserPwd" element={<FindUserPwd />} />
           <Route path="/qna" element={<Qna />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/write" element={<WritePost />} />
         </Routes>
       </div>
     </Router>

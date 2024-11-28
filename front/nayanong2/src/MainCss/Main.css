@@ -5,6 +5,7 @@
     padding: 30px 30px;
     background-color: #F5EFE6; /* 배경색 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #A07C5A;
   }
   
  /* 왼쪽: 로고 */
@@ -60,19 +61,18 @@
   }
   
   .mainButton {
-    padding: 8px 12px;
+    /* padding: 8px 12px; */
     font-size: 20px;
     background-color: #F5EFE6; /* 버튼 색 */
-    color: #D9CBB6;
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-family: 'SSFlowerRoad', sans-serif;
-  
+    /* font-family: 'SSFlowerRoad', sans-serif; */
   }
   
   .mainButton:hover {
-    background-color: #A07C5A; /* 호버 색 */
+    background-color: #F5EFE6; /* 호버 색 */
     text-decoration: underline;
   }
   

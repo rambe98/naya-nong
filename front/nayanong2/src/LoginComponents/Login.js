@@ -98,7 +98,7 @@ function Login({ setLoginSuccess, setClientNum }) {
           type="submit" // 폼 제출 버튼
           className="loginButton"
         >
-          Login
+          로그인
         </button>
         <button
           type="button"

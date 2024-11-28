@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, } from 'react';
 import logo from '../assets/logo.png';
 import '../MainCss/Qna.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,10 +7,16 @@ import axios from 'axios';
 
 const Qna = () => {
     const navigate = useNavigate('');
-    const [nickname, setNickname] = useState(); //닉네임 상태
+    const [userNick, setUserNick] = useState(); //닉네임 상태
+    const [formData, setFormData] = useState({ //폼데이터를 보내기위한 초기값,
+        userNick : userNick,
+        qnaTitle : '',
+        qnaDtail:'',
+    })
     const [date, setDate] = useState(''); //작성일자
     const clientNum = localStorage.getItem('clientNum'); //로컬스토리지에 클라이언트넘을 변수에저장
-
+    
+    //날짜 함수
     useEffect(() => {
         const updateDate = () => {
             const currentDate = new Date();
@@ -26,6 +32,7 @@ const Qna = () => {
     // []를 사용하는이유는 페이지가 최초 렌더링 될때 한번만실행해야하고
     // []가 없을경우에는 상태가 변할때마다 업데이트되기때문에 원하는 값이 안나올수있다.(중복된 타이머가 발생)
     
+    //클라이언트넘에 아무런 값이없을때 로그인 이동페이지로 이동하게함 if/else는 확인,취소
     useEffect(() => {
         if (!clientNum) {
             const userConfirmed = window.confirm(
@@ -39,22 +46,59 @@ const Qna = () => {
         }
     }, []);
 
+    //사용자가 입력한 값으로 폼데이터 업데이트
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+    //clientNum이 변경될때마다 서버에서 닉네임을 받아온다.
     useEffect(() => {
         const fetchNickName = async () => {
             try {
                 if (clientNum) { // clientNum이 존재하는 경우에만 실행
                     const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
                     if (response.status === 200) {
-                        setNickname(response.data.userNick); // 서버에서 받은 닉네임
+                        setUserNick(response.data.userNick); // 서버에서 받은 닉네임
                     }
                 }
             } catch (error) {
                 console.error('닉네임 조회 실패:', error);
             }
         };
-
+    
         fetchNickName(); // useEffect 실행 시 닉네임 조회
-    }, [clientNum]); // clientNum이 변경될 때마다 실행
+    }, [clientNum]);
+    
+    // userNick이 변경될 때 formData.userNick 동기화
+    useEffect(() => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            userNick: userNick || "", // userNick을 업데이트
+        }));
+    }, [userNick]);
+    
+
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(`http://localhost:7070/qna`,formData,{
+                headers: {
+                    "Content-Type": "application/json",
+                  },
+            });
+           alert('문의하기가 완료되었습니다.');
+           setFormData({
+            userNick : userNick,
+            qnaTitle : '',
+            qnaDtail : '',
+           })
+           navigate('/');
+        } catch (error) {
+            alert('문의하기 실패');
+        }
+        console.log(formData);
+        
+    }
 
     return (
 
@@ -62,30 +106,43 @@ const Qna = () => {
        
 
             {/* 입력 폼 */}
+            <form className="qnaForm" onSubmit={handleSubmit}>
             <div className="qnaInputContainer">
+                {/* 닉네임 */}
                 <input
                     type="text"
+                    name="userNick"
                     placeholder="이름을 입력해주세요"
                     className="qnaInput"
-                    value={nickname}
-                    readOnly
+                    value={userNick}
+                    readOnly // 읽기 전용
                 />
 
-             
+                {/* 제목 */}
                 <input
                     type="text"
+                    name="qnaTitle"
                     placeholder="제목을 입력해주세요"
                     className="qnaInput"
+                    value={formData.qnaTitle}
+                    onChange={handleChange}
+                    required // 필수 입력
                 />
 
-          
+                {/* 내용 */}
                 <textarea
+                    name="qnaDtail"
                     placeholder="내용을 입력해주세요"
                     className="qnaInputtext"
+                    value={formData.qnaDtail}
+                    onChange={handleChange}
+                    required // 필수 입력
                 />
 
-                <button className="qnaButton">보내기</button>
+                {/* 제출 버튼 */}
+                <button type="submit" className="qnaButton">보내기</button>
             </div>
+        </form>
         </div>
 
 

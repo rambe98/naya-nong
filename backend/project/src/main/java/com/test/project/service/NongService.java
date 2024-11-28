@@ -48,15 +48,15 @@ public class NongService {
 		NongEntity entity = dto.toEntity(dto);
 		// 아이디 중복 체크
 		if (repository.existsByUserId(entity.getUserId())) {
-			throw new IllegalArgumentException("아이디가 이미 있습니다.");
+			throw new IllegalArgumentException("중복된 아이디가 있습니다.");
 		}
 		// 별명 중복 체크
 		if (repository.existsByUserNick(entity.getUserNick())) {
-			throw new IllegalArgumentException("별명 이미 있습니다.");
+			throw new IllegalArgumentException("중복된 닉네임이 있습니다.");
 		}
 		// 이메일 중복 체크
 		if (repository.existsByUserEmail(entity.getUserEmail())) {
-			throw new IllegalArgumentException("이메일 이미 있습니다.");
+			throw new IllegalArgumentException("중복된 이메일이 있습니다.");
 		}
 		// 중복이 없으면 새 사용자 저장
 		NongEntity savedEntity = repository.save(entity);

@@ -28,5 +28,5 @@ public class NongEntity {
 	private String userName;
 	private String phoneCom;
 	private String userNick;
-}
+}//NongEntity end
 

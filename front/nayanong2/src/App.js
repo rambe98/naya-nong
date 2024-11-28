@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './User/Login';
-import Signup from './User/Signup';
-import UserInfo from './User/UserInfo';
-import FindUserId from './User/FindUserId';
-import FindUserPwd from './User/FindUserPwd';
-import Qna from './Board/Qna';
+import Login from './LoginComponents/Login';
+import Signup from './LoginComponents/Signup';
+import UserInfo from './LoginComponents/UserInfo';
+import FindUserId from './LoginComponents/FindUserId';
+import FindUserPwd from './LoginComponents/FindUserPwd';
+import Qna from './MainComponents/Qna';
 import Main from './Main/Main';
-import Board from './Board/Board';
-import WritePost from './Board/WritePost';
-import PostDetail from './Board/PostDetail';
+import Board from './MainComponents/Board';
+import WritePost from './MainComponents/WritePost';
 
 function App() {
   const [loginsuccess, setLoginSuccess] = useState(false);
@@ -64,13 +63,12 @@ function App() {
             }
           />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/userinfo/:clientNum" element={<UserInfo />} />
+          <Route path="/userinfo/:clientNum" element={<UserInfo/>} />
           <Route path="/findUserId" element={<FindUserId />} />
           <Route path="/findUserPwd" element={<FindUserPwd />} />
           <Route path="/qna" element={<Qna />} />
           <Route path="/board" element={<Board />} />
           <Route path="/write" element={<WritePost />} />
-          <Route path="/detail" element={<PostDetail />} />
         </Routes>
       </div>
     </Router>

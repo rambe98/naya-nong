@@ -55,8 +55,6 @@ public class NongConteroller {
 	}//adduser end
 	
 	@PostMapping("/verifypassword") // 여기서 "/verify-password"가 매핑 이름
-	
-	
     public ResponseEntity<?> verifyPassword(@RequestBody NongDTO dto) {
         int clientNum = dto.getClientNum();
         String userPwd = dto.getUserPwd();
@@ -67,7 +65,7 @@ public class NongConteroller {
             return ResponseEntity.ok("비밀번호 확인 완료했습니다.");
         } catch (IllegalArgumentException e) {
             // 비밀번호가 틀린 경우
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀립니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         
         

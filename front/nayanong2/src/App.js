@@ -62,7 +62,7 @@ function App() {
             }
           />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/userinfo/:clientNum" element={<UserInfo />} />
+          <Route path="/userinfo/:clientNum" element={<UserInfo/>} />
           <Route path="/findUserId" element={<FindUserId />} />
           <Route path="/findUserPwd" element={<FindUserPwd />} />
           <Route path="/qna" element={<Qna />} />

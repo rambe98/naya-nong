@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import '../LoginCss/Login.css';
 import logo from '../assets/logo.png';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -11,6 +11,8 @@ function Login({ setLoginSuccess, setClientNum }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+
+  
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -19,7 +21,7 @@ function Login({ setLoginSuccess, setClientNum }) {
       setError('아이디와 비밀번호를 모두 입력해주세요.');
       return;
     }
-
+    // 아이디 및 비밀번호 공백 검증
     if (userId.includes(' ') || userPwd.includes(' ')) {
       setError('아이디와 비밀번호는 공백을 포함할 수 없습니다.');
       return;
@@ -29,8 +31,8 @@ function Login({ setLoginSuccess, setClientNum }) {
     setError('');
 
     const logindata = {
-      userId,
-      userPwd,
+      userId : userId,
+      userPwd: userPwd,
     };
 
     try {
@@ -60,19 +62,28 @@ function Login({ setLoginSuccess, setClientNum }) {
       }
     } catch (error) {
       console.error('로그인 실패:', error);
-      setError('로그인에 실패했습니다. 다시 시도해주세요.');
+      setError('로그인에 실패했습니다.\n 다시 시도해주세요.');
     }
   };
 
   return (
     <div className="loginContainer">
-      <h2 className='loginH2'>로 그 인</h2>
-      <form className="loginForm">
+      <h2 className="loginH2">로 그 인</h2>
+      <form
+        className="loginForm"
+        onSubmit={handleLogin} // 폼 제출 이벤트 처리
+      >
         <input
           type="text"
           placeholder="아이디 입력"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault(); // 기본 동작 방지
+              handleLogin(e); // 로그인 처리 함수 호출
+            }
+          }}
           className="loginInput"
         />
         <input
@@ -83,10 +94,17 @@ function Login({ setLoginSuccess, setClientNum }) {
           className="loginInput"
         />
         {error && <p className="loginerrorText">{error}</p>}
-        <button type="button" className="loginButton" onClick={handleLogin}>
-          로그인
+        <button
+          type="submit" // 폼 제출 버튼
+          className="loginButton"
+        >
+          Login
         </button>
-        <button type="button" className="loginButton" onClick={() => navigate('/')}>
+        <button
+          type="button"
+          className="loginButton"
+          onClick={() => navigate('/')}
+        >
           이전
         </button>
       </form>

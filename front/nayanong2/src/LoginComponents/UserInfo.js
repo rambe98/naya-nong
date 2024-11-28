@@ -10,6 +10,9 @@ const UserInfo = () => {
 
   const [edit, setEdit] = useState(false);
   const [backupUserInfo, setBackupUserInfo] = useState(null); // 백업 상태
+  const [showModal, setShowModal] = useState(false); //모달 표시상태
+  const [password, setPassword] = useState(''); //입력된비밀번호
+  const [showPassword, setShowPassword] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     userId: "",
@@ -18,12 +21,14 @@ const UserInfo = () => {
     userNick: "",
     userEmail: "",
     userPnum: "",
-    userTelecom: "",
+    phoneCom: "",
   })
 
   // 사용자마다 고유 index 번호가 있는데 사용자가 변경될 때마다 렌더링된다.
   useEffect(() => {
     const fetchUserInfo = async () => {
+      if (!clientNum) return;
+
       try {
         // 서버에서 사용자 정보 요청
         const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
@@ -43,6 +48,28 @@ const UserInfo = () => {
     }
   }, [clientNum]);
 
+  // 수정버튼을 눌렀을 때  비밀번호 모달창에 비밀번호를 서버에 전송해서 db와 비교하는 post요청
+  const handlePasswordClick = async () => {
+    try {
+      const response = await axios.post('http://localhost:7070/users/verifypassword', {
+        clientNum: clientNum,
+        userPwd: password,
+      },
+    );
+      if (response.status === 200) {
+        alert('비밀번호가 확인 되었습니다.');
+        setEdit(true); // 수정 모드 진입하기
+        setShowModal(false); //모달 닫기
+      } else {
+        
+      }
+    } catch (error) {
+      console.error(error);
+      alert('비밀번호가 일치하지 않습니다.')
+
+    }
+  }
+
   // 수정이 완료되면 서버에 PUT 요청
   const handleSaveClick = async () => {
     try {
@@ -55,6 +82,7 @@ const UserInfo = () => {
     }
   }
 
+  // 수정상태의 입력값 변경
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({
@@ -63,11 +91,15 @@ const UserInfo = () => {
     }));
   }
 
+  // 수정버튼
   const handleEditClick = () => {
-    setEdit(true);
+    console.log('모달 열림 이전 상태:', showModal)
+    setShowModal(true);
+    console.log('모달 열림 이후 상태:', showModal);
     setBackupUserInfo({ ...userInfo });
   }
 
+  // 취소버튼
   const handleCancelClick = () => {
     if (backupUserInfo) {
       setUserInfo({ ...backupUserInfo });
@@ -75,117 +107,172 @@ const UserInfo = () => {
     setEdit(false);
   }
 
+  //비밀번호 보이기&숨기기
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  }
+
+
   return (
     <div className='userInfoContainer'>
       <img src={logo} alt='logo' className='userInfoLogo' />
       <h2 className='userInfoHeader'>회원정보수정</h2>
-
+  
       <form className="userInfoForm">
-  {edit ? (
-    <>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">아이디:</label>
-        <span className="userInfoFormText">{userInfo.userId}</span>
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">이름:</label>
-        <span className="userInfoFormText">{userInfo.userName}</span>
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">비밀번호:</label>
-        <input
-          className="userInfoFormInput"
-          type="password"
-          name="userPwd"
-          value={userInfo.userPwd}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">닉네임:</label>
-        <input
-          className="userInfoFormInput"
-          type="text"
-          name="userNick"
-          value={userInfo.userNick}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">이메일:</label>
-        <input
-          className="userInfoFormInput"
-          type="text"
-          name="userEmail"
-          value={userInfo.userEmail}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">핸드폰번호:</label>
-        <span className="userInfoFormText">{userInfo.userPnum}</span>
-      </div>
-      <button
-        className="userInfoFormButton"
-        type="button"
-        onClick={handleSaveClick}
-      >
-        저장
-      </button>
-      <button
-        className="userInfoFormButton userInfoFormCancelButton"
-        type="button"
-        onClick={handleCancelClick}
-      >
-        취소
-      </button>
-    </>
-  ) : (
-    <>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">아이디:</label>
-        <span className="userInfoFormText">{userInfo.userId}</span>
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">이름:</label>
-        <span className="userInfoFormText">{userInfo.userName}</span>
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">비밀번호:</label>
-        <span className="userInfoFormText">{userInfo.userPwd}</span>
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">닉네임:</label>
-        <span className="userInfoFormText">{userInfo.userNick}</span>
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">이메일:</label>
-        <span className="userInfoFormText">{userInfo.userEmail}</span>
-      </div>
-      <div className="userInfoFormGroup">
-        <label className="userInfoFormLabel">핸드폰번호:</label>
-        <span className="userInfoFormText">{userInfo.userPnum}</span>
-      </div>
-      <button
-        className="userInfoFormButton"
-        type="button"
-        onClick={handleEditClick}
-      >
-        수정
-      </button>
-      <button
-        className="userInfoFormButton userInfoFormCancelButton"
-        type="button"
-        onClick={() => navigate('/')}
-      >
-        돌아가기
-      </button>
-    </>
-  )}
-</form>
-
+        {edit ? (
+          <>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">아이디:</label>
+              <span className="userInfoFormText">{userInfo.userId}</span>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">이름:</label>
+              <span className="userInfoFormText">{userInfo.userName}</span>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">비밀번호:</label>
+              <input
+                className="userInfoFormInput"
+                type={showPassword ? 'text' : 'password'}
+                name="userPwd"
+                value={userInfo.userPwd}
+                onChange={handleInputChange}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                style={{
+                  marginLeft: '10px',
+                  padding: '5px 10px',
+                  backgroundColor: '#D9CBB6',
+                  border: 'none',
+                  borderRadius: '5px',
+                  color: 'white',
+                  cursor: 'pointer',
+                }}
+              >
+                {showPassword ? '숨기기' : '보이기'}
+              </button>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">닉네임:</label>
+              <input
+                className="userInfoFormInput"
+                type="text"
+                name="userNick"
+                value={userInfo.userNick}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">이메일:</label>
+              <input
+                className="userInfoFormInput"
+                type="text"
+                name="userEmail"
+                value={userInfo.userEmail}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">핸드폰번호:</label>
+              <span className="userInfoFormText">{userInfo.userPnum}</span>
+            </div>
+            <button
+              className="userInfoFormButton"
+              type="button"
+              onClick={handleSaveClick}
+            >
+              저장
+            </button>
+            <button
+              className="userInfoFormButton userInfoFormCancelButton"
+              type="button"
+              onClick={handleCancelClick}
+            >
+              취소
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">아이디:</label>
+              <span className="userInfoFormText">{userInfo.userId}</span>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">이름:</label>
+              <span className="userInfoFormText">{userInfo.userName}</span>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">비밀번호:</label>
+              <span className="userInfoFormText">{"*".repeat(userInfo.userPwd.length)}</span>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">닉네임:</label>
+              <span className="userInfoFormText">{userInfo.userNick}</span>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">이메일:</label>
+              <span className="userInfoFormText">{userInfo.userEmail}</span>
+            </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">핸드폰번호:</label>
+              <span className="userInfoFormText">{userInfo.userPnum}</span>
+            </div>
+            <button
+              className="userInfoFormButton"
+              type="button"
+              onClick={handleEditClick}
+            >
+              수정
+            </button>
+            <button
+              className="userInfoFormButton userInfoFormCancelButton"
+              type="button"
+              onClick={() => navigate('/')}
+            >
+              돌아가기
+            </button>
+          </>
+        )}
+      </form>
+  
+      {/* 모달 UI 추가 */}
+      {showModal && (
+        <div className="modalOverlay">
+          <form
+            className="modalContent"
+            onSubmit={(e) => {
+              e.preventDefault(); // 기본 제출 동작 방지
+              handlePasswordClick(); // 비밀번호 확인 처리
+            }}
+          >
+            <h3>비밀번호 확인</h3>
+            <input
+              type="password"
+              placeholder="비밀번호를 입력하세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="modalInput"
+            />
+            <div className="modalButtons">
+              <button type="submit" className="modalConfirmButton">
+                확인
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="modalCancelButton"
+              >
+                취소
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
+  
 };
 
 export default UserInfo;

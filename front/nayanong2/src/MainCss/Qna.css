@@ -74,40 +74,7 @@
 }
 
 
-/* 기본 스타일 */
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
-  }
-  
-  nav li {
-    cursor: pointer;
-    padding: 10px;
-    font-size: 16px;
-    color: #C4A484;
-    text-decoration: none;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 약간의 텍스트 그림자 */
-  }
-  
-  nav li.active {
-    border-bottom: 2px solid #C4A484; /* 활성화된 메뉴에만 언더라인 추가 */
-    color: #C4A484;                  /* 활성화된 메뉴의 색상 변경 */
-    font-weight: bold;               /* 활성화된 메뉴 글씨 두껍게 */
-  }
-  
-  nav li a {
-    text-decoration: none;
-    color: inherit;
-    font-family: 'SSFlowerRoad', sans-serif;
-    font-size: 18px;
-  }
- 
-  nav li:hover {
-    color: #A07C5A; /* 마우스를 올릴 때 색상 변경 */
-  }
+
   
   /* QnA 페이지의 p 태그 스타일 */
 .qnaInputContainer p {

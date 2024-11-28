@@ -25,6 +25,7 @@ const Qna = () => {
     },[clientNum, navigate])
     // []를 사용하는이유는 페이지가 최초 렌더링 될때 한번만실행해야하고
     // []가 없을경우에는 상태가 변할때마다 업데이트되기때문에 원하는 값이 안나올수있다.(중복된 타이머가 발생)
+    
     useEffect(() => {
         if (!clientNum) {
             const userConfirmed = window.confirm(

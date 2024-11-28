@@ -1,47 +1,57 @@
 import React, { useState } from 'react';
-import Main from '../Main/Main';
-import '../MainCss/Board.css';
 import { useNavigate } from 'react-router-dom';
-import SideBar from '../Main/SideBar';
 import { FaBars } from 'react-icons/fa';
+import '../MainCss/Board.css';
+import '../MainCss/SideBar.css';  // 사이드바 스타일 임포트
 
 const Board = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
-    const [isSidebarVisible, setIsSidebarVisible] = useState(false)
-
+    // 사이드바 토글 함수
     const toggleSidebar = () => {
-        setIsSidebarVisible(prevState => !prevState)
-    }
-
+        setIsSidebarVisible((prevState) => !prevState);
+    };
 
     return (
         <div className="boardContainer">
+            {/* 사이드바 컨테이너 */}
             <div className={`sidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
-                <SideBar />
+                <div>
+                    <ul>
+                        <li><a href="#">공지사항</a></li>
+                        <li><a href="#">자유게시판</a></li>
+                    </ul>
+                </div>
             </div>
+
+            {/* 메인 내용 영역 */}
             <div className="boardInputContainer">
-                <div className='boardContainerButton'>
-                    <button className='sidebarToggleButton' onClick={toggleSidebar}>
+                {/* 사이드바 토글 버튼 */}
+                <div className="boardContainerButton">
+                    <button className="sidebarToggleButton" onClick={toggleSidebar}>
                         <FaBars />
                     </button>
+                    {/* 글쓰기 버튼 */}
                     <button className="boardWriteButton" onClick={() => navigate("/Write")}>글쓰기</button>
                 </div>
-                <div className='boardContainerButton2'>
+                {/* 검색 영역 */}
+                <div className="boardContainerButton2">
                     <input type="text" placeholder="검색어를 입력하세요." className="boardSearchInput" />
                     <button className="boardSearchButton">검색</button>
                 </div>
             </div>
-            <div className='boardListContainer'>
-                <div className='boardListHeader'>
-                    <p className='boardListItem number'>번호</p>
-                    <p className='boardListItem title'>제목</p>
-                    <p className='boardListItem author'>작성자</p>
-                    <p className='boardListItem date'>등록일</p>
-                    <p className='boardListItem views'>조회수</p>
+
+            {/* 게시판 리스트 영역 */}
+            <div className="boardListContainer">
+                <div className="boardListHeader">
+                    <p className="boardListItem number">번호</p>
+                    <p className="boardListItem title">제목</p>
+                    <p className="boardListItem author">작성자</p>
+                    <p className="boardListItem date">등록일</p>
+                    <p className="boardListItem views">조회수</p>
                 </div>
             </div>
-
         </div>
     );
 };

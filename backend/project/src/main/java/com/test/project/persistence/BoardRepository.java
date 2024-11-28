@@ -13,4 +13,5 @@ import com.test.project.entity.BoardEntity;
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
 	// userNick을 기준으로 게시판을 조회하는 메서드
 	 List<BoardEntity> findByProjectUserNick(String userNick);
+	 
 }

@@ -3,12 +3,16 @@ package com.test.project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.project.dto.HeartDTO;
+import com.test.project.entity.BoardEntity;
+import com.test.project.persistence.BoardRepository;
 import com.test.project.service.HeartService;
 
 @RestController
@@ -17,6 +21,10 @@ public class HeartController {
 
 	@Autowired
 	private HeartService service;
+	
+    @Autowired
+    private BoardRepository boardRepository;
+
 
 	@PostMapping
 	public ResponseEntity<?> likePost(@RequestBody HeartDTO dto) {
@@ -33,5 +41,26 @@ public class HeartController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}
 	}
+	
+	 // 게시물의 좋아요 수를 조회하는 엔드포인트
+    @GetMapping("/{bodNum}/likeCount")
+    public ResponseEntity<?> getLikeCount(@PathVariable("bodNum")Integer bodNum) {
+        try {
+            // 게시물에 대한 좋아요 수를 업데이트하고 반환
+            service.updateLikeCount(bodNum);
+            BoardEntity board = boardRepository.findById(bodNum)
+                    .orElseThrow(() -> new IllegalArgumentException("게시판을 찾을 수 없습니다."));
+            // 좋아요 수를 반환
+            return ResponseEntity.ok(board.getLikeCount());
+           
+        } catch (IllegalArgumentException e) {
+            // 예외 발생 시 400 상태 코드로 처리
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시물 조회에 실패했습니다: " + e.getMessage());
+        } catch (Exception e) {
+            // 예기치 못한 오류에 대한 처리
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+        }
+
+    }
 
 }

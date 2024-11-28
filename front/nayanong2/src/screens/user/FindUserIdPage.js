@@ -105,4 +105,4 @@ const FindUserId = () => {
             </div>
           );          
 }
-export default FindUserId
+export default FindUserId;

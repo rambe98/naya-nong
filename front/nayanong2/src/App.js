@@ -6,7 +6,7 @@ import UserInfo from './LoginComponents/UserInfo';
 import FindUserId from './LoginComponents/FindUserId';
 import FindUserPwd from './LoginComponents/FindUserPwd';
 import Qna from './MainComponents/Qna';
-import Main from './Main/Main';
+import Main from './screens/Header';
 import Board from './MainComponents/Board';
 import WritePost from './MainComponents/WritePost';
 

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.test.project.dto.BoardDTO;
 import com.test.project.entity.BoardEntity;
+import com.test.project.entity.HeartEntity;
 import com.test.project.entity.NongEntity;
 import com.test.project.persistence.BoardRepository;
+import com.test.project.persistence.HeartRepository;
 import com.test.project.persistence.NongRepository;
 
 import jakarta.transaction.Transactional;
@@ -25,6 +27,9 @@ public class BoardService {
 
 	@Autowired
 	private NongRepository nongRepository;
+	
+	@Autowired
+	private HeartRepository heartRepository;
 
 	private void validate(final BoardEntity entity) {
 		if (entity == null) {
@@ -78,20 +83,18 @@ public class BoardService {
 
 	// 삭제
 	public boolean deleteBoard(BoardDTO dto) {
-
 		BoardEntity entity = dto.toEntity(dto);
-
 		Optional<BoardEntity> original = boardRepository.findById(entity.getBodNum());
-
 		if (original.isPresent()) {
 			boardRepository.delete(entity);
 			return true;
 		} // if end
-
 		else {
 			return false;
 		} // else end
-
 	}// deleteUsers end
+	
+	
+	
 
 }

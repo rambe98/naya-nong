@@ -66,5 +66,7 @@ public class BoardController {
 			return ResponseEntity.badRequest().body("데이터에러");
 		} // catch end
 	}// deleteUsers end
+	
+	
 
 }

@@ -69,20 +69,15 @@ const Qna = () => {
                     value={nickname}
                     readOnly
                 />
-
-             
                 <input
                     type="text"
                     placeholder="제목을 입력해주세요"
                     className="qnaInput"
                 />
-
-          
                 <textarea
                     placeholder="내용을 입력해주세요"
                     className="qnaInputtext"
                 />
-
                 <button className="qnaButton">보내기</button>
             </div>
         </div>

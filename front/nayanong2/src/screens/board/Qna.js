@@ -1,6 +1,6 @@
 import React, { useEffect, useState, } from 'react';
-import logo from '../assets/logo.png';
-import '../MainCss/Qna.css';
+import logo from '../../assets/logo.png'
+import '../../css/Qna.css';
 import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';

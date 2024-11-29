@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../MainCss/WritePost.css';
+import '../../css/WritePost.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 

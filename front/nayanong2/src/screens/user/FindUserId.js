@@ -1,7 +1,7 @@
 import React, { useState} from 'react'
-import logo from '../assets/logo.png'
+import logo from '../../assets/logo.png'
 import axios from 'axios'
-import '../LoginCss/FindUser.css'
+import '../../css/FindUser.css';
 import { useNavigate } from 'react-router-dom'
 
 const FindUserId = () => {

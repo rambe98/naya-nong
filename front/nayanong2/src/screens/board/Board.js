@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
-import '../MainCss/Board.css';
-import '../MainCss/SideBar.css'; 
+import '../../css/Board.css'
+import '../../css/SideBar.css'
 
 const Board = () => {
     const navigate = useNavigate();

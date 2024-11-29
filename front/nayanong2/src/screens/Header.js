@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import '../MainCss/Main.css';
+import '../css/Main.css'
 
 const Header = ({ loginsuccess, handleLogInfo, handleLogout }) => {
   const navigate = useNavigate();

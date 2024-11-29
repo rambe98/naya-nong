@@ -14,7 +14,8 @@ code {
 
 @font-face {
   font-family: 'SSFlowerRoad';
-  src: url('./assets/SSFlowerRoad1family/SSFlowerRoadRegular.ttf') format('truetype'); /* 예: 'SSFlowerRoad.ttf' */
+  src: url('./assets/SSFlowerRoad1family/SSFlowerRoadRegular.ttf') format('truetype');
+  /* 예: 'SSFlowerRoad.ttf' */
   font-weight: normal;
   font-style: normal;
 }

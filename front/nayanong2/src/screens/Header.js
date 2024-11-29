@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import '../MainCss/Main.css';
+import '../css/Main.css'
 
-const Main = ({ loginsuccess, handleLogInfo, handleLogout }) => {
+const Header = ({ loginsuccess, handleLogInfo, handleLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -56,4 +56,4 @@ const Main = ({ loginsuccess, handleLogInfo, handleLogout }) => {
   );
 };
 
-export default Main;
+export default Header;

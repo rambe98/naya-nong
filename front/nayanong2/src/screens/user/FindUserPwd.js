@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../LoginCss/FindUser.css";
-import logo from "../assets/logo.png";
+import '../../css/FindUser.css'
+import logo from '../../assets/logo.png';
 
 const FindUserPwd = () => {
   const [userId, setUserId] = useState("");

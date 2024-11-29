@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { loginsuccess, clientNum } from './recoil/UserRecoil';
 import Login from './screens/user/Login';
 import Signup from './screens/user/Signup';
 import UserInfo from './screens/user/UserInfo';
@@ -11,8 +13,8 @@ import Board from './screens/board/Board'
 import WritePost from './screens/board/WritePost'
 
 function App() {
-  const [loginsuccess, setLoginSuccess] = useState(false);
-  const [clientNum, setClientNum] = useState(null);
+  const [loginsuccess, setLoginSuccess] = useRecoilState(loginsuccess);
+  const [clientNum, setClientNum] = useRecoilState(clientNum);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('loginsuccess') === 'true';

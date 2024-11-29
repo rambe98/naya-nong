@@ -5,8 +5,8 @@ import '../../css/FindUser.css';
 import { useNavigate } from 'react-router-dom'
 
 const FindUserId = () => {
-    const [userName, setUserName] = useState('')
-    const [userPnum, setUserPnum] = useState('')
+    const [userName, setUserName] = useState('');
+    const [userPnum, setUserPnum] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [message, setMessage] = useState('');
     const [isCodeSent, setIsCodeSent] = useState(false);

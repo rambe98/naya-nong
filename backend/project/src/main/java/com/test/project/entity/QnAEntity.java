@@ -24,17 +24,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QnAEntity {
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
-   private int qnaNum;
-   private String qnaTitle;
-   private String qnaDtail;
-   
-   @ManyToOne
-   @JoinColumn(name = "user_nick", referencedColumnName = "userNick")
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int qnaNum;
+	private String qnaTitle;
+	private String qnaDtail;
+	
+	@ManyToOne
+	@JoinColumn(name = "user_nick", referencedColumnName = "userNick")
 
-   private NongEntity nong;
-   
-   @CreationTimestamp
-   private LocalDateTime writeDate;
+	private NongEntity nong;
+	
+	@CreationTimestamp
+	private LocalDateTime writeDate;
 }

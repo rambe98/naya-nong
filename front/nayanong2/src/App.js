@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './LoginComponents/Login';
-import Signup from './LoginComponents/Signup';
-import UserInfo from './LoginComponents/UserInfo';
-import FindUserId from './LoginComponents/FindUserId';
-import FindUserPwd from './LoginComponents/FindUserPwd';
-import Qna from './MainComponents/Qna';
-import Main from './Main/Main';
-import Board from './MainComponents/Board';
-import WritePost from './MainComponents/WritePost';
+import Login from './screens/user/Login';
+import Signup from './screens/user/Signup';
+import UserInfo from './screens/user/UserInfo';
+import FindUserId from './screens/user/FindUserId';
+import FindUserPwd from './screens/user/FindUserPwd';
+import Qna from './screens/board/Qna'
+import Main from './screens/Header'
+import Board from './screens/board/Board'
+import WritePost from './screens/board/WritePost'
 
 function App() {
   const [loginsuccess, setLoginSuccess] = useState(false);

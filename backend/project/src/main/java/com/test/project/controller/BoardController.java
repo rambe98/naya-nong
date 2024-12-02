@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.project.dto.BoardDTO;
+import com.test.project.entity.BoardEntity;
 import com.test.project.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,17 @@ public class BoardController {
 	}// showAllBoard end
 	
 
-	@GetMapping("/{userNick}")
+	@GetMapping("/user/{userNick}")
 	public ResponseEntity<?> getBoardsByUserNick(@PathVariable("userNick") String userNick) {
 		List<BoardDTO> getBoardsByUserNick = service.getBoardsByUserNick(userNick);
 		return ResponseEntity.ok(getBoardsByUserNick);
 	}//getBoardsByUserNick
 	
+	@GetMapping("/{bodNum}")
+	public ResponseEntity<?> getBoardsByBoardNum(@PathVariable("bodNum") int bodNum) {
+		BoardEntity getBoardsByBoardNum = service.getBoardsByBoardNum(bodNum);
+		return ResponseEntity.ok(getBoardsByBoardNum);
+	}
 
 	@PostMapping
 	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto) {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.project.dto.BoardDTO;
@@ -45,7 +46,44 @@ public class BoardController {
 		BoardEntity getBoardsByBoardNum = service.getBoardsByBoardNum(bodNum);
 		return ResponseEntity.ok(getBoardsByBoardNum);
 	}
+	// 제목으로 검색
+    @GetMapping("/search/title")
+    public ResponseEntity<List<BoardDTO>> searchByTitle(@RequestParam("keyword") String titleKeyword) {
+        List<BoardDTO> boards = service.searchByTitle(titleKeyword);
+        return ResponseEntity.ok(boards);
+    }
 
+    // 내용으로 검색
+    @GetMapping("/search/content")
+    public ResponseEntity<List<BoardDTO>> searchByContent(@RequestParam("keyword") String contentKeyword) {
+        List<BoardDTO> boards = service.searchByContent(contentKeyword);
+        return ResponseEntity.ok(boards);
+    }
+
+    // 제목 또는 내용으로 검색
+    @GetMapping("/search/titleOrContent")
+    public ResponseEntity<List<BoardDTO>> searchByTitleOrContent(@RequestParam("titleKeyword") String titleKeyword, 
+                                                                  @RequestParam("contentKeyword") String contentKeyword) {
+        List<BoardDTO> boards = service.searchByTitleOrContent(titleKeyword, contentKeyword);
+        return ResponseEntity.ok(boards);
+    }
+
+    // 닉네임으로 검색
+    @GetMapping("/search/userNick")
+    public ResponseEntity<List<BoardDTO>> searchByUserNick(@RequestParam("keyword") String userNickKeyword) {
+        List<BoardDTO> boards = service.searchByUserNick(userNickKeyword);
+        return ResponseEntity.ok(boards);
+    }
+
+    // 제목, 내용, 닉네임 모두 검색
+    @GetMapping("/search")
+    public ResponseEntity<List<BoardDTO>> searchBoards(@RequestParam(value = "titleKeyword", required = false) String titleKeyword, 
+                                                       @RequestParam(value = "contentKeyword", required = false) String contentKeyword, 
+                                                       @RequestParam(value = "userNickKeyword", required = false) String userNickKeyword) {
+        List<BoardDTO> boards = service.searchBoards(titleKeyword, contentKeyword, userNickKeyword);
+        return ResponseEntity.ok(boards);
+    }
+	
 	@PostMapping
 	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto) {
 		BoardDTO addBoard = service.addBoard(dto);

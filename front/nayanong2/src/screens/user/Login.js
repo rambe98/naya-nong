@@ -1,34 +1,46 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import '../../css/Login.css'
 import logo from '../../assets/logo.png'
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { clientNumAtom,loginsuccessAtom, messageAtom, userIdAtom, userPwdAtom, userNicksuccessAtom } from '../../recoil/UserRecoil';
 
-function Login({ setLoginSuccess, setClientNum }) {
-  const [userId, setUserId] = useState('');
-  const [userPwd, setUserPwd] = useState('');
-  const [error, setError] = useState('');
+function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [userId, setUserId] = useRecoilState(userIdAtom);
+  const [userPwd, setUserPwd] = useRecoilState(userPwdAtom);
+  const [message, setMessage] = useRecoilState(messageAtom);
+  const setLoginSuccess = useSetRecoilState(loginsuccessAtom);
+  const setClientNum = useSetRecoilState(clientNumAtom);
+  const setUserNick = useSetRecoilState(userNicksuccessAtom);
 
   
+  const handleBack = () => {
+    setUserId('');
+    setUserPwd('');
+    setMessage('');
+    navigate('/'); // 이전 경로로 이동
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     // 아이디 및 비밀번호 검증
     if (!userId.trim() || !userPwd.trim()) {
-      setError('아이디와 비밀번호를 모두 입력해주세요.');
+      setMessage('아이디와 비밀번호를 모두 입력해주세요.');
       return;
     }
     // 아이디 및 비밀번호 공백 검증
     if (userId.includes(' ') || userPwd.includes(' ')) {
-      setError('아이디와 비밀번호는 공백을 포함할 수 없습니다.');
+      setMessage('아이디와 비밀번호는 공백을 포함할 수 없습니다.');
       return;
     }
 
     // 에러 초기화
-    setError('');
+    setMessage('');
 
     const logindata = {
       userId : userId,
@@ -43,14 +55,16 @@ function Login({ setLoginSuccess, setClientNum }) {
       if (response.status >= 200 && response.status < 300) {
         const user = response.data;
 
-        // 로컬 스토리지에 상태 저장
-        localStorage.setItem('loginsuccess', 'true');
-        localStorage.setItem('userId', user.userId);
-        localStorage.setItem('clientNum', user.clientNum);
+        // 세션 스토리지에 상태 저장
+        sessionStorage.setItem('loginsuccess', 'true');
+        sessionStorage.setItem('userId', user.userId);
+        sessionStorage.setItem('clientNum', user.clientNum);
+        sessionStorage.setItem('userNick', user.userNick);
 
         // 부모 상태 업데이트
         setLoginSuccess(true);
         setClientNum(user.clientNum);
+        setUserNick(user.userNick)
 
         alert('로그인 성공');
 
@@ -61,13 +75,14 @@ function Login({ setLoginSuccess, setClientNum }) {
         throw new Error('Unexpected response status: ' + response.status);
       }
     } catch (error) {
-      console.error('로그인 실패:', error);
-      setError('로그인에 실패했습니다.\n 다시 시도해주세요.');
+      console.error('로그인 실패:', message);
+      setMessage('로그인에 실패했습니다.\n 다시 시도해주세요.');
     }
   };
 
   return (
     <div className="loginContainer">
+       <img src={logo} alt="Logo" className="mainLogo" onClick={() => navigate('/')} />
       <h2 className="loginH2">로 그 인</h2>
       <form
         className="loginForm"
@@ -93,7 +108,7 @@ function Login({ setLoginSuccess, setClientNum }) {
           onChange={(e) => setUserPwd(e.target.value)}
           className="loginInput"
         />
-        {error && <p className="loginerrorText">{error}</p>}
+        {message && <p className="loginerrorText">{message}</p>}
         <button
           type="submit" // 폼 제출 버튼
           className="loginButton"
@@ -103,7 +118,7 @@ function Login({ setLoginSuccess, setClientNum }) {
         <button
           type="button"
           className="loginButton"
-          onClick={() => navigate('/')}
+          onClick={handleBack}
         >
           이전
         </button>

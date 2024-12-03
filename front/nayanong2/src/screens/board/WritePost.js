@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import '../../css/WritePost.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
 
 const WritePost = () => {
     const navigate = useNavigate();
 
+    const [userNick, setUserNick] = useRecoilState(userNickAtom)//닉네임 상태
+    const clientNum = useRecoilValue(clientNumAtom) //로컬스토리지에 클라이언트넘을 변수에저장
+
     const [title, setTitle] = useState('') //제목
     const [content, setContent] = useState('') //내용
-    const [userNick, setUserNick] = useState(''); //닉네임 상태
-    const [date, setDate] = useState(''); //작성일자
-
-    const clientNum = localStorage.getItem('clientNum'); //로컬스토리지에 클라이언트넘을 변수에저장
+    const [date,setDate] = useState("")
 
     useEffect(() => {
         const updateDate = () => {
@@ -30,12 +32,13 @@ const WritePost = () => {
 
     //닉네임 조회
     useEffect(() => {
-        const fetchNickName = async () => {
+        const getUserNick = async () => {
             try {
                 if (clientNum) { // clientNum이 존재하는 경우에만 실행
                     const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
                     if (response.status === 200) {
-                        setUserNick(response.data.userNick); // 서버에서 받은 닉네임
+                        setUserNick(response.data.userNick); // 서버에서 받은 닉네임을 setUserNick에 저장
+                        console.log("clientNum: ", clientNum);
                     }
                 }
             } catch (error) {
@@ -43,8 +46,22 @@ const WritePost = () => {
             }
         };
 
-        fetchNickName(); // useEffect 실행 시 닉네임 조회
-    }, [clientNum]); // clientNum이 변경될 때마다 실행
+        getUserNick(); // useEffect 실행 시 닉네임 조회
+    }, [clientNum, setUserNick]); // clientNum이 변경될 때마다 실행하여 userNick을 setUserNick에 저장
+
+    //로그인 선행
+    useEffect(() => {
+        if (!clientNum) {
+            const userConfirmed = window.confirm(
+                '로그인을 해야 이용 가능한 서비스입니다. \n로그인 페이지로 이동하시겠습니까?'
+            );
+            if (userConfirmed) {
+                navigate('/login', { state: { from: '/write' } });
+            } else {
+                navigate('/');
+            }
+        }
+    }, []);
 
     //게시글 작성 요청 함수
     const savePost = async (e) => {
@@ -59,13 +76,18 @@ const WritePost = () => {
             return alert('내용을 입력하세요.')
         }
         const data = {
-            userNick : userNick,
-            bodTitle : title,
-            bodDtail : content,
+            userNick: userNick,
+            bodTitle: title,
+            bodDtail: content,
+            
         }
+        console.log('writePost에서 보냄 : ', data);
         try {
             //게시글 작성 API 요청
             const response = await axios.post('http://localhost:7070/board', data)
+
+            console.log('writePost 게시글 내용: ', response.data);
+
             if (response.status === 200) {
                 alert('게시글이 작성되었습니다.')
                 navigate('/board')

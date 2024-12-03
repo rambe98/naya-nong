@@ -3,22 +3,17 @@ import '../../css/Signup.css'
 import logo from '../../assets/logo.png'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { formDataAtom, messageAtom, smessageAtom } from "../../recoil/UserRecoil";
 
 function Signup() {
-
-  const [smessage, setSmessage] = useState('');
-  const [message, setMessage] = useState('')
+  
+  const [formData, setFormData] = useRecoilState(formDataAtom);
+  const [smessage, setSmessage] = useRecoilState(smessageAtom);
+  const [message, setMessage] = useRecoilState(messageAtom);
 
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    userName: "",
-    userId: "",
-    userPwd: "",
-    userNick: "",
-    userEmail: "",
-    userPnum: "",
-    phoneCom: "",
-  });
+ 
 
   //기존 객체의 키,값 형태로 폼데이터 업데이트
   const handleChange = (e) => {
@@ -33,13 +28,12 @@ function Signup() {
     
   };
 
-  //폼제출
+  //회원가입 폼 요청
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("회원가입 정보:", formData);
     addUser(formData);
     setSmessage("");;
-    
   };
 
   //회원가입
@@ -61,7 +55,7 @@ function Signup() {
     const userNameRegex = /^[가-힣]{2,20}$/
     //아이디 정규식 , 영문자와 숫자만 포함된 문자열이며, 길이가 4자 이상 20자 이하인 문자열
     const userIdRegex = /^[a-zA-Z0-9]{4,20}$/
-    //비밀번호 정규식, 영어 대소문자, 숫자, 특수문자(7~20자)
+    //비밀번호 정규식, 영어 대소문자, 숫자, 특수문자 포함(7~20자)
     const userPwdRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{5,20}$/
     //이메일 정규식
     const userEmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
@@ -113,9 +107,15 @@ function Signup() {
     }
   };
 
+  const cancleButton = () =>{
+    setFormData('');
+    setSmessage('');
+    setMessage('');
+    navigate('/');
+  }
+
   return (
     <div className="signupContainer">
-      <img src={logo} alt="Logo" className="signupLogo" />
       <span className="signupHeader">회원가입</span>
       <form className="signupForm" onSubmit={handleSubmit}>
         <div className="signupSection">
@@ -201,7 +201,7 @@ function Signup() {
         </button>
         <button
           type="button"
-          onClick={() => navigate("/")}
+          onClick={cancleButton}
           className="signupButton"
         >
           이전

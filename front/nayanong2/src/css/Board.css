@@ -99,6 +99,17 @@
   font-weight: bold;
   font-size: 16px;
 }
+.boardList {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 2px solid #a8d08d; /* 연한 초록색 테두리 */
+  background-color: #fafad2; /* 연한 초록색 배경 */
+  color: #6B8E23;
+  font-weight: bold;
+  font-size: 16px;
+}
+
 
 /* boardListItem: 각 항목(p태그)에 적용할 스타일 */
 .boardListItem {

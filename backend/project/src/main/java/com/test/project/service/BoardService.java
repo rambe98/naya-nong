@@ -68,36 +68,26 @@ public class BoardService {
         List<BoardEntity> boardEntities = boardRepository.findByBodDtailContaining(contentKeyword);
         return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
     }
-
-    // 제목 또는 내용으로 게시글 검색
-    public List<BoardDTO> searchByTitleOrContent(String titleKeyword, String contentKeyword) {
-        List<BoardEntity> boardEntities = boardRepository.findByBodTitleContainingOrBodDtailContaining(titleKeyword, contentKeyword);
-        return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
-    }
-
     // 닉네임으로 게시글 검색
     public List<BoardDTO> searchByUserNick(String userNickKeyword) {
         List<BoardEntity> boardEntities = boardRepository.findByProjectUserNickContaining(userNickKeyword);
         return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
     }
 
-    // 통합 검색
-    public List<BoardDTO> searchBoards(String titleKeyword, String contentKeyword, String userNickKeyword) {
-        if (titleKeyword != null && contentKeyword != null && userNickKeyword != null) {
-            // 제목, 내용, 닉네임에 모두 검색어가 있는 경우
-            return boardRepository.findByBodTitleContainingOrBodDtailContaining(titleKeyword, contentKeyword).stream()
-                    .filter(board -> board.getProject().getUserNick().contains(userNickKeyword))
-                    .map(BoardDTO::new)
-                    .collect(Collectors.toList());
-        } else if (titleKeyword != null && contentKeyword == null && userNickKeyword == null) {
-            return searchByTitle(titleKeyword);
-        } else if (contentKeyword != null && titleKeyword == null && userNickKeyword == null) {
-            return searchByContent(contentKeyword);
-        } else if (titleKeyword == null && contentKeyword == null && userNickKeyword != null) {
-            return searchByUserNick(userNickKeyword);
-        } else {
-            return searchByTitleOrContent(titleKeyword, contentKeyword);
-        }
+    // 제목+내용으로 검색 (제목과 내용에 키워드가 모두 포함된 게시글 검색)
+    public List<BoardDTO> searchByTitleAndContent(String titleKeyword, String contentKeyword) {
+        List<BoardEntity> boards = boardRepository.findByBodTitleContainingOrBodDtailContaining(titleKeyword, contentKeyword);
+        return boards.stream()
+                .map(BoardDTO::new)  // BoardEntity -> BoardDTO로 변환
+                .collect(Collectors.toList());
+    }
+
+    // 전체 검색 (제목, 내용, 닉네임에 키워드가 포함된 게시글 검색)
+    public List<BoardDTO> searchAll(String keyword) {
+        List<BoardEntity> boards = boardRepository.findByAllKeyword(keyword); // 앞서 만든 findByAllKeyword 사용
+        return boards.stream()
+                .map(BoardDTO::new)  // BoardEntity -> BoardDTO로 변환
+                .collect(Collectors.toList());
     }
 	
 	

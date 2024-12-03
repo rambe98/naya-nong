@@ -41,6 +41,10 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-gson
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-gson', version: '0.11.5'
+	    // Spring Security 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // OAuth2 의존성 추가 (필요한 경우)
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 }
 

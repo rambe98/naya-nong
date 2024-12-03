@@ -1,0 +1,101 @@
+/* PostDetail 페이지 */
+.postDetailContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* 화면 전체 높이를 차지하도록 */
+    background-color: #F5EFE6; /* 연한 베이지 배경색 */
+    width: 100vw;
+    padding: 0 20px;
+}
+
+/* 게시글 컨테이너 */
+.postDetailContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 800px; /* 최대 너비 설정 */
+    margin-top: 20px; /* 상단 여백 */
+    padding: 20px;
+    background-color: #FAF5EE; /* 연한 베이지 배경 */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+}
+
+/* 게시글 제목 스타일 */
+.postTitle {
+    font-size: 24px;
+    font-weight: bold;
+    color: #6D5A50; /* 제목 색상 */
+    margin-bottom: 20px;
+}
+
+/* 작성자, 등록일, 조회수, 좋아요 카운트 스타일 */
+.postInfo {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 14px;
+    color: #8A7F73; /* 부드러운 브라운 색상 */
+    margin-bottom: 20px;
+}
+
+.postInfo span {
+    margin-right: 10px;
+}
+
+/* 게시글 본문 내용 */
+.postContent {
+    font-size: 16px;
+    color: #6D5A50;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* 좋아요 버튼 스타일 */
+.likeButton {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #C4A484; /* 강조된 브라운 */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px; /* 버튼의 최대 크기 제한 */
+    margin-top: 10px;
+    align-self: center;
+}
+
+.likeButton:hover {
+    background-color: #A07C5A; /* 더 진한 브라운 */
+}
+
+/* 뒤로가기 버튼 스타일 */
+.backButton {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #6D5A50;
+    background-color: #F5EFE6;
+    border: 2px solid #6D5A50;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px;
+    margin-top: 20px;
+    align-self: center;
+}
+
+.backButton:hover {
+    background-color: #D9CBB6; /* 연한 브라운 */
+}
+
+/* 로딩 화면 스타일 */
+.loading {
+    text-align: center;
+    font-size: 18px;
+    color: #6D5A50;
+    margin-top: 50px;
+}

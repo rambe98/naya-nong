@@ -11,6 +11,7 @@
     transform: translateX(-250px); /* 처음에는 사이드바가 화면 밖에 위치하도록 설정 */
     transition: transform 0.3s ease-in-out;
     z-index: 0;
+
   }
   
   /* show 클래스가 있을 때 사이드바가 보이도록 설정 */
@@ -51,6 +52,7 @@
   /* 사이드바 항목 스타일 */
   .sidebar li {
     margin: 20px 0;
+
   }
   
   /* 링크 스타일 */

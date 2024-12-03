@@ -45,7 +45,7 @@
   border-radius: 8px; /* 둥근 모서리 */
   background-color: #FAF5EE; /* 아주 연한 베이지 */
   font-size: 18px; /* 입력 텍스트 크기 */
-  text-align: left; /* 텍스트 정렬 왼쪽 */
+  text-align: center; /* 텍스트 정렬 왼쪽 */
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* 내부 그림자 */
 }
 

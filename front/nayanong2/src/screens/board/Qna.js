@@ -2,19 +2,22 @@ import React, { useEffect, useState, } from 'react';
 import logo from '../../assets/logo.png'
 import '../../css/Qna.css';
 import { Link, useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
 
 const Qna = () => {
     const navigate = useNavigate('');
-    const [userNick, setUserNick] = useState(); //닉네임 상태
+   
+    const [userNick,setUserNick] = useRecoilState(userNickAtom)
+    
     const [formData, setFormData] = useState({ //폼데이터를 보내기위한 초기값,
         userNick : userNick,
         qnaTitle : '',
         qnaDtail:'',
     })
     const [date, setDate] = useState(''); //작성일자
-    const clientNum = localStorage.getItem('clientNum'); //로컬스토리지에 클라이언트넘을 변수에저장
+    const clientNum = useRecoilValue(clientNumAtom) //로컬스토리지에 클라이언트넘을 변수에저장
     
     //날짜 함수
     useEffect(() => {

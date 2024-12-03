@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import '../../css/Board.css'
 import '../../css/SideBar.css'
+import axios from 'axios';
 
 const Board = () => {
     const navigate = useNavigate();
@@ -10,11 +11,33 @@ const Board = () => {
     //사이드바 현재 상태 설정 (기본 false) , setIsSidebarVisible 상태 업데이트 함수
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
+    //게시글 목록
+    const [posts, setPosts] = useState([])
+
     // 사이드바 
     const toggleSidebar = () => {
         // (prevState) => !prevState 이전 상태를 !연산자로 반전시킴
         setIsSidebarVisible((prevState) => !prevState);
     };
+
+    //게시글 목록 가져오기
+    const getList = async () => {
+        try {
+            const response = await axios.get('http://localhost:7070/board')
+            if (response.status === 200) {
+                console.log("board 게시글 : ", response.data);
+                const reversePosts = response.data.reverse() //게시글을 최신순으로 정렬하기 위해 reverse()사용
+                setPosts(reversePosts) //서버에서 받은 게시글 목록을 상태에 저장
+            }
+        } catch (error) {
+            console.error('목록을 가져올 수 없습니다.')
+            alert('게시글 목록 error')
+        }
+    }
+    //컴포넌트가 마운트될 때 게시글 리스트 가져옴
+    useEffect(() => {
+        getList()
+    }, [])
 
 
     return (
@@ -46,7 +69,7 @@ const Board = () => {
                 </div>
             </div>
 
-            {/* 게시판 리스트 영역 */}
+            {/* 게시판 리스트 bar */}
             <div className="boardListContainer">
                 <div className="boardListHeader">
                     <p className="boardListItem number">번호</p>
@@ -55,6 +78,26 @@ const Board = () => {
                     <p className="boardListItem date">등록일</p>
                     <p className="boardListItem views">조회수</p>
                 </div>
+
+                {/* 게시글 목록 */}
+                {/* 배열에 게시글이 있으면 나오는 내용 */}
+                {posts.length > 0 ? (
+                    posts.map((post, index) => (
+                        <div key={post.id} className='boardList'>
+                            {/* index는 0번부터 시작 , 게시글은 번호는 1번부터 시작해야 해서 +1 */}
+                            <p className="boardListItem number">{index + 1}</p>
+                            <p className="boardListItem title">
+                            <Link to={`/post/${post.bodNum}`}>{post.bodTitle}</Link>
+                            </p>
+                            <p className="boardListItem author">{post.userNick}</p>
+                            <p className="boardListItem date">{post.date}</p>
+                            <p className="boardListItem views">{post.views}</p>
+                        </div>
+                    ))
+                ) : (
+                    //게시글이 없으면 나오는 내용
+                    <p>게시글이 없습니다.</p>
+                )}
             </div>
         </div>
     );

@@ -111,3 +111,11 @@ nav li a {
 nav li:hover {
   color: #A07C5A; /* 마우스를 올릴 때 색상 변경 */
 }
+
+.HeaderHello{
+  font-size: 20px;
+  background-color: #F5EFE6; /* 버튼 색 */
+  color: #6D5A50;
+  border: none;
+  border-radius: 5px;
+}

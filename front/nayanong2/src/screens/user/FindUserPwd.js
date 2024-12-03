@@ -3,12 +3,18 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../../css/FindUser.css'
 import logo from '../../assets/logo.png';
+import { messageAtom, userPwdAtom } from "../../recoil/UserRecoil";
+import { useRecoilState } from "recoil";
+
 
 const FindUserPwd = () => {
+
+  const [message, setMessage] = useRecoilState(messageAtom);
+  const [userPwd, setUserPwd] = useRecoilState(userPwdAtom);
+  
   const [userId, setUserId] = useState("");
-  const [userPwd, setUserPwd] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
-  const [message, setMessage] = useState("");
+  
   const navigate = useNavigate();
 
   const handlePwdChange = (e) => {

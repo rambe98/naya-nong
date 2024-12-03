@@ -28,6 +28,5 @@ public class NongEntity {
 	private String userName;
 	private String phoneCom;
 	private String userNick;
-	private String authProvider; //OAuth 소셜로그인시 사용할 유저 정보 제공자
 }//NongEntity end
 

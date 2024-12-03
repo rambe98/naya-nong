@@ -76,7 +76,7 @@ public class BoardController {
     }
 
     // 제목, 내용, 닉네임 모두 검색
-    @GetMapping("/search")
+    @GetMapping("/search/all")
     public ResponseEntity<List<BoardDTO>> searchBoards(@RequestParam(value = "titleKeyword", required = false) String titleKeyword, 
                                                        @RequestParam(value = "contentKeyword", required = false) String contentKeyword, 
                                                        @RequestParam(value = "userNickKeyword", required = false) String userNickKeyword) {

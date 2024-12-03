@@ -1,48 +1,105 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
-import '../../css/Board.css'
-import '../../css/SideBar.css'
+import '../../css/Board.css';
+import '../../css/SideBar.css';
 import axios from 'axios';
 
 const Board = () => {
     const navigate = useNavigate();
-    
-    //사이드바 현재 상태 설정 (기본 false) , setIsSidebarVisible 상태 업데이트 함수
+    //사이드바 표시여부 관리
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
-    //게시글 목록
-    const [posts, setPosts] = useState([])
+    //게시글 데이터 관리
+    const [posts, setPosts] = useState([]);
 
-    // 사이드바 
+    //검색어 관리 
+    const [searchKeyword, setSearchKeyword] = useState("");
+
+    //검색 범주(전체, 제목, 내용, 제목+내용, 닉네임) 관리
+    const [searchCategory, setSearchCategory] = useState("");
+
+    //사이드바의 가시성을 true/false로 전환
     const toggleSidebar = () => {
-        // (prevState) => !prevState 이전 상태를 !연산자로 반전시킴
         setIsSidebarVisible((prevState) => !prevState);
     };
 
-    //게시글 목록 가져오기
+    //서버로부터 게시글 목록을 가져와 posts에 저장 / 최신순 정렬을 위해 reverse()사용
     const getList = async () => {
         try {
-            const response = await axios.get('http://localhost:7070/board')
+            const response = await axios.get('http://localhost:7070/board');
             if (response.status === 200) {
-                console.log("board 게시글 : ", response.data);
-                const reversePosts = response.data.reverse() //게시글을 최신순으로 정렬하기 위해 reverse()사용
-                setPosts(reversePosts) //서버에서 받은 게시글 목록을 상태에 저장
+                const reversePosts = response.data.reverse();
+                setPosts(reversePosts);
             }
         } catch (error) {
-            console.error('목록을 가져올 수 없습니다.')
-            alert('게시글 목록 error')
+            console.error('목록을 가져올 수 없습니다.');
+            alert('게시글 목록 error');
         }
-    }
-    //컴포넌트가 마운트될 때 게시글 리스트 가져옴
-    useEffect(() => {
-        getList()
-    }, [])
+    };
 
+    const handleSearch = async () => {
+        if (!searchKeyword.trim()) {
+            alert("검색어를 입력해주세요.");
+            return;
+        }
+    
+        let url = "";
+        let params = {};
+    
+        // 검색 범주에 따른 URL 및 파라미터 설정
+        switch (searchCategory) {
+            case "title": // 제목 검색
+                url = "http://localhost:7070/board/search/title";
+                params = { keyword: searchKeyword };
+                break;
+            case "content": // 내용 검색
+                url = "http://localhost:7070/board/search/content";
+                params = { keyword: searchKeyword };
+                break;
+            case "titleOrContent": // 제목+내용 검색
+                url = "http://localhost:7070/board/search/titleOrContent";
+                params = { keyword: searchKeyword }; // 하나의 키워드로 처리
+                break;
+            case "userNick": // 닉네임 검색
+                url = "http://localhost:7070/board/search/userNick";
+                params = { keyword: searchKeyword };
+                break;
+            case "all": // 전체 검색
+                url = "http://localhost:7070/board/search/all";
+                params = {
+                    titleKeyword: searchKeyword,
+                    contentKeyword: searchKeyword,
+                    userNickKeyword: searchKeyword,
+                };
+                break;
+            default:
+                alert("잘못된 검색 범주입니다.");
+                return;
+        }
+    
+        try {
+            const response = await axios.get(url, { params });
+            if (response.status === 200) {
+                setPosts(response.data.reverse()); // 최신순 정렬
+            } else {
+                setPosts([]);
+            }
+        } catch (error) {
+            console.error("검색 중 오류가 발생했습니다.", error);
+            alert("검색 실패");
+        }
+    };
+    
+    
+    
+    
+    useEffect(() => {
+        getList();
+    }, []);
 
     return (
         <div className="boardContainer">
-            {/* 사이드바 컨테이너 , 사이드바 true면 보여줌, false면 숨김*/}
             <div className={`sidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
                 <div>
                     <ul>
@@ -52,24 +109,37 @@ const Board = () => {
                 </div>
             </div>
 
-            {/* 메인 내용 영역 */}
             <div className="boardInputContainer">
-                {/* 사이드바 토글 버튼 */}
                 <div className="boardContainerButton">
                     <button className="sidebarToggleButton" onClick={toggleSidebar}>
                         <FaBars />
                     </button>
-                    {/* 글쓰기 버튼 */}
                     <button className="boardWriteButton" onClick={() => navigate("/write")}>글쓰기</button>
                 </div>
-                {/* 검색 영역 */}
                 <div className="boardContainerButton2">
-                    <input type="text" placeholder="검색어를 입력하세요." className="boardSearchInput" />
-                    <button className="boardSearchButton">검색</button>
+                    <select
+                        className="boardSearchCategory"
+                        value={searchCategory}
+                        onChange={(e) => setSearchCategory(e.target.value)}
+                    >
+                        <option value="all">전체</option>
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                        <option value="titleOrContent">제목+내용</option>
+                        <option value="userNick">닉네임</option>
+                        
+                    </select>
+                    <input
+                        type="text"
+                        placeholder="검색어를 입력하세요."
+                        className="boardSearchInput"
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                    />
+                    <button className="boardSearchButton" onClick={handleSearch}>검색</button>
                 </div>
             </div>
 
-            {/* 게시판 리스트 bar */}
             <div className="boardListContainer">
                 <div className="boardListHeader">
                     <p className="boardListItem number">번호</p>
@@ -78,16 +148,12 @@ const Board = () => {
                     <p className="boardListItem date">등록일</p>
                     <p className="boardListItem views">조회수</p>
                 </div>
-
-                {/* 게시글 목록 */}
-                {/* 배열에 게시글이 있으면 나오는 내용 */}
                 {posts.length > 0 ? (
                     posts.map((post, index) => (
-                        <div key={post.id} className='boardList'>
-                            {/* index는 0번부터 시작 , 게시글은 번호는 1번부터 시작해야 해서 +1 */}
+                        <div key={post.id} className="boardList">
                             <p className="boardListItem number">{index + 1}</p>
                             <p className="boardListItem title">
-                            <Link to={`/post/${post.bodNum}`}>{post.bodTitle}</Link>
+                                <Link to={`/post/${post.bodNum}`}>{post.bodTitle}</Link>
                             </p>
                             <p className="boardListItem author">{post.userNick}</p>
                             <p className="boardListItem date">{post.date}</p>
@@ -95,7 +161,6 @@ const Board = () => {
                         </div>
                     ))
                 ) : (
-                    //게시글이 없으면 나오는 내용
                     <p>게시글이 없습니다.</p>
                 )}
             </div>

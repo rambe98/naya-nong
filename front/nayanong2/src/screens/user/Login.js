@@ -92,6 +92,7 @@ function Login() {
           type="text"
           placeholder="아이디 입력"
           value={userId}
+          autocomplete="off"
           onChange={(e) => setUserId(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -104,6 +105,7 @@ function Login() {
         <input
           type="password"
           placeholder="비밀번호 입력"
+          autocomplete="off"
           value={userPwd}
           onChange={(e) => setUserPwd(e.target.value)}
           className="loginInput"

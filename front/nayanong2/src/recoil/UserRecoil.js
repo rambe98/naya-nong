@@ -102,29 +102,6 @@ export const confirmPwdAtom = atom({
     default: "",
 })
 
-//유저 휴대폰 번호
-export const userPnumAtom = atom({
-    key: 'userPnum',
-    default: "",
-})
-
-//인증번호 요청 여부
-export const isCondeSentAtom = atom({
-    key: 'isCondeSent',
-    default: false,
-})
-
-//인증번호 확인
-export const vericationCodeAtom = atom({
-    key: 'vericationCode',
-    default: ""
-})
-
-//error
-export const errorAtom = atom({
-    key: 'error',
-    default: "",
-})
 
 export const validationMessageAtom = atom({
     key: 'validationMessage',

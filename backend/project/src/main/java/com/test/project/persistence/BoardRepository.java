@@ -33,6 +33,6 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
             "b.bodTitle LIKE %:keyword% OR " +
             "b.bodDtail LIKE %:keyword% OR " +
             "b.project.userNick LIKE %:keyword%")
-     List<BoardEntity> findByAllKeyword(String keyword);
+    List<BoardEntity> findByAllKeyword(@Param("keyword") String keyword);
 
 }

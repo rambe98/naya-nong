@@ -43,8 +43,14 @@ public class BoardController {
 	
 	@GetMapping("/{bodNum}")
 	public ResponseEntity<?> getBoardsByBoardNum(@PathVariable("bodNum") int bodNum) {
-		BoardEntity getBoardsByBoardNum = service.getBoardsByBoardNum(bodNum);
-		return ResponseEntity.ok(getBoardsByBoardNum);
+	    try {
+	        BoardDTO boardDTO = service.getBoardsByBoardNum(bodNum);
+	        return ResponseEntity.ok(boardDTO); // 게시글 정보 반환
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(404).body(e.getMessage()); // 게시글이 없을 경우 404 상태 코드 반환
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).body("서버 오류가 발생했습니다."); // 다른 예외 처리
+	    }
 	}
 	// 제목으로 검색
     @GetMapping("/search/title")

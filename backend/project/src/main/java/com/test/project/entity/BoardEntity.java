@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +30,8 @@ public class BoardEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int bodNum;
 	private String bodTitle;
-	private String bodDtail;
+	@Column(length = 5000)  // 최대 5000자까지 입력 가능
+    private String bodDtail;  // 게시글 내용
 	
 	@ManyToOne
 	@JoinColumn(name = "user_nick", referencedColumnName = "userNick", nullable = false)
@@ -40,7 +42,4 @@ public class BoardEntity {
 	private LocalDateTime writeDate;
 	private int views;
 	private int likeCount;
-	
-	
-
 }

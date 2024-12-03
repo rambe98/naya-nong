@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import '../css/Main.css'
-import { useRecoilValue, useResetRecoilState, useSetRecoilState, useRecoilState} from 'recoil';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState, useRecoilState } from 'recoil';
 import { clientNumAtom, loginsuccessAtom, messageAtom, userIdAtom, userPwdAtom, formDataAtom, userNickSelector } from '../recoil/UserRecoil';
 
 const Header = () => {
@@ -31,7 +31,7 @@ const Header = () => {
   //     setUserNick(localUserNick); // 로컬 스토리지와 상태 동기화
   //   }
   // }, [userNick, setUserNick]);
-  
+
 
   //로그아웃 함수
   const handleLogout = () => {
@@ -78,7 +78,13 @@ const Header = () => {
         </ul>
       </nav>
       <div className="mainHeaderRight">
-      {loginsuccess && <span className='HeaderHello'>환영합니다<br/> {userNick}님</span>}
+        {loginsuccess && (
+          <span className="HeaderHello">
+            환영합니다<br />
+            <span className="highlight">{userNick}</span>님
+          </span>
+        )}
+
 
         {!loginsuccess ? (
           <>

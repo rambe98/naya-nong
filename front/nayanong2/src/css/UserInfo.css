@@ -255,3 +255,29 @@
 .modalCancelButton:hover {
   background-color: #B9A391; /* 더 진한 연한 브라운 */
 }
+
+/* 비밀번호 표시/숨기기 버튼 스타일 */
+.togglePasswordButton {
+  background-color: #D9CBB6; /* 연한 브라운 배경색 */
+  color: white; /* 흰색 텍스트 */
+  border: none; /* 기본 테두리 제거 */
+  border-radius: 5px; /* 둥근 모서리 */
+  padding: 8px 12px; /* 버튼 내부 여백 */
+  font-size: 14px; /* 글자 크기 */
+  font-weight: bold; /* 굵은 텍스트 */
+  cursor: pointer; /* 포인터 커서 */
+  margin-left: 10px; /* 왼쪽 여백 */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* 배경색 및 크기 전환 효과 */
+}
+
+/* 버튼 호버 효과 */
+.togglePasswordButton:hover {
+  background-color: #C4A484; /* 강조된 브라운 배경색 */
+  transform: scale(1.05); /* 약간 확대 */
+}
+
+/* 버튼 활성화 시 효과 */
+.togglePasswordButton:active {
+  background-color: #A07C5A; /* 더 어두운 브라운 */
+  transform: scale(0.95); /* 약간 축소 */
+}

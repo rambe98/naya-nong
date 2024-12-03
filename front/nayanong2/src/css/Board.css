@@ -19,7 +19,7 @@
   width: 100%;
   max-width: 900px;
   margin-top: 20px;
-  background-color: #ffffff; /* 흰색 배경 */
+  background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -41,22 +41,14 @@
   background-color: #556B2F;
 }
 
-/* 오른쪽 버튼들 (검색창, 검색 버튼) */
-.boardRightButtons {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-}
-
 /* 검색 입력창 */
 .boardSearchInput {
   padding: 12px 20px;
   font-size: 16px;
   width: 250px;
-  border: 2px solid #6B8E23; /* 연한 초록색 테두리 */
+  border: 2px solid #6B8E23;
   border-radius: 5px;
-  background-color: #fafad2; /* 연한 배경색 */
+  background-color: #fafad2;
 }
 
 /* 검색 버튼 */
@@ -72,7 +64,36 @@
 }
 
 .boardSearchButton:hover {
-  background-color:#556B2F;
+  background-color: #556B2F;
+}
+
+/* 검색 범주 선택 */
+.boardSearchCategory {
+  padding: 10px 15px;
+  margin-right: 15px;
+  font-size: 16px;
+  border: 2px solid #6B8E23;
+  border-radius: 5px;
+  background-color: #fafad2;
+  color: #6B8E23;
+  cursor: pointer;
+}
+
+.boardSearchCategory:hover {
+  background-color: #e6f5c9;
+  border-color: #556B2F;
+}
+
+/* 페이지 당 게시글 수 선택 */
+.boardItemsPerPageSelect {
+  padding: 10px 15px;
+  margin-left: 15px;
+  font-size: 16px;
+  border: 2px solid #6B8E23;
+  border-radius: 5px;
+  background-color: #fafad2;
+  color: #6B8E23;
+  cursor: pointer;
 }
 
 /* boardListContainer: 전체 컨테이너 */
@@ -92,70 +113,105 @@
 .boardListHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
-  border-bottom: 2px solid #a8d08d; /* 연한 초록색 테두리 */
-  background-color: #fafad2; /* 연한 초록색 배경 */
+  border-bottom: 2px solid #a8d08d;
+  background-color: #fafad2;
   color: #6B8E23;
   font-weight: bold;
   font-size: 16px;
+  text-align: center;
 }
 
 /* boardListItem: 각 항목(p태그)에 적용할 스타일 */
 .boardListItem {
   text-align: center;
   font-size: 16px;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* 번호, 제목, 작성자, 등록일, 조회수에 대해 각 항목의 flex 비율 설정 */
+/* 번호, 제목, 작성자, 등록일, 조회수 플렉스 비율 설정 */
 .boardListItem.number {
-  flex: 1;
+  flex: 0 0 50px;
+  max-width: 50px;
 }
 
 .boardListItem.title {
-  flex: 4;
+  flex: 1 0 300px;
+  max-width: 300px;
 }
 
 .boardListItem.author {
-  flex: 2;
+  flex: 0 0 150px;
+  max-width: 150px;
 }
 
 .boardListItem.date {
-  flex: 1.5;
+  flex: 0 0 120px;
+  max-width: 120px;
 }
 
 .boardListItem.views {
-  flex: 1.5;
+  flex: 0 0 80px;
+  max-width: 80px;
 }
 
-/* 사이드바 */
-.boardSideBar {
-  position: absolute;
-  margin-right: 50;
-}
-
+/* 게시글 목록 */
 .boardList {
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
-  border-bottom: 2px solid #a8d08d; /* 연한 초록색 테두리 */
-  background-color: #fafad2; /* 연한 초록색 배경 */
+  border-bottom: 2px solid #a8d08d;
+  background-color: #fafad2;
   color: #6B8E23;
-  font-weight: bold;
   font-size: 16px;
 }
 
-.boardSearchCategory {
-  padding: 10px 15px; /* 여백 증가 */
-  margin-right: 15px; /* 오른쪽 여백 증가 */
-  font-size: 16px; /* 폰트 크기 증가 */
-  border: 2px solid #6B8E23; /* 테두리 색상 */
-  border-radius: 5px; /* 둥근 모서리 */
-  background-color: #fafad2; /* 연한 배경색 */
-  color: #6B8E23; /* 텍스트 색상 */
-  cursor: pointer; /* 마우스를 올렸을 때 포인터 */
+/* 링크 기본 스타일 (언더라인 제거, 초록색 설정) */
+.boardListItem.title a {
+  text-decoration: none;
+  color: #2C5F2D;
+  font-weight: 600;
 }
 
-.boardSearchCategory:hover {
-  background-color: #e6f5c9; /* 호버 시 배경색 변경 */
-  border-color: #556B2F; /* 호버 시 테두리 색 변경 */
+/* 링크 호버 스타일 (언더라인 추가) */
+.boardListItem.title a:hover {
+  text-decoration: underline;
+  color: #6B8E23;
+}
+
+/* 페이지네이션 */
+.boardPagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.boardPageButton {
+  padding: 8px 12px;
+  margin: 0 5px;
+  font-size: 14px;
+  color: #6B8E23;
+  border: 1px solid #6B8E23;
+  border-radius: 4px;
+  background-color: #fafad2;
+  cursor: pointer;
+}
+
+.boardPageButton:hover {
+  background-color: #e6f5c9;
+}
+
+.boardActivePage {
+  background-color: #6B8E23;
+  color: #fff;
+  cursor: default;
 }

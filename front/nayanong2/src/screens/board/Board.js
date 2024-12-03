@@ -7,30 +7,22 @@ import axios from 'axios';
 
 const Board = () => {
     const navigate = useNavigate();
-    //사이드바 표시여부 관리
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-
-    //게시글 데이터 관리
     const [posts, setPosts] = useState([]);
-
-    //검색어 관리 
     const [searchKeyword, setSearchKeyword] = useState("");
-
-    //검색 범주(전체, 제목, 내용, 제목+내용, 닉네임) 관리
     const [searchCategory, setSearchCategory] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
-    //사이드바의 가시성을 true/false로 전환
     const toggleSidebar = () => {
         setIsSidebarVisible((prevState) => !prevState);
     };
 
-    //서버로부터 게시글 목록을 가져와 posts에 저장 / 최신순 정렬을 위해 reverse()사용
     const getList = async () => {
         try {
             const response = await axios.get('http://localhost:7070/board');
             if (response.status === 200) {
-                const reversePosts = response.data.reverse();
-                setPosts(reversePosts);
+                setPosts(response.data.reverse());
             }
         } catch (error) {
             console.error('목록을 가져올 수 없습니다.');
@@ -43,45 +35,41 @@ const Board = () => {
             alert("검색어를 입력해주세요.");
             return;
         }
-    
+
         let url = "";
         let params = {};
-    
-        // 검색 범주에 따른 URL 및 파라미터 설정
+
         switch (searchCategory) {
-            case "title": // 제목 검색
+            case "title":
                 url = "http://localhost:7070/board/search/title";
                 params = { keyword: searchKeyword };
                 break;
-            case "content": // 내용 검색
+            case "content":
                 url = "http://localhost:7070/board/search/content";
                 params = { keyword: searchKeyword };
                 break;
-            case "titleOrContent": // 제목+내용 검색
-                url = "http://localhost:7070/board/search/titleOrContent";
-                params = { keyword: searchKeyword }; // 하나의 키워드로 처리
+            case "titleOrContent":
+                url = "http://localhost:7070/board/search/titleAndContent";
+                params = { titleKeyword: searchKeyword, contentKeyword: searchKeyword };
                 break;
-            case "userNick": // 닉네임 검색
+            case "userNick":
                 url = "http://localhost:7070/board/search/userNick";
                 params = { keyword: searchKeyword };
                 break;
-            case "all": // 전체 검색
+            case "all":
                 url = "http://localhost:7070/board/search/all";
-                params = {
-                    titleKeyword: searchKeyword,
-                    contentKeyword: searchKeyword,
-                    userNickKeyword: searchKeyword,
-                };
+                params = { keyword: searchKeyword };
                 break;
             default:
                 alert("잘못된 검색 범주입니다.");
                 return;
         }
-    
+
         try {
             const response = await axios.get(url, { params });
             if (response.status === 200) {
-                setPosts(response.data.reverse()); // 최신순 정렬
+                setPosts(response.data.reverse());
+                setCurrentPage(1);
             } else {
                 setPosts([]);
             }
@@ -90,10 +78,18 @@ const Board = () => {
             alert("검색 실패");
         }
     };
-    
-    
-    
-    
+
+    const totalPages = Math.ceil(posts.length / itemsPerPage);
+
+    const currentPosts = posts.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     useEffect(() => {
         getList();
     }, []);
@@ -114,9 +110,17 @@ const Board = () => {
                     <button className="sidebarToggleButton" onClick={toggleSidebar}>
                         <FaBars />
                     </button>
-                    <button className="boardWriteButton" onClick={() => navigate("/write")}>글쓰기</button>
+                    <button className="boardWriteButton" onClick={() => navigate('/write')}>
+                        글쓰기
+                    </button>
                 </div>
-                <div className="boardContainerButton2">
+                <form
+                    className="boardContainerButton2"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSearch();
+                    }}
+                >
                     <select
                         className="boardSearchCategory"
                         value={searchCategory}
@@ -127,7 +131,6 @@ const Board = () => {
                         <option value="content">내용</option>
                         <option value="titleOrContent">제목+내용</option>
                         <option value="userNick">닉네임</option>
-                        
                     </select>
                     <input
                         type="text"
@@ -136,33 +139,62 @@ const Board = () => {
                         value={searchKeyword}
                         onChange={(e) => setSearchKeyword(e.target.value)}
                     />
-                    <button className="boardSearchButton" onClick={handleSearch}>검색</button>
-                </div>
+                    <button type="submit" className="boardSearchButton">
+                        검색
+                    </button>
+                    <select
+                        className="boardItemsPerPageSelect"
+                        value={itemsPerPage}
+                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                    >
+                        <option value={10}>10개</option>
+                        <option value={20}>20개</option>
+                        <option value={30}>30개</option>
+                    </select>
+                </form>
             </div>
 
             <div className="boardListContainer">
                 <div className="boardListHeader">
-                    <p className="boardListItem number">번호</p>
-                    <p className="boardListItem title">제목</p>
-                    <p className="boardListItem author">작성자</p>
-                    <p className="boardListItem date">등록일</p>
-                    <p className="boardListItem views">조회수</p>
+                    <p className="boardListItem boardNumber">번호</p>
+                    <p className="boardListItem boardTitle">제목</p>
+                    <p className="boardListItem boardAuthor">작성자</p>
+                    <p className="boardListItem boardDate">등록일</p>
+                    <p className="boardListItem boardViews">조회수</p>
                 </div>
-                {posts.length > 0 ? (
-                    posts.map((post, index) => (
-                        <div key={post.id} className="boardList">
-                            <p className="boardListItem number">{index + 1}</p>
-                            <p className="boardListItem title">
-                                <Link to={`/post/${post.bodNum}`}>{post.bodTitle}</Link>
+                {currentPosts.length > 0 ? (
+                    currentPosts.map((post, index) => (
+                        <div key={post.bodNum} className="boardList">
+                            <p className="boardListItem boardNumber">{index + 1 + (currentPage - 1) * itemsPerPage}</p>
+                            <p className="boardListItem boardTitle">
+                                <Link to={`/board/${post.bodNum}`}>{post.bodTitle}</Link>
                             </p>
-                            <p className="boardListItem author">{post.userNick}</p>
-                            <p className="boardListItem date">{post.date}</p>
-                            <p className="boardListItem views">{post.views}</p>
+                            <p className="boardListItem boardAuthor">{post.userNick}</p>
+                            <p className="boardListItem boardDate">
+                                {new Date(post.writeDate).toLocaleDateString("ko-KR", {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "numeric",
+                                }).replace(/\.$/, "")}
+                            </p>
+                            <p className="boardListItem boardViews">{post.views}</p>
                         </div>
                     ))
                 ) : (
-                    <p>게시글이 없습니다.</p>
+                    <p className="boardNoPosts">게시글이 없습니다.</p>
                 )}
+            </div>
+
+            <div className="boardPagination">
+                {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                        key={i}
+                        className={`boardPageButton ${i + 1 === currentPage ? "boardActivePage" : ""}`}
+                        onClick={() => handlePageChange(i + 1)}
+                    >
+                        {i + 1}
+                    </button>
+                ))}
             </div>
         </div>
     );

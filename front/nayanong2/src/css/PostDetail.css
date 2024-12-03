@@ -45,12 +45,16 @@
     margin-right: 10px;
 }
 
-/* 게시글 본문 내용 */
 .postContent {
-    font-size: 16px;
-    color: #6D5A50;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    font-size: 16px; /* 텍스트 크기 */
+    color: #6D5A50; /* 텍스트 색상 */
+    line-height: 1.6; /* 줄 간격 */
+    margin-bottom: 20px; /* 하단 여백 */
+    white-space: pre-wrap; /* 공백과 줄바꿈 유지 */
+    overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+    word-wrap: break-word; /* 하위 브라우저 호환 */
+    width: 100%; /* 컨테이너 크기에 맞춤 */
+    text-align: justify; /* 텍스트 정렬 */
 }
 
 /* 좋아요 버튼 스타일 */
@@ -99,3 +103,72 @@
     color: #6D5A50;
     margin-top: 50px;
 }
+
+/* 버튼 그룹 */
+.postButtonGroup {
+    display: flex; /* 버튼들을 가로로 나열 */
+    justify-content: space-evenly; /* 버튼 간 동일한 간격 유지 */
+    align-items: center; /* 버튼 세로 정렬 */
+    width: 100%; /* 부모 요소의 너비에 맞춤 */
+    margin-top: 20px; /* 상단 여백 */
+}
+
+/* 버튼 스타일 공통 */
+.postDeleteButton,
+.postNextButton,
+.postBackButton,
+.postListButton {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #6D5A50; /* 텍스트 색상 (브라운 톤) */
+    border: 2px solid #D9CBB6; /* 버튼 테두리 */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #FAF5EE; /* 버튼 배경색 (연한 베이지) */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    flex: 1; /* 각 버튼이 동일한 너비를 가지도록 설정 */
+    max-width: 120px; /* 최대 버튼 너비 제한 */
+    text-align: center;
+}
+
+/* 삭제 버튼 */
+.postDeleteButton {
+    background-color: #F5EFE6; /* 연한 베이지 배경 */
+}
+
+.postDeleteButton:hover {
+    background-color: #EDE2D6; /* 약간 진한 베이지 */
+    color: #C74B4B; /* 강조된 레드 텍스트 */
+}
+
+/* 다음 버튼 */
+.postNextButton {
+    background-color: #FAF5EE; /* 연한 베이지 배경 */
+}
+
+.postNextButton:hover {
+    background-color: #EDE2D6; /* 약간 진한 베이지 */
+    color: #4A7D58; /* 강조된 녹색 텍스트 */
+}
+
+/* 이전 버튼 */
+.postBackButton {
+    background-color: #FAF5EE; /* 연한 베이지 배경 */
+}
+
+.postBackButton:hover {
+    background-color: #EDE2D6; /* 약간 진한 베이지 */
+    color: #4A6EA7; /* 강조된 파란색 텍스트 */
+}
+
+/* 목록으로 버튼 */
+.postListButton {
+    background-color: #FAF5EE; /* 연한 베이지 배경 */
+}
+
+.postListButton:hover {
+    background-color: #EDE2D6; /* 약간 진한 베이지 */
+    color: #D18E5B; /* 강조된 브라운 텍스트 */
+}
+

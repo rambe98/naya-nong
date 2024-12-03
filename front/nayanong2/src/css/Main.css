@@ -119,3 +119,9 @@ nav li:hover {
   border: none;
   border-radius: 5px;
 }
+
+.HeaderHello .highlight {
+  font-weight: bold;
+  color: orange; /* 강조 색상 */
+  font-size: 18px; /* 필요 시 글씨 크기 조정 */
+}

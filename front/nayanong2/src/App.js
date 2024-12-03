@@ -73,7 +73,7 @@ const isLoginPage = location.pathname === '/login';
         <Route path="/qna" element={<Qna />} />
         <Route path="/board" element={<Board />} />
         <Route path="/write" element={<WritePost />} />
-        <Route path="/post/:bodNum" element={<PostDetail />} />
+        <Route path="/board/:bodNum" element={<PostDetail />} />
       </Routes>
     </div>
   );

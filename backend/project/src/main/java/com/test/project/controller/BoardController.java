@@ -60,27 +60,24 @@ public class BoardController {
         return ResponseEntity.ok(boards);
     }
 
-    // 제목 또는 내용으로 검색
-    @GetMapping("/search/titleOrContent")
-    public ResponseEntity<List<BoardDTO>> searchByTitleOrContent(@RequestParam("titleKeyword") String titleKeyword, 
-                                                                  @RequestParam("contentKeyword") String contentKeyword) {
-        List<BoardDTO> boards = service.searchByTitleOrContent(titleKeyword, contentKeyword);
-        return ResponseEntity.ok(boards);
-    }
-
     // 닉네임으로 검색
     @GetMapping("/search/userNick")
     public ResponseEntity<List<BoardDTO>> searchByUserNick(@RequestParam("keyword") String userNickKeyword) {
         List<BoardDTO> boards = service.searchByUserNick(userNickKeyword);
         return ResponseEntity.ok(boards);
     }
+    // 제목과 내용으로 검색
+    @GetMapping("/search/titleAndContent")
+    public ResponseEntity<List<BoardDTO>> searchByTitleAndContent(@RequestParam("titleKeyword") String titleKeyword,
+                                                                  @RequestParam("contentKeyword") String contentKeyword) {
+        List<BoardDTO> boards = service.searchByTitleAndContent(titleKeyword, contentKeyword);
+        return ResponseEntity.ok(boards);
+    }
 
-    // 제목, 내용, 닉네임 모두 검색
+    // 전체 검색 (제목, 내용, 닉네임)
     @GetMapping("/search/all")
-    public ResponseEntity<List<BoardDTO>> searchBoards(@RequestParam(value = "titleKeyword", required = false) String titleKeyword, 
-                                                       @RequestParam(value = "contentKeyword", required = false) String contentKeyword, 
-                                                       @RequestParam(value = "userNickKeyword", required = false) String userNickKeyword) {
-        List<BoardDTO> boards = service.searchBoards(titleKeyword, contentKeyword, userNickKeyword);
+    public ResponseEntity<List<BoardDTO>> searchAll(@RequestParam("keyword") String keyword) {
+        List<BoardDTO> boards = service.searchAll(keyword);
         return ResponseEntity.ok(boards);
     }
 	

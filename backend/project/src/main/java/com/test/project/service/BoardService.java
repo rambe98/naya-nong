@@ -45,9 +45,7 @@ public class BoardService {
 	
 	// boarderDetail
 	public BoardEntity getBoardsByBoardNum(int bodNum) {
-		// BoardEntity에서 userNick에 해당하는 게시판 리스트를 조회
 		BoardEntity boardEntities = boardRepository.findByBodNum(bodNum);
-		// 조회된 BoardEntity 리스트를 BoardDTO 리스트로 변환하여 반환
 		return boardEntities;
 	}
 
@@ -58,6 +56,50 @@ public class BoardService {
 		// 조회된 BoardEntity 리스트를 BoardDTO 리스트로 변환하여 반환
 		return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
 	}// getBoardsByUserNick end
+	
+	// 제목으로 게시글 검색
+    public List<BoardDTO> searchByTitle(String titleKeyword) {
+        List<BoardEntity> boardEntities = boardRepository.findByBodTitleContaining(titleKeyword);
+        return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
+    }
+
+    // 내용으로 게시글 검색
+    public List<BoardDTO> searchByContent(String contentKeyword) {
+        List<BoardEntity> boardEntities = boardRepository.findByBodDtailContaining(contentKeyword);
+        return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
+    }
+
+    // 제목 또는 내용으로 게시글 검색
+    public List<BoardDTO> searchByTitleOrContent(String titleKeyword, String contentKeyword) {
+        List<BoardEntity> boardEntities = boardRepository.findByBodTitleContainingOrBodDtailContaining(titleKeyword, contentKeyword);
+        return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
+    }
+
+    // 닉네임으로 게시글 검색
+    public List<BoardDTO> searchByUserNick(String userNickKeyword) {
+        List<BoardEntity> boardEntities = boardRepository.findByProjectUserNickContaining(userNickKeyword);
+        return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
+    }
+
+    // 통합 검색
+    public List<BoardDTO> searchBoards(String titleKeyword, String contentKeyword, String userNickKeyword) {
+        if (titleKeyword != null && contentKeyword != null && userNickKeyword != null) {
+            // 제목, 내용, 닉네임에 모두 검색어가 있는 경우
+            return boardRepository.findByBodTitleContainingOrBodDtailContaining(titleKeyword, contentKeyword).stream()
+                    .filter(board -> board.getProject().getUserNick().contains(userNickKeyword))
+                    .map(BoardDTO::new)
+                    .collect(Collectors.toList());
+        } else if (titleKeyword != null && contentKeyword == null && userNickKeyword == null) {
+            return searchByTitle(titleKeyword);
+        } else if (contentKeyword != null && titleKeyword == null && userNickKeyword == null) {
+            return searchByContent(contentKeyword);
+        } else if (titleKeyword == null && contentKeyword == null && userNickKeyword != null) {
+            return searchByUserNick(userNickKeyword);
+        } else {
+            return searchByTitleOrContent(titleKeyword, contentKeyword);
+        }
+    }
+	
 	
 
 	// 추가
@@ -100,8 +142,4 @@ public class BoardService {
 			return false;
 		} // else end
 	}// deleteUsers end
-	
-	
-	
-
 }

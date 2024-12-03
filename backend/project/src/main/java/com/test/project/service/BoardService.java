@@ -56,20 +56,6 @@ public class BoardService {
 	    // BoardDTO로 변환하여 반환
 	    return new BoardDTO(boardEntity);
 	}
-	
-    public BoardDTO viewBoard(int bodNum) {
-        // 게시글을 조회하여 조회수 증가
-        Optional<BoardEntity> optionalBoard = boardRepository.findById(bodNum);
-        if (optionalBoard.isPresent()) {
-            BoardEntity boardEntity = optionalBoard.get();
-            boardEntity.setViews(boardEntity.getViews() + 1);  // 조회수 증가
-            boardRepository.save(boardEntity);  // 업데이트된 조회수 저장
-
-            // BoardEntity -> BoardDTO 변환하여 반환
-            return new BoardDTO(boardEntity);
-        }
-        return null;  // 게시글이 존재하지 않으면 null 반환
-    }
 
 	// 사용자별게시판 조회
 	public List<BoardDTO> getBoardsByUserNick(String userNick) {

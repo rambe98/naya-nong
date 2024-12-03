@@ -68,19 +68,20 @@ public class NongService {
 	public NongDTO updateUsers(NongDTO dto) {
 	    NongEntity entity = dto.toEntity(dto);
 	    
-	    // 이메일과 닉네임 중복 체크
+	    // 수정하려는 이메일과 닉네임이 이미 다른 사용자에 의해 사용 중인지 체크
 	    Optional<NongEntity> existingEmail = repository.findByUserEmail(entity.getUserEmail());
 	    Optional<NongEntity> existingNick = repository.findByUserNick(entity.getUserNick());
-	    
-	    // 이메일이나 닉네임이 이미 존재하는 경우, 수정 불가
+
+	    // 이메일이나 닉네임이 다른 사용자에 의해 이미 사용되고 있는지 체크 (현재 사용자가 아니라면 예외 던짐)
 	    if (existingEmail.isPresent() && existingEmail.get().getClientNum() != entity.getClientNum()) {
-	        throw new IllegalArgumentException("이메일이 이미 존재합니다.");
+	        throw new IllegalArgumentException("이메일이 이미 다른 사용자에 의해 사용 중입니다.");
 	    }
 	    
 	    if (existingNick.isPresent() && existingNick.get().getClientNum() != entity.getClientNum()) {
-	        throw new IllegalArgumentException("닉네임이 이미 존재합니다.");
+	        throw new IllegalArgumentException("닉네임이 이미 다른 사용자에 의해 사용 중입니다.");
 	    }
 
+	    // 사용자 정보 수정
 	    Optional<NongEntity> original = repository.findById(entity.getClientNum());
 	    if (original.isPresent()) {
 	        NongEntity nong = original.get();

@@ -1,33 +1,20 @@
 package com.test.project.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
-import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
-import com.test.project.security.JwtAuthenticationFilter;
-import com.test.project.security.OAuthSuccessHandler;
-import com.test.project.security.OAuthUserServiceImpl;
-import com.test.project.security.RedirectUrlCokkieFilter;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000") // 여러 도메인 허용
+                .allowedOrigins("http://localhost:3000/") // 여러 도메인 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+                .allowCredentials(true);
     }
 //    
 //    @Autowired

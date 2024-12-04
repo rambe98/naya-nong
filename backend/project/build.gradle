@@ -54,8 +54,6 @@ dependencies {
     // JSON 변환을 위한 Jackson
     implementation 'com.fasterxml.jackson.core:jackson-databind' // Optional, 기본적으로 Spring Boot는 자동으로 포함
 
-	implementation 'org.json:json:20210307'  // 최신 버전으로 업데이트 가능
-	implementation 'org.json:json-simple:1.1.1'  // 최신 버전으로 업데이트 가능
 }
 
 tasks.named('test') {

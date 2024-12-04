@@ -39,6 +39,7 @@ public class BoardEntity {
 	
 	@CreationTimestamp
 	private LocalDateTime writeDate;
+	private LocalDateTime updateDate;
 	private int views;
 	private int likeCount;
 	

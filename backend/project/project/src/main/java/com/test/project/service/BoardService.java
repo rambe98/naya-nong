@@ -1,5 +1,6 @@
 package com.test.project.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -120,6 +121,7 @@ public class BoardService {
          BoardEntity board = original.get();
          board.setBodTitle(entity.getBodTitle());
          board.setBodDtail(entity.getBodDtail());
+         board.setUpdateDate(LocalDateTime.now());
          boardRepository.save(board);
          BoardDTO updatedDTO = new BoardDTO(board);
          return updatedDTO;

@@ -13,6 +13,7 @@ import Header from './screens/Header'
 import Board from './screens/board/Board'
 import WritePost from './screens/board/WritePost'
 import PostDetail from './screens/board/PostDetail';
+import UpdatePost from './screens/board/UpdatePost';
 
 function App() {
   
@@ -74,6 +75,7 @@ const isLoginPage = location.pathname === '/login';
         <Route path="/board" element={<Board />} />
         <Route path="/write" element={<WritePost />} />
         <Route path="/board/:bodNum" element={<PostDetail />} />
+        <Route path="/update/:bodNum" element={<UpdatePost />} />
       </Routes>
     </div>
   );

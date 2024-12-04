@@ -1,22 +1,59 @@
 package com.test.project.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.test.project.entity.ProductEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProductDTO {
+    private String pCertKey;
+    private String pCertId;
+    private String pReturnType;
+    private String price;
 
-	@JsonProperty("county_code")  // JSON의 "county_code" 필드를 Java의 county_code 필드에 매핑
-    private String countyCode;
+    // Getters and Setters
+    public String getpCertKey() {
+        return pCertKey;
+    }
 
-    @JsonProperty("county_name")  // JSON의 "county_name" 필드를 Java의 county_name 필드에 매핑
-    private String countyName;
+    public void setpCertKey(String pCertKey) {
+        this.pCertKey = pCertKey;
+    }
 
-    @JsonProperty("product_cls_code")  // JSON의 "product_cls_code" 필드를 Java의 product_cls_code 필드에 매핑
-    private String productClsCode;
+    public String getpCertId() {
+        return pCertId;
+    }
+
+    public void setpCertId(String pCertId) {
+        this.pCertId = pCertId;
+    }
+
+    public String getpReturnType() {
+        return pReturnType;
+    }
+
+    public void setpReturnType(String pReturnType) {
+        this.pReturnType = pReturnType;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    // DTO -> Entity 변환
+    public ProductEntity toEntity() {
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setPCertKey(this.pCertKey);
+        productEntity.setPCertId(this.pCertId);
+        productEntity.setPReturnType(this.pReturnType);
+        productEntity.setPrice(this.price);
+        return productEntity;
+    }
 }

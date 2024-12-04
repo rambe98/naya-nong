@@ -1,21 +1,24 @@
 package com.test.project.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "product")
 public class ProductEntity {
-	
-	@Id
-	private Long id;
-	private String county_code;
-	private String county_name;
-	private String product_cls_code;
 
+    @Id
+    private Long id; // 기본 키
+
+    private String pCertKey;
+    private String pCertId;
+    private String pReturnType;
+    private String price;
 }

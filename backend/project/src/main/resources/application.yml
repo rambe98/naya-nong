@@ -1,0 +1,21 @@
+server:
+  port: 7070
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_nong
+    username: root  # MySQL 사용자 이름
+    password: skdishd  # MySQL 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # 데이터베이스 구조 자동 업데이트
+    show-sql: true  # SQL 쿼리 로그 출력
+    properties:
+      hibernate:
+        format_sql: true  # SQL 포맷팅
+
+external-api:
+    url: "http://www.kamis.or.kr/service/price/json.do?action=dailyCountyList"
+    api-key: "202671f9-de02-4f98-a13b-87747d743f06"

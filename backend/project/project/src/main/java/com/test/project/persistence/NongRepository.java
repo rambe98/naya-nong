@@ -12,7 +12,7 @@ import com.test.project.entity.NongEntity;
 public interface NongRepository extends JpaRepository<NongEntity, Integer> {
 	// 'userNick'을 기준으로 NongEntity를 찾는 메서드 정의
 	Optional<NongEntity> findByUserNick(String userNick);
-
+	Optional<NongEntity> findByUserEmail(String userEmail);
 	// 해당 UserNick이 존재하면 true 없으면 false로 바환
 	Boolean existsByUserNick(String userNick);
 

@@ -66,19 +66,33 @@ public class NongService {
 
 	// 수정
 	public NongDTO updateUsers(NongDTO dto) {
-		NongEntity entity = dto.toEntity(dto);
-		Optional<NongEntity> original = repository.findById(entity.getClientNum());
-		if (original.isPresent()) {
-			NongEntity nong = original.get();
-			nong.setUserId(entity.getUserId());//관리자 권한으로 백엔드에서 수동으로 설정할 수 있게 만듦
-			nong.setUserPwd(entity.getUserPwd());
-			nong.setUserEmail(entity.getUserEmail());
-			nong.setUserNick(entity.getUserNick());
-			repository.save(nong);
-			return new NongDTO(nong);
-		} // if end
-		return null;
-	}// updateUsers end
+	       NongEntity entity = dto.toEntity(dto);
+	       
+	       // 이메일과 닉네임 중복 체크
+	       Optional<NongEntity> existingEmail = repository.findByUserEmail(entity.getUserEmail());
+	       Optional<NongEntity> existingNick = repository.findByUserNick(entity.getUserNick());
+	       
+	       // 이메일이나 닉네임이 이미 존재하는 경우, 수정 불가
+	       if (existingEmail.isPresent() && existingEmail.get().getClientNum() != entity.getClientNum()) {
+	           throw new IllegalArgumentException("이메일이 이미 존재합니다.");
+	       }
+	       
+	       if (existingNick.isPresent() && existingNick.get().getClientNum() != entity.getClientNum()) {
+	           throw new IllegalArgumentException("닉네임이 이미 존재합니다.");
+	       }
+
+	       Optional<NongEntity> original = repository.findById(entity.getClientNum());
+	       if (original.isPresent()) {
+	           NongEntity nong = original.get();
+	           nong.setUserId(entity.getUserId()); // 관리자 권한으로 백엔드에서 수동으로 설정할 수 있게 만듦
+	           nong.setUserPwd(entity.getUserPwd());
+	           nong.setUserEmail(entity.getUserEmail());
+	           nong.setUserNick(entity.getUserNick());
+	           repository.save(nong);
+	           return new NongDTO(nong);
+	       }
+	       return null; // 찾지 못한 경우
+	   }
 	
 
 	// 삭제

@@ -72,10 +72,28 @@ public class NongConteroller {
 	
 
 	@PutMapping("/{clientNum}")
-	public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto) {
-		NongDTO users = service.updateUsers(dto);
-		return ResponseEntity.ok().body(users);
-	}// updateUsers end
+	   public ResponseEntity<?> updateUsers(@RequestBody NongDTO dto, @PathVariable("clientNum") int clientNum) {
+	       try {
+	           // clientNum을 dto에 세팅하거나, dto에서 확인하는 로직 추가
+	           if (clientNum != dto.getClientNum()) {
+	               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("클라이언트 번호가 일치하지 않습니다.");
+	           }
+
+	           NongDTO users = service.updateUsers(dto);
+
+	           if (users == null) {
+	               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+	           }
+
+	           return ResponseEntity.ok().body(users);
+	       } catch (IllegalArgumentException e) {
+	           // 이메일, 닉네임 중복으로 IllegalArgumentException 발생 시
+	           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	       } catch (Exception e) {
+	           // 그 외의 예외 처리
+	           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+	       }
+	   }
 	
 
 	@DeleteMapping("/{clientNum}")

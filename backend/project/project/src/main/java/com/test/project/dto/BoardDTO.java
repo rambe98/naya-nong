@@ -21,6 +21,7 @@ public class BoardDTO {
 	private String bodDtail;
 	private String userNick;
 	private LocalDateTime writeDate;
+	private LocalDateTime updateDate;
 	private int views;
 	private int likeCount;
 	
@@ -33,6 +34,7 @@ public class BoardDTO {
 		this.bodDtail = entity.getBodDtail();
 		this.writeDate = entity.getWriteDate();
 		this.views = entity.getViews();
+		this.updateDate = entity.getUpdateDate();
 		this.likeCount = entity.getLikeCount();
 		this.userNick = entity.getProject().getUserNick();
 
@@ -47,6 +49,7 @@ public class BoardDTO {
 						  .bodTitle(dto.getBodTitle())
 						  .bodDtail(dto.getBodDtail())
 						  .writeDate(dto.writeDate)
+						  .updateDate(dto.getUpdateDate())
 						  .views(dto.views)
 						  .likeCount(dto.getLikeCount())
 						  .build();

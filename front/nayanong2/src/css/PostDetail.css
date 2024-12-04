@@ -47,10 +47,15 @@
 
 /* 게시글 본문 내용 */
 .postContent {
-    font-size: 16px;
-    color: #6D5A50;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    font-size: 16px; /* 텍스트 크기 */
+    color: #6D5A50; /* 텍스트 색상 */
+    line-height: 1.6; /* 줄 간격 */
+    margin-bottom: 20px; /* 하단 여백 */
+    white-space: pre-wrap; /* 공백과 줄바꿈 유지 */
+    overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+    word-wrap: break-word; /* 하위 브라우저 호환 */
+    width: 100%; /* 컨테이너 크기에 맞춤 */
+    text-align: justify; /* 텍스트 정렬 */
 }
 
 /* 좋아요 버튼 스타일 */

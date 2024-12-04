@@ -12,9 +12,10 @@ import Header from './screens/Header'
 import Board from './screens/board/Board'
 import WritePost from './screens/board/WritePost'
 import PostDetail from './screens/board/PostDetail';
+import UpdatePost from './screens/board/UpdatePost';
 
 function App() {
-  
+
   /*
    useRecoilState
    상태값을 읽을 수 있고 상태를 읽고 업데이트할 때 사용하며
@@ -38,26 +39,26 @@ function App() {
     상태를 읽지는 않고 바꾸기만 한다.
    */
 
-  useEffect(() =>{
+  useEffect(() => {
     //초기화된 로그인상태로 로컬스토리지에서 가져온 값을 의미함
     setLoginSuccess(initializedLoginSuccess);
     //초기화된 클라이언트 번호로 로컬스토리지에서 가져온 값을 의미함
     setClientNum(initializedClientNum);
-  },[initializedLoginSuccess, initializedClientNum, setLoginSuccess, setClientNum]);
+  }, [initializedLoginSuccess, initializedClientNum, setLoginSuccess, setClientNum]);
 
 
-  return(
+  return (
     <Router>
       <InnerApp />
     </Router>
   )
 }
 
-  // Router 내부에서만 useLocation 사용
+// Router 내부에서만 useLocation 사용
 function InnerApp() {
   const location = useLocation();
-const isLoginPage = location.pathname === '/login';
-  
+  const isLoginPage = location.pathname === '/login';
+
   return (
     <div className="App">
       {/* 로그인 페이지가 아닐 때만 Header 렌더링 */}
@@ -71,7 +72,8 @@ const isLoginPage = location.pathname === '/login';
         <Route path="/qna" element={<Qna />} />
         <Route path="/board" element={<Board />} />
         <Route path="/write" element={<WritePost />} />
-        <Route path="/post/:bodNum" element={<PostDetail />} />
+        <Route path="/board/:bodNum" element={<PostDetail />} />
+        <Route path="/update/:bodNum" element={<UpdatePost />} />
       </Routes>
     </div>
   );

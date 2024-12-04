@@ -33,57 +33,64 @@ public class BoardController {
 		List<BoardDTO> boards = service.showAllBoard();
 		return ResponseEntity.ok(boards);
 	}// showAllBoard end
-	
 
 	@GetMapping("/user/{userNick}")
 	public ResponseEntity<?> getBoardsByUserNick(@PathVariable("userNick") String userNick) {
 		List<BoardDTO> getBoardsByUserNick = service.getBoardsByUserNick(userNick);
 		return ResponseEntity.ok(getBoardsByUserNick);
-	}//getBoardsByUserNick
-	
+	}// getBoardsByUserNick
+
 	@GetMapping("/{bodNum}")
 	public ResponseEntity<?> getBoardsByBoardNum(@PathVariable("bodNum") int bodNum) {
-		BoardEntity getBoardsByBoardNum = service.getBoardsByBoardNum(bodNum);
-		return ResponseEntity.ok(getBoardsByBoardNum);
+		try {
+			BoardDTO boardDTO = service.getBoardsByBoardNum(bodNum);
+			return ResponseEntity.ok(boardDTO); // 게시글 정보 반환
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(404).body(e.getMessage()); // 게시글이 없을 경우 404 상태 코드 반환
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body("서버 오류가 발생했습니다."); // 다른 예외 처리
+		}
 	}
+
 	// 제목으로 검색
-    @GetMapping("/search/title")
-    public ResponseEntity<List<BoardDTO>> searchByTitle(@RequestParam("keyword") String titleKeyword) {
-        List<BoardDTO> boards = service.searchByTitle(titleKeyword);
-        return ResponseEntity.ok(boards);
-    }
+	@GetMapping("/search/title")
+	public ResponseEntity<List<BoardDTO>> searchByTitle(@RequestParam("keyword") String titleKeyword) {
+		List<BoardDTO> boards = service.searchByTitle(titleKeyword);
+		return ResponseEntity.ok(boards);
+	}
 
-    // 내용으로 검색
-    @GetMapping("/search/content")
-    public ResponseEntity<List<BoardDTO>> searchByContent(@RequestParam("keyword") String contentKeyword) {
-        List<BoardDTO> boards = service.searchByContent(contentKeyword);
-        return ResponseEntity.ok(boards);
-    }
+	// 내용으로 검색
+	@GetMapping("/search/content")
+	public ResponseEntity<List<BoardDTO>> searchByContent(@RequestParam("keyword") String contentKeyword) {
+		List<BoardDTO> boards = service.searchByContent(contentKeyword);
+		return ResponseEntity.ok(boards);
+	}
 
-    // 제목 또는 내용으로 검색
-    @GetMapping("/search/titleOrContent")
-    public ResponseEntity<List<BoardDTO>> searchByTitleOrContent(@RequestParam("titleKeyword") String titleKeyword, 
-                                                                  @RequestParam("contentKeyword") String contentKeyword) {
-        List<BoardDTO> boards = service.searchByTitleOrContent(titleKeyword, contentKeyword);
-        return ResponseEntity.ok(boards);
-    }
+	// 제목 또는 내용으로 검색
+	@GetMapping("/search/titleOrContent")
+	public ResponseEntity<List<BoardDTO>> searchByTitleOrContent(@RequestParam("titleKeyword") String titleKeyword,
+			@RequestParam("contentKeyword") String contentKeyword) {
+		List<BoardDTO> boards = service.searchByTitleOrContent(titleKeyword, contentKeyword);
+		return ResponseEntity.ok(boards);
+	}
 
-    // 닉네임으로 검색
-    @GetMapping("/search/userNick")
-    public ResponseEntity<List<BoardDTO>> searchByUserNick(@RequestParam("keyword") String userNickKeyword) {
-        List<BoardDTO> boards = service.searchByUserNick(userNickKeyword);
-        return ResponseEntity.ok(boards);
-    }
+	// 닉네임으로 검색
+	@GetMapping("/search/userNick")
+	public ResponseEntity<List<BoardDTO>> searchByUserNick(@RequestParam("keyword") String userNickKeyword) {
+		List<BoardDTO> boards = service.searchByUserNick(userNickKeyword);
+		return ResponseEntity.ok(boards);
+	}
 
-    // 제목, 내용, 닉네임 모두 검색
-    @GetMapping("/search")
-    public ResponseEntity<List<BoardDTO>> searchBoards(@RequestParam(value = "titleKeyword", required = false) String titleKeyword, 
-                                                       @RequestParam(value = "contentKeyword", required = false) String contentKeyword, 
-                                                       @RequestParam(value = "userNickKeyword", required = false) String userNickKeyword) {
-        List<BoardDTO> boards = service.searchBoards(titleKeyword, contentKeyword, userNickKeyword);
-        return ResponseEntity.ok(boards);
-    }
-	
+	// 제목, 내용, 닉네임 모두 검색
+	@GetMapping("/search")
+	public ResponseEntity<List<BoardDTO>> searchBoards(
+			@RequestParam(value = "titleKeyword", required = false) String titleKeyword,
+			@RequestParam(value = "contentKeyword", required = false) String contentKeyword,
+			@RequestParam(value = "userNickKeyword", required = false) String userNickKeyword) {
+		List<BoardDTO> boards = service.searchBoards(titleKeyword, contentKeyword, userNickKeyword);
+		return ResponseEntity.ok(boards);
+	}
+
 	@PostMapping
 	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto) {
 		BoardDTO addBoard = service.addBoard(dto);
@@ -95,7 +102,6 @@ public class BoardController {
 		BoardDTO updateBoard = service.updateBoard(dto);
 		return ResponseEntity.ok().body(updateBoard);
 	}// updateUsers end
-	
 
 	@DeleteMapping("/{bodNum}")
 	public ResponseEntity<?> deleteBoard(BoardDTO dto) {
@@ -110,7 +116,5 @@ public class BoardController {
 			return ResponseEntity.badRequest().body("데이터에러");
 		} // catch end
 	}// deleteUsers end
-	
-	
 
 }

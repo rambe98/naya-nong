@@ -12,6 +12,7 @@ import {
   validationRegexAtom,
   validateForm,
   messageAtom,
+  smessageAtom,
 } from "../../recoil/UserRecoil";
 
 const UserInfo = () => {
@@ -24,6 +25,7 @@ const UserInfo = () => {
   const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
   const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
   const [message, setMessage] = useRecoilState(messageAtom); // 클라이언트 메시지
+  const [smessage, setSMessage] = useRecoilState(smessageAtom); // 서버 메시지
 
   const { clientNum } = useParams(); // URL에서 clientNum을 가져옴
 
@@ -83,15 +85,14 @@ const UserInfo = () => {
 
   // 정보 저장
   const handleSaveClick = async () => {
-    // 유효성 검사
     const isValid = validateForm(
       userInfo,
       validationMessage,
       validationRegex,
-      setMessage // 오류 메시지 설정
+      setMessage
     );
 
-    if (!isValid) return; // 유효하지 않은 경우 중단
+    if (!isValid) return;
 
     const updatedUserInfo = { ...userInfo, userPwd };
 
@@ -104,63 +105,64 @@ const UserInfo = () => {
       if (response.status === 200) {
         const updatedUser = response.data;
 
-        // Recoil 상태 업데이트
         setUserNick(updatedUser.userNick);
 
-        // 로컬 스토리지 강제 동기화
         sessionStorage.setItem("userNick", updatedUser.userNick);
 
         alert("수정이 완료되었습니다.");
         setEdit(false);
         setUserPwd("");
-        setMessage(""); // 성공 시 메시지 초기화
+        setMessage(""); // 메시지 초기화
+        setSMessage(""); // 서버 메시지 초기화
       }
     } catch (error) {
       console.error("저장 실패:", error);
-      alert("저장 중 문제가 발생했습니다.");
+
+      // 서버에서 반환된 메시지 처리
+      if (error.response && error.response.status === 400) {
+        setSMessage(error.response.data); // 서버 메시지 설정
+      } else {
+        setSMessage("저장 중 문제가 발생했습니다."); // 기본 오류 메시지
+      }
     }
   };
 
-  // 입력값 변경 처리
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "userPwd") {
-      setUserPwd(value); // 별도 상태 업데이트
+      setUserPwd(value);
+    } else {
+      setUserInfo((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
-    setUserInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // 입력값 변경 시 에러 메시지 초기화
-    setMessage("");
+    setMessage(""); // 입력 중 클라이언트 메시지 초기화
+    setSMessage(""); // 입력 중 서버 메시지 초기화
   };
 
-  // 수정 버튼 클릭
   const handleEditClick = () => {
     setShowModal(true);
-    setBackupUserInfo({ ...userInfo }); // 기존 사용자 정보 백업
+    setBackupUserInfo({ ...userInfo });
   };
 
-  // 취소 버튼 클릭
   const handleCancelClick = () => {
     if (backupUserInfo) {
-      setUserInfo({ ...backupUserInfo }); // 백업 데이터 복원
+      setUserInfo({ ...backupUserInfo });
     }
     setEdit(false);
-    setMessage(""); // 클라이언트 메시지 초기화
+    setMessage("");
+    setSMessage("");
   };
 
-  // 비밀번호 표시/숨기기
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
-  // 모달 닫기
   const modalCancelClick = () => {
-    setUserPwd(""); // 비밀번호 초기화
-    setShowModal(false); // 모달 닫기
+    setUserPwd("");
+    setShowModal(false);
   };
 
   return (
@@ -223,8 +225,8 @@ const UserInfo = () => {
               <label className="userInfoFormLabel">통신사:</label>
               <span className="userInfoFormText">{userInfo.phoneCom}</span>
             </div>
-            {/* 클라이언트 에러 메시지 표시 */}
             {message && <p className="errorText">{message}</p>}
+            {smessage && <p className="errorText">{smessage}</p>}
             <button
               className="userInfoFormButton"
               type="button"

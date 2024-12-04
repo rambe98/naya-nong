@@ -49,10 +49,9 @@ const PostDetail = () => {
     //좋아요 토글 함수
     const toggleLike = async () => {
         try {
-            // 서버에서 요구하는 userNick과 bodNum 값을 포함하여 POST 요청을 보낸다.
             const response = await axios.post("http://localhost:7070/heart", {
-                userNick: sessionUserNick, // 세션 스토리지에서 가져온 사용자 닉네임
-                bodNum: parseInt(bodNum), // 현재 게시글 번호를 정수로 변환하여 전달
+                userNick: sessionUserNick,
+                bodNum: parseInt(bodNum),
             });
 
             if (response.data === "좋아요가 추가되었습니다.") {
@@ -68,8 +67,9 @@ const PostDetail = () => {
         }
     }
 
-    //게시글 불러오는 함수
     useEffect(() => {
+
+        //게시글 불러오는 함수
         const getBoardData = async () => {
             try {
                 const boardsResponse = await axios.get("http://localhost:7070/board")
@@ -187,57 +187,34 @@ const PostDetail = () => {
     return (
         <div className="postDetailContainer">
             <div className="postDetailContent">
-                {/* 제목과 수정/삭제 버튼 */}
-                <div className="postHeader">
-                    <h2 className="postTitle">제목 : {board.bodTitle}</h2>
-                    <div className="postActionButtons">
-                        {board.project.userNick === sessionUserNick && (
-                            <button onClick={handleUpdate}>수정</button>
-                        )}
-                        {board.project.userNick === sessionUserNick && (
-                            <button onClick={handleDelete}>삭제</button>
-                        )}
-                    </div>
-                </div>
-    
-                {/* 작성자, 작성일자, 조회수 */}
+                <h2 className="postTitle">{board.bodTitle}</h2>
                 <div className="postInfo">
                     <span>작성자 : {board.userNick}</span>
                     <span>작성일자 : {board.writeDate}</span>
                     <span>조회수: {board.views}</span>
                 </div>
-    
-                {/* 본문 내용 */}
                 <div className="postContent">{board.bodDtail}</div>
-    
-                {/* 좋아요 */}
-                <div className="postInfoicon">
-                    <span>
-                        <span
-                            onClick={toggleLike}
-                            className="likeIcon"
-                            style={{ cursor: "pointer", marginLeft: "10px", fontSize: "1.5rem" }}
-                        >
-                            {liked ? <FaThumbsUp color="lightblue" /> : <FaRegThumbsUp color="gray" />}
-                        </span>
-                        좋아요: {likeCount}
-                    </span>
+                <div className="postInfo">
+                    <span><span
+                        onClick={toggleLike}
+                        className="likeIcon"
+                        style={{ cursor: "pointer", marginLeft: "10px", fontSize: "1.5rem", }}
+                    >
+                        {liked ? <FaThumbsUp color="lightblue" /> : <FaRegThumbsUp color="gray" />}
+                    </span>좋아요: {likeCount} </span>
                 </div>
-    
-                {/* 하단 버튼 그룹 */}
-                <div className="postButtonGroup">
-                    <div className="postButtonLargeRow">
-                        <button onClick={handleBack}>이전</button>
-                        {currentIndex > 0 && (
-                            <button onClick={handleNext}>다음</button>
-                        )}
-                        <button onClick={() => navigate("/board")}>목록으로</button>
-                    </div>
-                </div>
+                {board.project.userNick === sessionUserNick && (
+                    <button onClick={handleDelete}>삭제</button>
+                )}
+                {currentIndex > 0 && (
+                    <button onClick={handleNext}>다음</button>
+                )}
+                <button onClick={handleBack}>이전</button>
+                <button onClick={() => navigate("/board")} >목록으로</button>
+                <button onClick={handleUpdate}>수정</button>
             </div>
         </div>
     );
-    
 };
 
-export default PostDetail;
+export default PostDetail

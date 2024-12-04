@@ -17,5 +17,5 @@ spring:
         format_sql: true  # SQL 포맷팅
 
 external-api:
-    url: "http://www.kamis.or.kr/service/price/json.do?action=dailyCountyList"
-    api-key: "202671f9-de02-4f98-a13b-87747d743f06"
+  url: "http://www.kamis.or.kr/service/price/xml.do?action=periodProductList"
+  api-key: "202671f9-de02-4f98-a13b-87747d743f06"

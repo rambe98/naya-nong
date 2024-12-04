@@ -5,6 +5,14 @@
   height: 100vh;
   justify-content: center;
   background-color: #F5EFE6; /* 연한 베이지 배경색 */
+  margin: 0; /* 헤더로 인한 여백 제거 */
+}
+
+html {
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+  height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
+  background-color: #F5EFE6; /* 로그인 페이지 배경색과 동일하게 설정 */
 }
 
 .loginForm {
@@ -105,3 +113,4 @@
   cursor: pointer;
   margin-bottom: 30px;
 }
+

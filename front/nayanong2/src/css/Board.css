@@ -136,8 +136,11 @@
   padding: 5px 10px;
   box-sizing: border-box;  /* 패딩 포함하여 정확한 너비 설정 */
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> test
 /* 게시글 목록 */
 .boardList {
   display: flex;

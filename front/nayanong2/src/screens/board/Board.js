@@ -61,17 +61,24 @@ const Board = () => {
         }
     };
 
+<<<<<<< HEAD
     useEffect(() => {
         getList();
     }, [sortBy]);
 
     // 페이지 변경
     const handlePageChange = (page) => {
+=======
+    // 한 페이지에 렌더링되는 게시글의 수 설정
+       // 페이지 변경
+       const handlePageChange = (page) => {
+>>>>>>> test
         setCurrentPage(page);
 
         //페이지 업데이트시 스크롤을 상단을 위치
         window.scrollTo(0, 0)
     };
+
 
     // 검색 함수
     const handleSearch = async () => {
@@ -143,7 +150,6 @@ const Board = () => {
             </div>
             {/* 작성일 및 페이지당 항목 수 선택 섹션 */}
             <div className="boardOptionsContainer">
-                <span className="boaderHeader">자유게시판</span>
                 <div>
                     <select
                         className="boardSortBySelect"

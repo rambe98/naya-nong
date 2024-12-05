@@ -81,13 +81,10 @@ const WritePost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-<<<<<<< HEAD
         // 제목과 내용이 비어 있으면 알림
         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
-=======
          // 제목과 내용이 비어 있으면 알림
          if (!formData.bodTitle || formData.bodTitle.trim() === '') {
->>>>>>> test
             return alert('제목을 입력하세요');
         }
         if (!formData.bodDtail || formData.bodDtail.trim() === '') {
@@ -116,14 +113,12 @@ const WritePost = () => {
             alert('게시글 작성이 실패했습니다.');
         }
     };
+}
 
-<<<<<<< HEAD
     //이전 버튼
     const handleBack = () => {
-=======
      //이전 버튼
      const handleBack = () => {
->>>>>>> test
         if (formData.bodDtail.trim() !== '') {
             const userConfirmed = window.confirm(
                 '작성 중인 내용이 사라집니다. \n정말 이전 페이지로 이동하시겠습니까?'
@@ -137,11 +132,6 @@ const WritePost = () => {
             navigate('/board');
         }
     }
-
-<<<<<<< HEAD
-
-=======
->>>>>>> test
     return (
         <div className="writeContainer">
             <span className="writeHeader">글쓰기</span>
@@ -186,5 +176,5 @@ const WritePost = () => {
         </div>
     );
 };
-
+}
 export default WritePost;

@@ -61,18 +61,15 @@ const Board = () => {
         }
     };
 
-<<<<<<< HEAD
     useEffect(() => {
         getList();
     }, [sortBy]);
 
     // 페이지 변경
     const handlePageChange = (page) => {
-=======
     // 한 페이지에 렌더링되는 게시글의 수 설정
        // 페이지 변경
        const handlePageChange = (page) => {
->>>>>>> test
         setCurrentPage(page);
 
         //페이지 업데이트시 스크롤을 상단을 위치
@@ -260,5 +257,5 @@ const Board = () => {
 
     );
 };
-
+}
 export default Board;

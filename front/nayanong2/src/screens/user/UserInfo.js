@@ -32,6 +32,7 @@ const UserInfo = () => {
   const [edit, setEdit] = useState(false);
   const [backupUserInfo, setBackupUserInfo] = useState(null); // 백업 상태
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
+  const [deleteModal, setDeleteModal] = useState(false) //회원 탈퇴 모달 표시 상태
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 여부
 
   //스크롤 없애기
@@ -180,6 +181,11 @@ const UserInfo = () => {
     setShowModal(false);
   };
 
+  //회원탈퇴 버튼
+  const hadleDeleteUser = () => {
+    setDeleteModal(true)
+  }
+
   return (
     <div className="userInfoContainer">
       <h2 className="userInfoHeader">회원정보수정</h2>
@@ -302,6 +308,13 @@ const UserInfo = () => {
               onClick={() => navigate("/")}
             >
               돌아가기
+            </button>
+            <button
+              className="userInfoFormButton userInfoFormCancelButton"
+              type="button"
+              onClick={hadleDeleteUser}
+            >
+              회원탈퇴
             </button>
           </>
         )}

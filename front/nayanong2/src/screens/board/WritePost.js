@@ -10,7 +10,6 @@ const WritePost = () => {
 
     const [userNick, setUserNick] = useRecoilState(userNickAtom); // 닉네임 상태
     const clientNum = useRecoilValue(clientNumAtom); // 로컬스토리지에 클라이언트 넘을 변수에 저장
-
     const [formData, setFormData] = useState({
         userNick: userNick,
         bodTitle: '', // 제목
@@ -20,12 +19,12 @@ const WritePost = () => {
     useEffect(() => {
         // body에 클래스 추가
         document.body.classList.add('no-scroll');
-    
+
         // 언마운트 시 클래스 제거
         return () => {
-          document.body.classList.remove('no-scroll');
+            document.body.classList.remove('no-scroll');
         };
-      }, []);
+    }, []);
 
     // 날짜 상태 (작성일자)
     const [date, setDate] = useState('');
@@ -83,10 +82,10 @@ const WritePost = () => {
         e.preventDefault();
 
         // 제목과 내용이 비어 있으면 알림
-        if (!formData.bodTitle) {
+        if (!formData.bodTitle || formData.bodTitle.trim() === '') {
             return alert('제목을 입력하세요');
         }
-        if (!formData.bodDtail) {
+        if (!formData.bodDtail || formData.bodDtail.trim() === '') {
             return alert('내용을 입력하세요');
         }
 
@@ -111,6 +110,23 @@ const WritePost = () => {
             alert('게시글 작성이 실패했습니다.');
         }
     };
+
+    //이전 버튼
+    const handleBack = () => {
+        if (formData.bodDtail.trim() !== '') {
+            const userConfirmed = window.confirm(
+                '작성 중인 내용이 사라집니다. \n정말 이전 페이지로 이동하시겠습니까?'
+            );
+            if (userConfirmed) {
+                //예 선택시 /board로 이동
+                navigate('/board', { state: { from: '/write' } });
+            }
+        } else {
+            // 작성중인 내용이 없으면 /board로 이동
+            navigate('/board');
+        }
+    }
+
 
     return (
         <div className="writeContainer">
@@ -151,7 +167,7 @@ const WritePost = () => {
 
                 {/* 제출 버튼 */}
                 <button type="submit" className="writeButton">작성</button>
-                <button type="button" className="writeButton" onClick={() => navigate('/board')}>이전</button>
+                <button type="button" className="writeButton" onClick={handleBack}>이전</button>
             </form>
         </div>
     );

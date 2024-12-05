@@ -61,9 +61,16 @@ const Board = () => {
         }
     };
 
-    // 한 페이지에 렌더링되는 게시글의 수 설정
+    useEffect(() => {
+        getList();
+    }, [sortBy]);
+
+    // 페이지 변경
     const handlePageChange = (page) => {
         setCurrentPage(page);
+
+        //페이지 업데이트시 스크롤을 상단을 위치
+        window.scrollTo(0, 0)
     };
 
     // 검색 함수
@@ -122,10 +129,6 @@ const Board = () => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
-
-    useEffect(() => {
-        getList();
-    }, [sortBy]);
 
     return (
         <div className="boardContainer">

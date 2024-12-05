@@ -20,6 +20,7 @@ public class ParentCommentDTO {
 	private String content;
 	private Long comId;
 	private String userNick;
+	private LocalDateTime createDate;
 	
 
 	//Entity -> DTO 
@@ -28,5 +29,6 @@ public class ParentCommentDTO {
 			this.content = entity.getContent();
 			this.userNick = entity.getNong().getUserNick();
 			this.comId = entity.getComment().getComId();
+			this.createDate = entity.getCreateDate();
 		}
 }

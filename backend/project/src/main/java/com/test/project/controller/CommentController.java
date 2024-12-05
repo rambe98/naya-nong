@@ -1,8 +1,11 @@
 package com.test.project.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +24,12 @@ public class CommentController {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@GetMapping
+	public ResponseEntity<List<CommentDTO>> showAllComment(){
+		List<CommentDTO> comment =  commentService.showAllComment();
+		return ResponseEntity.ok(comment);
+	}
 
 	 // 댓글 추가 API
     @PostMapping("/add")

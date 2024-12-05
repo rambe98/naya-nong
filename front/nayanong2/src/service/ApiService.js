@@ -65,14 +65,3 @@ export function signin(userDTO) {
             throw error; // 호출한 곳에서 에러를 처리할 수 있도록 다시 던짐
         });
 }
-
-//로그아웃
-export function signout() {
-    // 로컬스토리지의 값을 null로 만든다.
-    localStorage.setItem("ACCESS_TOKEN", null);
-    window.location.href = "/login"
-}
-// 회원 생성
-export function signup(userDTO) {
-    return call("/auth/signup", "POST", userDTO);
-}

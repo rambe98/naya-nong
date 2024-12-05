@@ -8,7 +8,7 @@ import { clientNumAtom } from '../../recoil/UserRecoil';
 const WritePost = () => {
     const navigate = useNavigate();
 
-    const clientNum = useRecoilValue(clientNumAtom); // 클라이언트 넘버 가져오기
+    const clientNum = localStorage.getItem("clientNum");
 
     const [formData, setFormData] = useState({
         userNick: localStorage.getItem('userNick') || '', // 로컬스토리지에서 닉네임 가져오기
@@ -64,9 +64,6 @@ const WritePost = () => {
         const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
         try {
             const response = await axios.post('http://localhost:7070/board', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰 추가
                   },

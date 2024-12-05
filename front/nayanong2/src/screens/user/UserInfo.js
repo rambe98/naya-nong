@@ -18,7 +18,7 @@ import {
 const UserInfo = () => {
   const navigate = useNavigate();
 
-  const [userPwd, setUserPwd] = useState(''); // 입력된 비밀번호
+  const [password, setPassword] = useState(''); // 입력된 비밀번호
   const [userInfo, setUserInfo] = useRecoilState(formDataAtom); // userInfo의 초기값
   const [userNick, setUserNick] = useState('');
 
@@ -82,7 +82,7 @@ const UserInfo = () => {
       const response = await axios.post("http://localhost:7070/users/verifypassword",
        {
           clientNum: clientNum,
-          userPwd: userPwd,
+          userPwd: password,
         },
         {
           headers: {
@@ -114,8 +114,8 @@ const UserInfo = () => {
     );
 
     if (!isValid) return;
-
-    const updatedUserInfo = { ...userInfo, userPwd };
+    
+    const updatedUserInfo = { ...userInfo, userPwd:password };
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       const response = await axios.put(
@@ -126,18 +126,18 @@ const UserInfo = () => {
           },
         }
       );
-  
+      console.log("전송 데이터:", updatedUserInfo); // 전송 데이터 로그 확인
 
       if (response.status === 200) {
         const updatedUser = response.data;
 
         setUserNick(updatedUser.userNick);
-
-        sessionStorage.setItem("userNick", updatedUser.userNick);
+        //로컬스토리지의 유저닉네임 업데이트
+        localStorage.setItem("userNick", updatedUser.userNick);
 
         alert("수정이 완료되었습니다.");
         setEdit(false);
-        setUserPwd("");
+        setPassword("");
         setMessage(""); // 메시지 초기화
         setSMessage(""); // 서버 메시지 초기화
       }
@@ -157,7 +157,7 @@ const UserInfo = () => {
     const { name, value } = e.target;
 
     if (name === "userPwd") {
-      setUserPwd(value);
+      setPassword(value);
     } else {
       setUserInfo((prev) => ({
         ...prev,
@@ -180,6 +180,7 @@ const UserInfo = () => {
     if (backupUserInfo) {
       setUserInfo({ ...backupUserInfo });
     }
+    setPassword("");
     setEdit(false);
     setMessage("");
     setSMessage("");
@@ -192,7 +193,7 @@ const UserInfo = () => {
 
   //모달 취소버튼
   const modalCancelClick = () => {
-    setUserPwd("");
+    setPassword("");
     setShowModal(false);
   };
 
@@ -217,7 +218,7 @@ const UserInfo = () => {
                 className="userInfoFormInput"
                 type={showPassword ? "text" : "password"}
                 name="userPwd"
-                value={userInfo.userPwd}
+                value={password}
                 onChange={handleInputChange}
               />
               <button
@@ -299,7 +300,7 @@ const UserInfo = () => {
             </div>
             <div className="userInfoFormGroup">
               <label className="userInfoFormLabel">핸드폰번호:</label>
-              <span className="userInfoFormText">{userInfo.userPnum}</span>
+              <span className="userInfoFormText">{"*".repeat(userInfo.userPnum?.length || 0)}</span>
             </div>
             <div className="userInfoFormGroup">
               <label className="userInfoFormLabel">통신사:</label>
@@ -336,8 +337,8 @@ const UserInfo = () => {
             <input
               type="password"
               placeholder="비밀번호를 입력하세요"
-              value={userPwd}
-              onChange={(e) => setUserPwd(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="modalInput"
             />
             <div className="modalButtons">

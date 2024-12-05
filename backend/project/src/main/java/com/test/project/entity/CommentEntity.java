@@ -2,8 +2,13 @@ package com.test.project.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.test.project.dto.CommentDTO.CommentDTOBuilder;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +22,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Table(name = "comment")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,14 +34,18 @@ public class CommentEntity {
 	    private Long comId; // 댓글 ID
 	    
 	    @ManyToOne
-	    @JoinColumn(name = "bodnum", referencedColumnName = "bodNum", nullable = false)
+	    @JoinColumn(name = "bod_num", referencedColumnName = "bodNum", nullable = false)
 	    private BoardEntity board;
 	    
 	    @ManyToOne
-	    @JoinColumn(name = "userNick", referencedColumnName = "userNick", nullable = false)
+	    @JoinColumn(name = "user_nick", referencedColumnName = "userNick", nullable = false)
 	    private NongEntity nong;
 	    
 	    private String content; 
+	    
+	    @CreationTimestamp
 	    private LocalDateTime createDate;
+	    
+	    @UpdateTimestamp
 	    private LocalDateTime updateDate;
 }

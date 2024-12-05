@@ -1,5 +1,6 @@
 package com.test.project.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Table(name = "heart")
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,12 +25,12 @@ public class HeartEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int heartNum;
 	
-	@ManyToOne
-	@JoinColumn(name = "userNick", referencedColumnName = "userNick")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_nick", referencedColumnName = "userNick")
     private NongEntity nong;
 	
-	@ManyToOne
-	@JoinColumn(name = "bodNum", referencedColumnName = "bodNum")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "bod_num", referencedColumnName = "bodNum")
     private BoardEntity board;
 	
 }

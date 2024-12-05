@@ -2,6 +2,7 @@ package com.test.project.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Table(name = "parentComment")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,11 +28,11 @@ public class ParentCommentEntity {
 	private Long pComId;
 
 	@ManyToOne
-	@JoinColumn(name = "userNick", referencedColumnName = "userNick", nullable = false)
+	@JoinColumn(name = "user_nick", referencedColumnName = "userNick", nullable = false)
 	private NongEntity nong;
 
 	@ManyToOne
-	@JoinColumn(name = "comId", referencedColumnName = "comId", nullable = false)
+	@JoinColumn(name = "com_id", referencedColumnName = "comId", nullable = false)
 	private CommentEntity comment;
 	
 	private LocalDateTime createDate;

@@ -65,19 +65,21 @@ public class NongConteroller {
 	    }
 
 	    try {
-	        // 자격 증명 확인
-	        NongEntity user = service.getBycredentials(userId, userPwd);
+	        // 1. 인증 및 토큰 생성
+	        String token = service.authenticateAndGenerateToken(userId, userPwd);
 
-	        // JWT 토큰 생성
-	        String token = service.generateToken(user);
+	        // 2. 사용자 정보 조회
+	        NongEntity userEntity = service.showUser(userId); // userId로 사용자 조회
+	        NongDTO responseDto = new NongDTO(userEntity);
 
-	        // 응답에 토큰 추가
-	        return ResponseEntity.ok(Map.of("token", token, "user", new NongDTO(user)));
+	        // 3. 응답에 토큰과 사용자 정보 포함
+	        return ResponseEntity.ok(Map.of("token", token, "user", responseDto));
 
 	    } catch (IllegalArgumentException e) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	    }
 	}
+
 	
 
 	@PostMapping("/verifypassword")

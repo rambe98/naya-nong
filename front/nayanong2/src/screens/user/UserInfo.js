@@ -18,17 +18,18 @@ import {
 const UserInfo = () => {
   const navigate = useNavigate();
 
-  const [userPwd, setUserPwd] = useRecoilState(confirmPwdAtom); // 입력된 비밀번호
+  const [userPwd, setUserPwd] = useState(''); // 입력된 비밀번호
   const [userInfo, setUserInfo] = useRecoilState(formDataAtom); // userInfo의 초기값
-  const setUserNick = useSetRecoilState(userNicksuccessAtom);
+  const [userNick, setUserNick] = useState('');
+
 
   const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
   const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
   const [message, setMessage] = useRecoilState(messageAtom); // 클라이언트 메시지
   const [smessage, setSMessage] = useRecoilState(smessageAtom); // 서버 메시지
 
-  const { clientNum } = useParams(); // URL에서 clientNum을 가져옴
-
+ const clientNum = localStorage.getItem("clientNum")
+ 
   const [edit, setEdit] = useState(false);
   const [backupUserInfo, setBackupUserInfo] = useState(null); // 백업 상태
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
@@ -48,15 +49,20 @@ const UserInfo = () => {
   // 사용자 정보 로드
   useEffect(() => {
     const loadUserDetails = async () => {
-      if (!clientNum) return;
-
+      const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
       try {
-        const response = await axios.get(
-          `http://localhost:7070/users/${clientNum}`
+        // 요청 보내기
+        const response = await axios.get(`http://localhost:7070/users/${clientNum}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // 인증 토큰 추가
+            },
+          }
         );
-
+  
+        // 서버에서 데이터 받아서 상태 업데이트
         if (response.data.clientNum) {
-          setUserInfo(response.data); // 서버에서 사용자 정보를 받아 Recoil 상태 업데이트
+          setUserInfo(response.data); // Recoil 상태 업데이트
         } else {
           throw new Error("회원 정보를 불러올 수 없습니다.");
         }
@@ -64,20 +70,24 @@ const UserInfo = () => {
         console.error("회원정보 로드 실패:", error);
       }
     };
-
-    if (clientNum) {
-      loadUserDetails();
-    }
+  
+    loadUserDetails(); // 함수 호출
   }, [clientNum, setUserInfo]);
+  
 
   // 비밀번호 확인
   const handlePasswordClick = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:7070/users/verifypassword",
-        {
+      const token = localStorage.getItem("ACCESS_TOKEN");
+      const response = await axios.post("http://localhost:7070/users/verifypassword",
+       {
           clientNum: clientNum,
           userPwd: userPwd,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 인증 토큰 추가
+          },
         }
       );
 
@@ -106,12 +116,17 @@ const UserInfo = () => {
     if (!isValid) return;
 
     const updatedUserInfo = { ...userInfo, userPwd };
-
+    const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       const response = await axios.put(
-        `http://localhost:7070/users/${clientNum}`,
-        updatedUserInfo
+        `http://localhost:7070/users/${clientNum}`,updatedUserInfo,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 인증 토큰 추가
+          },
+        }
       );
+  
 
       if (response.status === 200) {
         const updatedUser = response.data;
@@ -157,6 +172,7 @@ const UserInfo = () => {
   const handleEditClick = () => {
     setShowModal(true);
     setBackupUserInfo({ ...userInfo });
+
   };
 
   //취소버튼 
@@ -201,7 +217,7 @@ const UserInfo = () => {
                 className="userInfoFormInput"
                 type={showPassword ? "text" : "password"}
                 name="userPwd"
-                value={userPwd}
+                value={userInfo.userPwd}
                 onChange={handleInputChange}
               />
               <button

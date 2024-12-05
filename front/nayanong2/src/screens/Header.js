@@ -2,44 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import '../css/Main.css';
-import { useRecoilValue, useResetRecoilState, useSetRecoilState, useRecoilState } from 'recoil';
-import { clientNumAtom, loginsuccessAtom, messageAtom, userIdAtom, userPwdAtom, formDataAtom, userNickSelector } from '../recoil/UserRecoil';
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isVisible, setIsVisible] = useState(true);  // 헤더의 visibility 상태 관리
+  const [isVisible, setIsVisible] = useState(true); // 헤더의 visibility 상태 관리
 
-  //loginsuccess에 loginsuccessAtom의 값을 읽어와 loginsuccess변수에 저장 (true, false가 저장됨)
-  const loginsuccess = useRecoilValue(loginsuccessAtom);
-  //loginsuccessAtom에 저장된 값으로 setLoginSuccess 업데이트 (true=로그인됨, false=로그아웃)
-  const setLoginSuccess = useSetRecoilState(loginsuccessAtom);
-  //clientNumAtom에서 현재 클라이언트번호를 읽어와 clientNum변수에 저장
-  const clientNum = useRecoilValue(clientNumAtom);
-  const [userNick, setUserNick] = useRecoilState(userNickSelector);
-
-  const resetUserId = useResetRecoilState(userIdAtom);
-  const resetUserPwd = useResetRecoilState(userPwdAtom);
-  const resetMessage = useResetRecoilState(messageAtom);
-  const resetFormData = useResetRecoilState(formDataAtom);
+  // 로컬스토리지에서 로그인 상태 및 사용자 정보 가져오기
+  const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
+  const userNick = localStorage.getItem("userNick");
 
   // 로그아웃 함수
   const handleLogout = () => {
-    setLoginSuccess(false);
-    sessionStorage.removeItem('loginsuccess');
-    sessionStorage.removeItem('clientNum');
-    sessionStorage.removeItem('userNick');
-    sessionStorage.removeItem('userId');
-    resetUserId();
-    resetUserPwd();
-    resetMessage();
-    resetFormData();
+    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem("loginsuccess");
+    localStorage.removeItem("clientNum");
+    localStorage.removeItem("userNick");
+    localStorage.removeItem("userId");
     alert('로그아웃 되었습니다.');
     navigate('/');
   };
 
   // 정보 수정 이동 함수
   const handleLogInfo = () => {
+    const clientNum = localStorage.getItem("clientNum");
     if (clientNum) {
       navigate(`/userinfo/${clientNum}`);
     } else {

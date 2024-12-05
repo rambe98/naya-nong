@@ -18,8 +18,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
+<<<<<<< HEAD
         .cors() // CORS 활성화
         .and()
+=======
+        	.cors()
+        	.and()
+>>>>>>> test
             .authorizeHttpRequests()
             .requestMatchers("/users/signin", "/users/signup", "/usrs/*").permitAll() // 로그인, 회원가입은 모두 허용
             .anyRequest().authenticated(); // 나머지 요청은 인증 필요

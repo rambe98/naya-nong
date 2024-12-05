@@ -1,5 +1,6 @@
 package com.test.project.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,7 +53,8 @@ public class ParentCommentService {
 	    ParentCommentEntity replyComment = ParentCommentEntity.builder()
 	            .comment(parentComment)  // 부모 댓글 설정
 	            .nong(user)              // 사용자 설정
-	            .content(content)        // 대댓글 내용
+	            .content(content)  		 // 대댓글 내용
+	            .createDate(LocalDateTime.now())
 	            .build();
 
 	    // 대댓글 저장

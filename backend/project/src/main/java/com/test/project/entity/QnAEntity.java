@@ -32,7 +32,6 @@ public class QnAEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "user_nick", referencedColumnName = "userNick")
-
 	private NongEntity nong;
 	
 	@CreationTimestamp

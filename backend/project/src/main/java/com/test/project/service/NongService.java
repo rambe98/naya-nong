@@ -45,7 +45,11 @@ public class NongService {
 		NongEntity entity = repository.findById(clientNum).orElseThrow(() -> new RuntimeException("User not found"));
 		return new NongDTO(entity);
 	}//showUser end
-
+	// userId로 조회
+	public NongEntity showUser(String userId) {
+	    return repository.findByUserId(userId)
+	                     .orElseThrow(() -> new RuntimeException("User not found with userId: " + userId));
+	}
 	// 추가
 	public NongDTO adduser(NongDTO dto) {
 		// DTO를 Entity로 변환
@@ -119,7 +123,7 @@ public class NongService {
 	}
 
 	// 로그인 처리 시 토큰 반환
-	public NongEntity getBycredentials(String userId, String userPwd) {
+	public String authenticateAndGenerateToken(String userId, String userPwd) {
 	    // 아이디로 사용자 확인
 	    Optional<NongEntity> userEntity = repository.findByUserId(userId);
 	    if (userEntity.isEmpty()) {
@@ -133,11 +137,9 @@ public class NongService {
 	    }
 
 	    // 인증 성공 시 토큰 생성
-	    String token = generateToken(entity);
-	    entity.setToken(token); // 사용자의 토큰을 저장 (선택 사항)
-
-	    return entity; // 인증된 엔티티 반환
+	    return generateToken(entity); // 엔티티를 변경하지 않고 토큰만 반환
 	}
+
 	
 
 	// 비밀번호 확인

@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { clientNumAtom,loginsuccessAtom, messageAtom, userIdAtom, userPwdAtom, userNicksuccessAtom } from '../../recoil/UserRecoil';
+import { signin } from '../../service/ApiService';
 
 function Login() {
   const navigate = useNavigate();
@@ -59,23 +60,21 @@ function Login() {
     };
 
     try {
-      const response = await axios.post('http://localhost:7070/users/signin', logindata, {
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const response = await signin(logindata)
 
-      if (response.status >= 200 && response.status < 300) {
-        const user = response.data;
+      if (response.token) {
+        
 
         // 세션 스토리지에 상태 저장
         sessionStorage.setItem('loginsuccess', 'true');
-        sessionStorage.setItem('userId', user.userId);
-        sessionStorage.setItem('clientNum', user.clientNum);
-        sessionStorage.setItem('userNick', user.userNick);
+        sessionStorage.setItem('userId', response.userId);
+        sessionStorage.setItem('clientNum', response.clientNum);
+        sessionStorage.setItem('userNick', response.userNick);
 
         // 부모 상태 업데이트
         setLoginSuccess(true);
-        setClientNum(user.clientNum);
-        setUserNick(user.userNick)
+        setClientNum(response.clientNum);
+        setUserNick(response.userNick)
         setUserPwd('');
         alert('로그인 성공');
 

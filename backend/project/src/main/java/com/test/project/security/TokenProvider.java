@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.stereotype.Service;
 
 import com.test.project.entity.NongEntity;
@@ -11,13 +13,14 @@ import com.test.project.entity.NongEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class TokenProvider {
     // SECRET_KEY는 문자열 형태로 간단한 비밀 키로 설정
-    private static final String SECRET_KEY = "mySecretKey";  // 비밀 키
+	private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     // 토큰 생성
     public String create(NongEntity nongEntity) {
         // 기한 지금으로부터 1일로 설정

@@ -50,12 +50,16 @@ const UserInfo = () => {
   useEffect(() => {
     const loadUserDetails = async () => {
       if (!clientNum) return;
-
+        const accessToken = localStorage.getItem("ACCESS_TOKEN")
       try {
         const response = await axios.get(
-          `http://localhost:7070/users/${clientNum}`
+          `http://localhost:7070/users/${clientNum}`,
+          {
+            headers:{
+              Authorization:`Bearer ${accessToken}`,
+            },
+          }
         );
-
         if (response.data.clientNum) {
           setUserInfo(response.data); // 서버에서 사용자 정보를 받아 Recoil 상태 업데이트
         } else {

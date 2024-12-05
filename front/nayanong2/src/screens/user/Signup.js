@@ -64,7 +64,7 @@ function Signup() {
     setSmessage("");
   };
 
-  // 회원가입 요청
+  //회원가입
   const addUser = async (formData) => {
     try {
       const response = await axios.post("http://localhost:7070/users/signup", formData, {
@@ -72,9 +72,24 @@ function Signup() {
           "Content-Type": "application/json",
         },
       });
-      console.log("회원추가 성공", response.data);
-      alert("회원이 추가되었습니다.");
-      navigate("/");
+      
+      // 응답 데이터 확인
+      console.log("응답 데이터:", response.data);
+  
+      const token = response.data.token;
+      if (token) {
+        localStorage.setItem("jwtToken", token);
+  
+        // 페이지 이동 전에 알림을 먼저 표시합니다.
+        alert("회원이 추가되었습니다.");
+  
+        // alert 창을 닫은 후 페이지를 이동하도록 setTimeout 사용
+        setTimeout(() => {
+          navigate("/"); // 홈으로 리디렉션
+        }, 100);  // 100ms 후 페이지 이동
+      } else {
+        console.error("토큰이 응답에 포함되지 않았습니다.");
+      }
     } catch (error) {
       // 서버에서 받은 에러 메시지 처리
       if (error.response && error.response.data) {
@@ -86,7 +101,7 @@ function Signup() {
       }
     }
   };
-
+  
   // 취소 버튼 동작
   const cancelButton = () => {
     setFormData(""); // 폼 데이터 초기화

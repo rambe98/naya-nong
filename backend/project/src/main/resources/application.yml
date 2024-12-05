@@ -1,0 +1,21 @@
+server:
+  port: 7070
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_nong
+    username: root  # MySQL 사용자 이름
+    password: skdishd  # MySQL 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # 데이터베이스 구조 자동 업데이트
+    show-sql: true  # SQL 쿼리 로그 출력
+    properties:
+      hibernate:
+        format_sql: true  # SQL 포맷팅
+
+jwt:
+  secret: eyJhbGciOiJIUzUxMiJ9eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcyNzk3NzQ2OSwiaWF0IjoxNzI3OTc3NDY5fQ3WUk1X983GsejnQZJSNQKjZBfBeSzOK4cAxpndz0G3pSItFPDiDVnSfD0ZsQzVCSkSMKQozyMVDjt9VYTcJw
+  expiration: 3600000 # 1 hour

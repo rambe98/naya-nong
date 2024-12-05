@@ -33,6 +33,8 @@ public class ParentCommentEntity {
 	@ManyToOne
 	@JoinColumn(name = "comId", referencedColumnName = "comId", nullable = false)
 	private CommentEntity comment;
+	
+	private LocalDateTime createDate;
 
 	private String content;
 }

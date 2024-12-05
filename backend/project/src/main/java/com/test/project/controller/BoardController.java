@@ -25,34 +25,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardController {
 
-	@Autowired
-	private BoardService service;
+   @Autowired
+   private BoardService service;
 
-	@GetMapping
-	public ResponseEntity<List<BoardDTO>> showAllBoard() {
-		List<BoardDTO> boards = service.showAllBoard();
-		return ResponseEntity.ok(boards);
-	}// showAllBoard end
-	
+   @GetMapping
+   public ResponseEntity<List<BoardDTO>> showAllBoard() {
+      List<BoardDTO> boards = service.showAllBoard();
+      return ResponseEntity.ok(boards);
+   }// showAllBoard end
+   
 
-	@GetMapping("/user/{userNick}")
-	public ResponseEntity<?> getBoardsByUserNick(@PathVariable("userNick") String userNick) {
-		List<BoardDTO> getBoardsByUserNick = service.getBoardsByUserNick(userNick);
-		return ResponseEntity.ok(getBoardsByUserNick);
-	}//getBoardsByUserNick
-	
-	@GetMapping("/{bodNum}")
-	public ResponseEntity<?> getBoardsByBoardNum(@PathVariable("bodNum") int bodNum) {
-	    try {
-	        BoardDTO boardDTO = service.getBoardsByBoardNum(bodNum);
-	        return ResponseEntity.ok(boardDTO); // 게시글 정보 반환
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(404).body(e.getMessage()); // 게시글이 없을 경우 404 상태 코드 반환
-	    } catch (Exception e) {
-	        return ResponseEntity.status(500).body("서버 오류가 발생했습니다."); // 다른 예외 처리
-	    }
-	}
-	// 제목으로 검색
+   @GetMapping("/user/{userNick}")
+   public ResponseEntity<?> getBoardsByUserNick(@PathVariable("userNick") String userNick) {
+      List<BoardDTO> getBoardsByUserNick = service.getBoardsByUserNick(userNick);
+      return ResponseEntity.ok(getBoardsByUserNick);
+   }//getBoardsByUserNick
+   
+   @GetMapping("/{bodNum}")
+   public ResponseEntity<?> getBoardsByBoardNum(@PathVariable("bodNum") int bodNum) {
+       try {
+           BoardDTO boardDTO = service.getBoardsByBoardNum(bodNum);
+           return ResponseEntity.ok(boardDTO); // 게시글 정보 반환
+       } catch (RuntimeException e) {
+           return ResponseEntity.status(404).body(e.getMessage()); // 게시글이 없을 경우 404 상태 코드 반환
+       } catch (Exception e) {
+           return ResponseEntity.status(500).body("서버 오류가 발생했습니다."); // 다른 예외 처리
+       }
+   }
+   // 제목으로 검색
     @GetMapping("/search/title")
     public ResponseEntity<List<BoardDTO>> searchByTitle(@RequestParam("keyword") String titleKeyword) {
         List<BoardDTO> boards = service.searchByTitle(titleKeyword);
@@ -86,34 +86,34 @@ public class BoardController {
         List<BoardDTO> boards = service.searchAll(keyword);
         return ResponseEntity.ok(boards);
     }
-	
-	@PostMapping
-	public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto) {
-		BoardDTO addBoard = service.addBoard(dto);
-		return ResponseEntity.ok().body(addBoard);
-	}// addBoard end
+   
+   @PostMapping
+   public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto) {
+      BoardDTO addBoard = service.addBoard(dto);
+      return ResponseEntity.ok().body(addBoard);
+   }// addBoard end
 
-	@PutMapping("/{bodNum}")
-	public ResponseEntity<?> updateBoard(@RequestBody BoardDTO dto) {
-		BoardDTO updateBoard = service.updateBoard(dto);
-		return ResponseEntity.ok().body(updateBoard);
-	}// updateUsers end
-	
+   @PutMapping("/{bodNum}")
+   public ResponseEntity<?> updateBoard(@RequestBody BoardDTO dto) {
+      BoardDTO updateBoard = service.updateBoard(dto);
+      return ResponseEntity.ok().body(updateBoard);
+   }// updateUsers end
+   
 
-	@DeleteMapping("/{bodNum}")
-	public ResponseEntity<?> deleteBoard(BoardDTO dto) {
-		boolean isDeleted = service.deleteBoard(dto);
-		try {
-			if (isDeleted) {
-				return ResponseEntity.ok("게시글이 삭제 되었습니다.");
-			} else {
-				return ResponseEntity.status(404).body("게시글을 찾을 수 없습니다.");
-			}
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("데이터에러");
-		} // catch end
-	}// deleteUsers end
-	
-	
+   @DeleteMapping("/{bodNum}")
+   public ResponseEntity<?> deleteBoard(BoardDTO dto) {
+      boolean isDeleted = service.deleteBoard(dto);
+      try {
+         if (isDeleted) {
+            return ResponseEntity.ok("게시글이 삭제 되었습니다.");
+         } else {
+            return ResponseEntity.status(404).body("게시글을 찾을 수 없습니다.");
+         }
+      } catch (Exception e) {
+         return ResponseEntity.badRequest().body("데이터에러");
+      } // catch end
+   }// deleteUsers end
+   
+   
 
 }

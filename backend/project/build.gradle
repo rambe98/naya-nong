@@ -45,6 +45,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // OAuth2 의존성 추가 (필요한 경우)
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+        // Spring Boot Web 의존성 (웹 애플리케이션이면 추가)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
 }
 

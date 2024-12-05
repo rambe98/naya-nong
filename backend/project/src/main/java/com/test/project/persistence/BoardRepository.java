@@ -12,19 +12,19 @@ import com.test.project.entity.BoardEntity;
 
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
-	// userNick을 기준으로 게시판을 조회하는 메서드
-	List<BoardEntity> findByProjectUserNick(String userNick);
+   // userNick을 기준으로 게시판을 조회하는 메서드
+   List<BoardEntity> findByProjectUserNick(String userNick);
 
-	BoardEntity findByBodNum(int bodNum);
+   BoardEntity findByBodNum(int bodNum);
 
-	// 제목으로 검색
-	List<BoardEntity> findByBodTitleContaining(String keyword);
+   // 제목으로 검색
+   List<BoardEntity> findByBodTitleContaining(String keyword);
 
-	// 내용으로 검색
-	List<BoardEntity> findByBodDtailContaining(String keyword);
+   // 내용으로 검색
+   List<BoardEntity> findByBodDtailContaining(String keyword);
 
-	// 닉네임으로 검색
-	List<BoardEntity> findByProjectUserNickContaining(String userNickKeyword);
+   // 닉네임으로 검색
+   List<BoardEntity> findByProjectUserNickContaining(String userNickKeyword);
     // 제목 또는 내용에 검색어가 포함된 게시글을 찾는 메서드
     List<BoardEntity> findByBodTitleContainingOrBodDtailContaining(String titleKeyword, String contentKeyword);
 
@@ -33,6 +33,6 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
             "b.bodTitle LIKE %:keyword% OR " +
             "b.bodDtail LIKE %:keyword% OR " +
             "b.project.userNick LIKE %:keyword%")
-    List<BoardEntity> findByAllKeyword(@Param("keyword") String keyword);
+     List<BoardEntity> findByAllKeyword(@Param("keyword") String keyword);
 
 }

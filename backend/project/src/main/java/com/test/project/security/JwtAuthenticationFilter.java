@@ -30,66 +30,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	//doFilterInternal을 오버라이딩해야 클래스에 에러가 사라짐
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-		throws ServletException, IOException {
-		//필터에서 뭘 하고 싶은지 작성 (토큰을 가지고 유효한지 검증)
+			throws ServletException, IOException {
 		try {
-			//읽어오는것을 먼저 해야한다
-			//1. 발급된 토큰 읽어오기
-			//request에 담긴 토큰을 꺼내기
+			// 요청에서 토큰을 가져옵니다
 			String token = parseBearerToken(request);
 			log.info("Filter is running...");
-			
-			//2. 토큰 검사하기
-			//token.equalsIgnoreCase -> 문자열비교 null이라는 단어가 들어있는지 비교
-			if(token != null && !token.equalsIgnoreCase("null")) {
-				//토큰을 통해 userId를 반환받는다.
-				//validateAndeGetUserId(token)
-				//검증을하고 userId를 반환
-				String userId = tokenProvider.validateAndeGetUserId(token);
+
+			if (token != null && !token.equalsIgnoreCase("null")) {
+				// 토큰을 검증합니다
+				log.info("Token found: " + token);  // 토큰 값 로깅
+				String userId = tokenProvider.validateAndGetUserId(token);
 				log.info("Authenticated user ID : " + userId);
-				
-				//사용자 인증 완료후, SecurityContext에 인증 정보를 등록
-				//AbstractAuthenticationToken
-				//스프링 시큐리티에서 제공하는 인증된 사용자 정보를 표현하는 추상클래스
-				//인증된 사용자와 그 사용자의 권한 정보(Authorities)를 담는 역할을 한다.
+
+				// 인증된 사용자 정보를 SecurityContext에 설정합니다
 				AbstractAuthenticationToken authentication = 
-						new UsernamePasswordAuthenticationToken(
-								userId,//id
-								null,//password (굳이 저장안해도되서 null)
-								AuthorityUtils.NO_AUTHORITIES //현재 권한 정보는 제공하지 않는다.
-								);
-				//WebAuthenticationDetailsSource
-				//request로 부터 인증 세부 정보를 생성하는 역할을 한다.
-				//.buildDetails(request)
-				//reques 객체에서 인증과 관련된 추가적인 정보를 추출한다.
-				//사용자의 세션 ID, 클라이언트의 IP주소 등의 메타데이터를 포함한다.
-				//
-				authentication.setDetails(
-						new WebAuthenticationDetailsSource()
-						.buildDetails(request)
-				);
-				
-				//SecurityContext (createEmptyContext의 반환형)
-				//인증된 정보를 저장
-				//SecurityContextHolder
-				//스프링 시큐리티에서 사용자의 인증 정보와 보안 컨텍스트를 관리하는 중심 클래스다.
-				//애플리케이션 내에서 현재 인증된 사용자의 정보를 저장하고 제공하는 역할을 한다.
-				SecurityContext securityContext = SecurityContextHolder.createEmptyContext(); 
-				//setAuthentication(authentication)
-				//현재 요청에 대한 인증 정보를 securityContext에 저장하여
-				//스프링 시큐리티가 해당 사용자를 인증된 사용자로 인식하게 해주는 메서드
+					new UsernamePasswordAuthenticationToken(userId, null, AuthorityUtils.NO_AUTHORITIES);
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 				securityContext.setAuthentication(authentication);
-				
-				//setContext
-				//인증을 완료한 후, 이 메서드를 사용하여 인증된 사용자 정보를 저장할 수 있다.
 				SecurityContextHolder.setContext(securityContext);
 			}
 		} catch (Exception e) {
 			logger.error("Could not set user authentication in security context", e);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 토큰이 잘못되었을 경우 401 응답
+			response.getWriter().write("Unauthorized access");
+			return;
 		}
-		//다음필터가 있으면 호출해라
-		filterChain.doFilter(request, response);
-	}//doFilterInternal
+
+		filterChain.doFilter(request, response); // 다음 필터로 넘깁니다
+	}
 	//HttpsServletRequest request
 	//클라이언트가 하는 요청은 request 객체에 담긴다.
 	private String parseBearerToken(HttpServletRequest request) {

@@ -33,8 +33,11 @@ public class CommentService {
 		
 	}
 
-	// 댓글 저장
-	public CommentDTO addComment(int bodNum, String userNick, String content) {
+	// 댓글 추가
+	public CommentDTO addComment(CommentDTO dto) {
+		int bodNum = dto.getBodNum();
+    	String userNick = dto.getUserNick();
+    	String content = dto.getContent();
 		BoardEntity board = boardRepository.findByBodNum(bodNum);
 		if (board == null) {
 			throw new RuntimeException("게시글을 찾을 수 없습니다.");
@@ -42,10 +45,14 @@ public class CommentService {
 		NongEntity user = nongRepository.findByUserNick(userNick)
 				.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-		CommentEntity comment = CommentEntity.builder().board(board).nong(user).content(content)
-				.createDate(LocalDateTime.now()).build();
-
-		CommentEntity savedComment = commentRepository.save(comment);
+		 CommentEntity entity = dto.toEntity(dto);
+		 entity.setBoard(board);
+		 entity.setNong(user);
+		 entity.setContent(content);
+		 entity.setCreateDate(LocalDateTime.now());
+		 entity.setUpdateDate(null);
+		 
+		CommentEntity savedComment = commentRepository.save(entity);
 
 		return new CommentDTO(savedComment);
 	}//addComent end
@@ -57,16 +64,9 @@ public class CommentService {
 		CommentEntity comment = commentRepository.findById(comId)
 				.orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));
 
-		// 댓글 내용 업데이트
 		comment.setContent(content);
-
-		// 수정 날짜 설정
 		comment.setUpdateDate(LocalDateTime.now());
-
-		// 댓글 저장
 		CommentEntity updatedComment = commentRepository.save(comment);
-
-		// DTO 반환
 		return new CommentDTO(updatedComment);
 	}// updateComment end
 	

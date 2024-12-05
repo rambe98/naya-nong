@@ -35,10 +35,8 @@ public class CommentController {
     @PostMapping("/add")
     public ResponseEntity<?> addComment(@RequestBody CommentDTO dto) {
     	
-    	int bodNum = dto.getBodNum();
-    	String userNick = dto.getUserNick();
-    	String content = dto.getContent();
-    	CommentDTO responseDTO = commentService.addComment(bodNum, userNick, content);
+    	
+    	CommentDTO responseDTO = commentService.addComment(dto);
         return ResponseEntity.ok(responseDTO);  // 성공적으로 댓글을 추가하고, 생성된 댓글 정보를 반환
     }
     

@@ -29,7 +29,7 @@ public class CommentDTO {
 			this.content=entity.getContent();
 			this.userNick = entity.getNong().getUserNick();
 			this.createDate = entity.getCreateDate();
-			this.updateDate =entity.getCreateDate();
+			this.updateDate =entity.getUpdateDate();
 			this.bodNum =entity.getBoard().getBodNum();
 		}
 		
@@ -38,7 +38,7 @@ public class CommentDTO {
 			return CommentEntity.builder()
 								.comId(dto.getComId())
 								.content(dto.getContent())
-								.createDate(dto.getCreateDate())
+								.createDate(dto.createDate)
 								.updateDate(dto.getUpdateDate())
 								.build();
 								

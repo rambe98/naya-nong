@@ -61,6 +61,15 @@ function Login() {
 
     try {
       const response = await signin(logindata)
+<<<<<<< HEAD
+=======
+
+      if (response.token) {
+        
+
+        // 세션 스토리지에 상태 저장
+   
+>>>>>>> test
 
       if (response.token) {
         

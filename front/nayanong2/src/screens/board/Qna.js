@@ -9,7 +9,8 @@ import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
 const Qna = () => {
     const navigate = useNavigate('');
    
-    const [userNick,setUserNick] = useRecoilState(userNickAtom)
+    // const [userNick,setUserNick] = useRecoilState(userNickAtom)
+    const userNick = localStorage.getItem("userNick");
     
     const [formData, setFormData] = useState({ //폼데이터를 보내기위한 초기값,
         userNick : userNick,
@@ -64,23 +65,23 @@ const Qna = () => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-    //clientNum이 변경될때마다 서버에서 닉네임을 받아온다.
-    useEffect(() => {
-        const fetchNickName = async () => {
-            try {
-                if (clientNum) { // clientNum이 존재하는 경우에만 실행
-                    const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
-                    if (response.status === 200) {
-                        setUserNick(response.data.userNick); // 서버에서 받은 닉네임
-                    }
-                }
-            } catch (error) {
-                console.error('닉네임 조회 실패:', error);
-            }
-        };
+    // //clientNum이 변경될때마다 서버에서 닉네임을 받아온다.
+    // useEffect(() => {
+    //     const fetchNickName = async () => {
+    //         try {
+    //             if (clientNum) { // clientNum이 존재하는 경우에만 실행
+    //                 const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
+    //                 if (response.status === 200) {
+    //                     setUserNick(response.data.userNick); // 서버에서 받은 닉네임
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             console.error('닉네임 조회 실패:', error);
+    //         }
+    //     };
     
-        fetchNickName(); // useEffect 실행 시 닉네임 조회
-    }, [clientNum]);
+    //     fetchNickName(); // useEffect 실행 시 닉네임 조회
+    // }, [clientNum]);
     
     // userNick이 변경될 때 formData.userNick 동기화
     useEffect(() => {

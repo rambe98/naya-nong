@@ -10,12 +10,11 @@ import { SiAnsys } from "react-icons/si";
 const PostDetail = () => {
     const navigate = useNavigate()
 
-    // 세션 스토리지에서 가져온 userNick 값
-    const sessionUserNick = sessionStorage.getItem("userNick")
+    // 로컬 스토리지에서 가져온 userNick 값
+    const localStorageUserNick = localStorage.getItem("userNick")
 
     //url에서 bodNum 받아오기
     const { bodNum } = useParams()
-
     const [board, setBoard] = useState({
         bodTitle: "",
         writeDate: "",
@@ -59,7 +58,7 @@ const PostDetail = () => {
     const toggleLike = async () => {
         try {
             const response = await axios.post("http://localhost:7070/heart", {
-                userNick: sessionUserNick,
+                userNick: localStorageUserNick,
                 bodNum: parseInt(bodNum),
             });
 
@@ -78,12 +77,22 @@ const PostDetail = () => {
 
     //bodNum이 있다면 페이지가 렌더링 될 때상세 게시글 불러오는 함수
     useEffect(() => {
+
         const getBoardData = async () => {
+            const token = localStorage.getItem('ACCESS_TOKEN');
             try {
-                const boardsResponse = await axios.get("http://localhost:7070/board")
+                const boardsResponse = await axios.get("http://localhost:7070/board",{
+                    headers: {
+                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    },
+                })
                 setBoards(boardsResponse.data)
 
-                const response = await axios.get(`http://localhost:7070/board/${bodNum}`)
+                const response = await axios.get(`http://localhost:7070/board/${bodNum}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    },
+                })
                 console.log("서버 응답 데이터:", response.data)
                 const data = response.data
                 const updateData = { ...data, project: { userNick: data.userNick } }
@@ -120,10 +129,10 @@ const PostDetail = () => {
     const handleUpdate = () => {
         // 게시글 작성자 userNick과 현재 사용자의 userNick 비교
         console.log('게시글 작성자 userNick:', board.project.userNick) // 게시글 작성자 userNick 확인
-        console.log('현재 사용자 userNick:', sessionUserNick) // 현재 사용자 userNick 확인
+        console.log('현재 사용자 userNick:', localStorageUserNick) // 현재 사용자 userNick 확인
 
         // 게시글 작성자의 userNick과 현재 이용자의 userNick을 비교
-        if (board.project.userNick !== sessionUserNick) {
+        if (board.project.userNick !== localStorageUserNick) {
             alert("수정 권한이 없습니다. 작성자만 수정할 수 있습니다.")
             return
         }
@@ -135,10 +144,10 @@ const PostDetail = () => {
         try {
             // 게시글 작성자 userNick과 현재 사용자의 userNick 비교
             console.log('게시글 작성자 userNick:', board.project.userNick) // 게시글 작성자 userNick 확인
-            console.log('현재 사용자 userNick:', sessionUserNick) // 현재 사용자 userNick 확인
+            console.log('현재 사용자 userNick:', localStorageUserNick) // 현재 사용자 userNick 확인
 
             // 게시글 작성자의 userNick과 현재 이용자의 userNick을 비교
-            if (board.project.userNick !== sessionUserNick) {
+            if (board.project.userNick !== localStorageUserNick) {
                 alert("삭제 권한이 없습니다. 작성자만 삭제할 수 있습니다.")
                 return
             }
@@ -190,8 +199,13 @@ const PostDetail = () => {
 
     //페이지가 렌더링 되면 댓글 리스트 출력
     const commentsget = async () => {
+        const token = localStorage.getItem('ACCESS_TOKEN');
         try {
-            const response = await axios.get(`http://localhost:7070/comments`);
+            const response = await axios.get(`http://localhost:7070/comments`,{
+                headers: {
+                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                },
+            });
             console.log("현재데이터야", response.data); // 응답 데이터 로그
             const reversedComments = [...response.data].reverse(); //배열상태의 데이터를 복사후 반전
             setComments(reversedComments); //상태 업데이트
@@ -204,11 +218,17 @@ const PostDetail = () => {
 
     //댓글추가(작성)
     const commentsAdd = async () => {
+        const token = localStorage.getItem('ACCESS_TOKEN');
         try {
             const response = await axios.post(`http://localhost:7070/comments/add`, {
                 content: newComment, //댓글 내용
-                userNick: sessionUserNick, //세션스토리지의 유저닉네임값
-                bodNum: parseInt(bodNum) //url에서 따온 bodNum을 정수형으로 반환
+                userNick: localStorageUserNick, //세션스토리지의 유저닉네임값
+                bodNum: parseInt(bodNum)//url에서 따온 bodNum을 정수형으로 반환
+               },
+                {
+                headers: {
+                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                },
             })
             console.log("댓글 추가 성공", response.data);
             alert("댓글이 추가되었습니다.")
@@ -247,10 +267,14 @@ const PostDetail = () => {
 
     //댓글 수정
     const commentsPut = async (comId, updatedContent) => {
+        const token = localStorage.getItem('ACCESS_TOKEN');
         try {
-
             const response = await axios.put(`http://localhost:7070/comments/update/${comId}`, {
                 content: updatedContent,
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                },
             });
             console.log("댓글 수정 성공:", response.data);
             alert("댓글이 수정되었습니다.");
@@ -266,10 +290,15 @@ const PostDetail = () => {
     // 대댓글 작성
     const replyAdd = async (parentId) => {
         if (!newReply.trim()) return alert("답글 내용을 입력하세요.");
+        const token = localStorage.getItem('ACCESS_TOKEN');
         try {
             const response = await axios.post(`http://localhost:7070/pComment/addReply/${parentId}`, {
                 content: newReply,
-                userNick: sessionUserNick,
+                userNick: localStorageUserNick,
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                },
             });
             // 부모 댓글에 대댓글 추가
             setComments(
@@ -344,10 +373,10 @@ const PostDetail = () => {
 
                     <button onClick={handleBack}>이전</button>
                     {currentIndex > 0 && <button onClick={handleNext}>다음</button>}
-                    {board.project.userNick === sessionUserNick && (
+                    {board.project.userNick === localStorageUserNick && (
                         <button onClick={handleUpdate}>수정</button>
                     )}
-                    {board.project.userNick === sessionUserNick && (
+                    {board.project.userNick === localStorageUserNick && (
                         <button onClick={handleDelete}>삭제</button>
                     )}
                     <button onClick={() => navigate("/board")}>목록으로</button>
@@ -413,7 +442,7 @@ const PostDetail = () => {
                                         {updateTime && <span>수정일자: {updateTime}</span>}
                                         <div className="commentButtons">
                                             {/* 작성자의 유저닉네임과 현재 세션스토리지에 저장된 유저닉이 같으면 수정 모드 진입 */}
-                                            {comment.userNick === sessionUserNick && (
+                                            {comment.userNick === localStorageUserNick && (
                                                 <>
                                                     <button
                                                         onClick={() => {

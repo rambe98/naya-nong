@@ -1,13 +1,14 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import '../css/Main.css'
-import { useRecoilValue, useResetRecoilState, useSetRecoilState, useRecoilState} from 'recoil';
+import '../css/Main.css';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState, useRecoilState } from 'recoil';
 import { clientNumAtom, loginsuccessAtom, messageAtom, userIdAtom, userPwdAtom, formDataAtom, userNickSelector } from '../recoil/UserRecoil';
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isVisible, setIsVisible] = useState(true);  // 헤더의 visibility 상태 관리
 
   //loginsuccess에 loginsuccessAtom의 값을 읽어와 loginsuccess변수에 저장 (true, false가 저장됨)
   const loginsuccess = useRecoilValue(loginsuccessAtom);
@@ -17,23 +18,12 @@ const Header = () => {
   const clientNum = useRecoilValue(clientNumAtom);
   const [userNick, setUserNick] = useRecoilState(userNickSelector);
 
-
-
-  //로그아웃시 로그인 인풋에 남아있는 값 디폴트값으로 초기화 하기위해 상태초기화함수 가져왔다
   const resetUserId = useResetRecoilState(userIdAtom);
   const resetUserPwd = useResetRecoilState(userPwdAtom);
   const resetMessage = useResetRecoilState(messageAtom);
   const resetFormData = useResetRecoilState(formDataAtom);
 
-  // useEffect(() => {
-  //   const localUserNick = localStorage.getItem("userNick");
-  //   if (localUserNick && localUserNick !== userNick) {
-  //     setUserNick(localUserNick); // 로컬 스토리지와 상태 동기화
-  //   }
-  // }, [userNick, setUserNick]);
-  
-
-  //로그아웃 함수
+  // 로그아웃 함수
   const handleLogout = () => {
     setLoginSuccess(false);
     sessionStorage.removeItem('loginsuccess');
@@ -48,21 +38,39 @@ const Header = () => {
     navigate('/');
   };
 
-  //정보수정 이동함수
+  // 정보 수정 이동 함수
   const handleLogInfo = () => {
     if (clientNum) {
-      // clientNum을 가지고 사용자 정보 페이지로 이동
       navigate(`/userinfo/${clientNum}`);
     } else {
       alert('로그인 정보가 없습니다. 다시 로그인 해주세요.');
     }
   };
 
+  // 스크롤 이벤트 처리
+  useEffect(() => {
+    let lastScrollTop = 0;
+    const handleScroll = () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > lastScrollTop && currentScroll > 50) {
+        // 스크롤 내리면 헤더 숨기기
+        setIsVisible(false);
+      } else {
+        // 스크롤 올리면 헤더 보이기
+        setIsVisible(true);
+      }
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="mainHeader">
+    <header className={`mainHeader ${isVisible ? 'visible' : 'hidden'}`}>
       <div className="mainHeaderLeft">
         <img src={logo} alt="Logo" className="mainLogo" onClick={() => navigate('/')} />
-        <h2 className='logoText '>나야, 농</h2>
+        <h2 className='logoText' onClick={() => navigate('/')}>나야, 농</h2>
       </div>
       <nav className="mainHeaderNav">
         <ul>
@@ -78,8 +86,12 @@ const Header = () => {
         </ul>
       </nav>
       <div className="mainHeaderRight">
-      {loginsuccess && <span className='HeaderHello'>환영합니다<br/> {userNick}님</span>}
-
+        {loginsuccess && (
+          <span className="HeaderHello">
+            환영합니다<br />
+            <span className="highlight">{userNick}</span>님
+          </span>
+        )}
         {!loginsuccess ? (
           <>
             <button className="mainButton" onClick={() => navigate('/login')}>

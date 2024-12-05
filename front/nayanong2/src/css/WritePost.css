@@ -1,128 +1,83 @@
-/* writePost 페이지 */
+/* 전체 컨테이너 스타일 */
 .writeContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh; /* 화면 전체 높이를 차지하도록 */
-    background-color: #F5EFE6; /* 연한 베이지 배경색 */
-    width: 100vw;
-    padding: 0 20px;
-  }
-  
-  /* 입력폼을 감싸는 컨테이너 */
-  .writeInputContainer {
-    display: flex;
-    flex-direction: column; /* 세로로 나열 */
-    align-items: center; /* 왼쪽 정렬 */
-    width: 100%;
-    max-width: 500px;
-    margin-top: 20px; /* 상단 여백 */
-  }
-  
-  /* 입력 필드와 제목 스타일 */
-  .writeInputContainer p {
-    margin-bottom: 10px; /* 제목과 입력 필드 간 여백 */
-    font-size: 16px; /* 제목 텍스트 크기 */
-    color: #6D5A50; /* 제목 텍스트 색상 */
-    font-weight: bold; /* 제목 텍스트 굵게 */
-    display: flex;
-    flex-direction: column; /* 제목과 필드를 세로로 정렬 */
-    width: 100%;
-  }
-  
-  /* 입력 필드 스타일 */
-  .writeInput,
-  .writeInputtext {
-    width: 80%; /* 가로 크기 고정 */
-    padding: 10px;
-    margin: 10px 0; /* 상하 여백 */
-    border: 2px solid #D9CBB6; /* 연한 브라운 테두리 */
-    border-radius: 5px;
-    background-color: #FAF5EE; /* 아주 연한 베이지 */
-    font-size: 16px;
-    text-align: center;
-  }
-  
-  /* 텍스트 영역 높이 */
-  .writeInputtext {
-    height: 350px; /* 텍스트 영역 높이 */
-    resize: none; /* 크기 조절 비활성화 */
-  }
-  
-  /* 버튼 스타일 */
-  .writeButton {
-    padding: 12px 12px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #C4A484; /* 강조된 브라운 */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    max-width: 150px; /* 버튼의 최대 크기 제한 */
-    margin-top: 20px; /* 입력 폼과 버튼 간 간격 */
-    align-self: center;
-     /* 버튼을 가운데 정렬 align-self를 사용하는 이유는
-     align-items은 모든 flexbox 항목에대해 적용하지만
-     align-self는 특정 항목에 대한것만 변경가능
-     */
-  }
-  
-  .writeButton:hover {
-    background-color: #A07C5A; /* 더 진한 브라운 */
-  }
-  
-  
-  /* 기본 스타일 */
-  nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      padding: 0;
-      margin: 0;
-    }
-    
-    nav li {
-      cursor: pointer;
-      padding: 10px;
-      font-size: 16px;
-      color: #C4A484;
-      text-decoration: none;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 약간의 텍스트 그림자 */
-    }
-    
-    nav li.active {
-      border-bottom: 2px solid #C4A484; /* 활성화된 메뉴에만 언더라인 추가 */
-      color: #C4A484;                  /* 활성화된 메뉴의 색상 변경 */
-      font-weight: bold;               /* 활성화된 메뉴 글씨 두껍게 */
-    }
-    
-    nav li a {
-      text-decoration: none;
-      color: inherit;
-      font-family: 'SSFlowerRoad', sans-serif;
-      font-size: 18px;
-    }
-   
-    nav li:hover {
-      color: #A07C5A; /* 마우스를 올릴 때 색상 변경 */
-    }
-    
-    /* QnA 페이지의 p 태그 스타일 */
-  .writeInputContainer p {
-    margin: 10px 0; /* 상하 여백 */
-    font-size: 16px; /* 글씨 크기 */
-    color: #6D5A50; /* 텍스트 색상 (브라운 톤) */
-    font-weight: bold; /* 굵게 */
-    display: flex; /* label과 input을 가로로 정렬 */
-    align-items: center; /* 수직 정렬 */
-    gap: 10px; /* 텍스트와 input 간격 */
-  }
-  
-  /* 입력 필드와 텍스트 정렬 */
-  .writeInputContainer p input,
-  .writeInputContainer p textarea {
-    flex: 1; /* 입력 필드가 남은 공간을 차지 */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+  height: 100vh;
+  background-color: #FFFFFF; /* 배경 흰색 */
+}
+
+/* 글쓰기 헤더 */
+.writeHeader {
+  font-size: 24px;
+  font-weight: bold;
+  color: black; /* 검정 텍스트 */
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid #d4a373; /* 메인 색상 */
+  padding-bottom: 10px;
+  display: inline-block;
+  margin-top: 0;
+  font-family: 'SSFlowerRoad', sans-serif;
+}
+
+/* 입력 폼 */
+.writeInputContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px; /* 최대 너비 설정 */
+  margin: 0 auto;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* 입력 필드 */
+.writeInput,
+.writeInputtext {
+  width: 100%; /* 부모 컨테이너 너비에 맞춤 */
+  max-width: 600px; /* 최대 너비 제한 */
+  padding: 15px;
+  margin-bottom: 20px; /* 하단 여백 */
+  border: 2px solid #d4a373; /* 메인 색상 */
+  border-radius: 8px;
+  background-color: #FFFFFF; /* 배경 흰색 */
+  font-size: 18px;
+  color: black; /* 검정 텍스트 */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* 텍스트 입력 영역 */
+.writeInputtext {
+  height: 200px; /* 입력 박스 높이 */
+  resize: none;
+}
+
+/* 버튼 */
+.writeButton {
+  display: block; /* 인라인 대신 블록으로 설정 */
+  margin: 20px auto 0; /* 상단 여백 추가하고 가로로 중앙 정렬 */
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white; /* 흰색 텍스트 */
+  background-color: #d4a373; /* 메인 색상 */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.writeButton:hover {
+  background-color: #b08968; /* 강조된 메인 색상 */
+  transform: scale(1.05); /* 약간 확대 효과 */
+}
+
+body.no-scroll {
+  overflow: hidden;
+  height: 100%;
+}

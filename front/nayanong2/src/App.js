@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clientNumAtom, loginsuccessAtom, loginsuccessSelector, clientNumSelector } from './recoil/UserRecoil';
+import { bodNumAtom } from '../src/recoil/BoardRecoil'
 import Login from './screens/user/Login';
 import Signup from './screens/user/Signup';
 import UserInfo from './screens/user/UserInfo';
@@ -15,7 +16,7 @@ import PostDetail from './screens/board/PostDetail';
 import UpdatePost from './screens/board/UpdatePost';
 
 function App() {
-
+  
   /*
    useRecoilState
    상태값을 읽을 수 있고 상태를 읽고 업데이트할 때 사용하며
@@ -24,6 +25,7 @@ function App() {
   */
   const [loginsuccess, setLoginSuccess] = useRecoilState(loginsuccessAtom);
   const [clientNum, setClientNum] = useRecoilState(clientNumAtom);
+  const [bodNum, setBodNum] = useRecoilState(bodNumAtom)
 
   /*
    useRecoilValue
@@ -39,26 +41,26 @@ function App() {
     상태를 읽지는 않고 바꾸기만 한다.
    */
 
-  useEffect(() => {
+  useEffect(() =>{
     //초기화된 로그인상태로 로컬스토리지에서 가져온 값을 의미함
     setLoginSuccess(initializedLoginSuccess);
     //초기화된 클라이언트 번호로 로컬스토리지에서 가져온 값을 의미함
     setClientNum(initializedClientNum);
-  }, [initializedLoginSuccess, initializedClientNum, setLoginSuccess, setClientNum]);
+  },[initializedLoginSuccess, initializedClientNum, setLoginSuccess, setClientNum]);
 
 
-  return (
+  return(
     <Router>
       <InnerApp />
     </Router>
   )
 }
 
-// Router 내부에서만 useLocation 사용
+  // Router 내부에서만 useLocation 사용
 function InnerApp() {
   const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
-
+const isLoginPage = location.pathname === '/login';
+  
   return (
     <div className="App">
       {/* 로그인 페이지가 아닐 때만 Header 렌더링 */}

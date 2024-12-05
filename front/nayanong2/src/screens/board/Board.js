@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaBars,FaArrowUp } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import '../../css/Board.css';
 import '../../css/SideBar.css';
 import axios from 'axios';
@@ -14,9 +14,16 @@ const Board = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
-    const [sortBy, setSortBy] = useState('date');
-    const [isVisible, setIsVisible] = useState(false)
 
+    const [sortBy, setSortBy] = useState('date');
+
+    const toggleSidebar = () => {
+        setIsSidebarVisible((prevState) => !prevState);
+    };
+
+    const handleSortChange = (e) => {
+        setSortBy(e.target.value);
+    };
 
     const getList = async () => {
         try {
@@ -120,39 +127,6 @@ const Board = () => {
         getList();
     }, [sortBy]);
 
-    //사이드 바
-    const toggleSidebar = () => {
-        setIsSidebarVisible((prevState) => !prevState);
-    };
-
-    //정렬 기준 변경
-    const handleSortChange = (e) => {
-        setSortBy(e.target.value);
-    };
-
-    //스크롤 업
-    const handleScroll = () => {
-        if (window.scrollY > 100) {
-            setIsVisible(true)
-        } else {
-            setIsVisible(false)
-        }
-    }
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [])
-
-    //버튼 클릭시 맨 위로 이동
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        })
-    }
-
     return (
         <div className="boardContainer">
             {/* 사이드바 */}
@@ -164,7 +138,32 @@ const Board = () => {
                     </ul>
                 </div>
             </div>
+            {/* 작성일 및 페이지당 항목 수 선택 섹션 */}
+            <div className="boardOptionsContainer">
+                <span className="boaderHeader">자유게시판</span>
+                <div>
+                    <select
+                        className="boardSortBySelect"
+                        value={sortBy}
+                        onChange={handleSortChange}
+                    >
+                        <option value="date">작성일</option>
+                        <option value="views">조회수</option>
+                        <option value="title">제목</option>
+                    </select>
+                    <select
+                        className="boardItemsPerPageSelect"
+                        value={itemsPerPage}
+                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                    >
+                        <option value={10}>10개</option>
+                        <option value={20}>20개</option>
+                        <option value={30}>30개</option>
+                    </select>
+                </div>
+            </div>
 
+            {/* 검색 및 글쓰기 섹션 */}
             <div className="boardInputContainer">
                 <div className="boardContainerButton">
                     <button className="sidebarToggleButton" onClick={toggleSidebar}>
@@ -202,32 +201,10 @@ const Board = () => {
                     <button type="submit" className="boardSearchButton">
                         검색
                     </button>
-
-                    <div>
-                        <select
-                            className="boardItemsPerPageSelect"
-                            value={itemsPerPage}
-                            onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                        >
-                            <option value={10}>10개</option>
-                            <option value={20}>20개</option>
-                            <option value={30}>30개</option>
-                        </select>
-
-                        {/* 정렬 기준 선택 UI */}
-                        <select
-                            className="boardSortBySelect"
-                            value={sortBy}
-                            onChange={handleSortChange}
-                        >
-                            <option value="date">작성일</option>
-                            <option value="views">조회수</option>
-                            <option value="title">제목</option>
-                        </select>
-                    </div>
                 </form>
             </div>
 
+            {/* 게시글 목록 */}
             <div className="boardListContainer">
                 <div className="boardListHeader">
                     <p className="boardListItem boardNumber">번호</p>
@@ -258,6 +235,7 @@ const Board = () => {
                     <p className="boardNoPosts">게시글이 없습니다.</p>
                 )}
             </div>
+
             <div className="boardPagination">
                 {Array.from({ length: totalPages }, (_, i) => (
                     <button
@@ -269,14 +247,8 @@ const Board = () => {
                     </button>
                 ))}
             </div>
-            <div className={`scrollToTopButton ${isVisible ? 'visible' : ''}`} >
-                {isVisible && (
-                    <button onClick={scrollToTop}>
-                        <FaArrowUp />
-                    </button>
-                )}
-            </div>
         </div>
+
     );
 };
 

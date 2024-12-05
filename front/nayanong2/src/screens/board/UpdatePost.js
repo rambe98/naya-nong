@@ -55,8 +55,11 @@ const UpdatePost = () => {
             console.log("setBoard", setBoard);
             console.log("Board", board);
             if (response.status === 200) {
-                console.log('서버 응답:', response.data); // 서버 응답 확인
-                alert('게시글이 수정되었습니다.');
+                if (window.confirm('게시글을 수정하시겠습니까?')) {
+                    alert("수정이 완료되었습니다.")
+                }else{
+                    alert("수정이 취소되었습니다.")
+                }
                 navigate(`/board/${bodNum}`); // 수정 후 게시글 상세 페이지로 이동
             }
         } catch (err) {

@@ -18,3 +18,6 @@ code {
   font-weight: normal;
   font-style: normal;
 }
+body {
+  margin-top: 80px; /* 헤더 높이만큼 여백 추가 */
+}

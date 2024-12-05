@@ -17,3 +17,8 @@ export const isSidebarVisibleAtom = atom({
     key: 'isSidebarVisible',
     default: false,
 })
+
+export const bodNumAtom = atom({
+    key: 'bodNumAtom',
+    default: null,
+})

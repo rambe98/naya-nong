@@ -34,6 +34,17 @@ const UserInfo = () => {
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 여부
 
+  //스크롤 없애기
+  useEffect(() => {
+    // body에 클래스 추가
+    document.body.classList.add('no-scroll');
+
+    // 언마운트 시 클래스 제거
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
+
   // 사용자 정보 로드
   useEffect(() => {
     const loadUserDetails = async () => {
@@ -142,11 +153,13 @@ const UserInfo = () => {
     setSMessage(""); // 입력 중 서버 메시지 초기화
   };
 
+  //수정모드 진입
   const handleEditClick = () => {
     setShowModal(true);
     setBackupUserInfo({ ...userInfo });
   };
 
+  //취소버튼 
   const handleCancelClick = () => {
     if (backupUserInfo) {
       setUserInfo({ ...backupUserInfo });
@@ -156,10 +169,12 @@ const UserInfo = () => {
     setSMessage("");
   };
 
+  //비밀번호 숨기기 / 보이기
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
+  //모달 취소버튼
   const modalCancelClick = () => {
     setUserPwd("");
     setShowModal(false);

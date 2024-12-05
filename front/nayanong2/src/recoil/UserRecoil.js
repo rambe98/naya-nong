@@ -50,6 +50,8 @@ export const userNickSelector = selector({
   });
   
   
+
+
 //formData
 export const formDataAtom = atom({
     key: 'formDataAtom', // 고유한 key
@@ -100,29 +102,6 @@ export const confirmPwdAtom = atom({
     default: "",
 })
 
-//유저 휴대폰 번호
-export const userPnumAtom = atom({
-    key: 'userPnum',
-    default: "",
-})
-
-//인증번호 요청 여부
-export const isCondeSentAtom = atom({
-    key: 'isCondeSent',
-    default: false,
-})
-
-//인증번호 확인
-export const vericationCodeAtom = atom({
-    key: 'vericationCode',
-    default: ""
-})
-
-//error
-export const errorAtom = atom({
-    key: 'error',
-    default: "",
-})
 
 export const validationMessageAtom = atom({
     key: 'validationMessage',
@@ -131,7 +110,7 @@ export const validationMessageAtom = atom({
       userId: "아이디를 입력해주세요. (영문자와 숫자만 가능,4~20자)",
       userPwd: "비밀번호를 입력해주세요. (영문자,숫자,특수문자 포함 6~20자)",
       userNick: "닉네임을 입력해주세요.",
-      userEmail: "이메일이 잘못되었습니다..",
+      userEmail: "이메일형식이 잘못되었습니다.",
       userPnum: "전화번호를 입력해주세요.",
       phoneCom: "통신사를 선택해주세요.",
     },
@@ -167,5 +146,4 @@ export const validationMessageAtom = atom({
     }
     return true;
   };
-  
   

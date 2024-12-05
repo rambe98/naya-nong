@@ -21,6 +21,7 @@ public class NongEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private int clientNum;
+	private String token;
 	private String userId;
 	private String userPwd;
 	private String userEmail;

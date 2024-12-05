@@ -3,7 +3,9 @@ package com.test.project.entity;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,11 +36,12 @@ public class BoardEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "user_nick", referencedColumnName = "userNick", nullable = false)
-
 	private NongEntity project;
 	
 	@CreationTimestamp
 	private LocalDateTime writeDate;
+	
+	@UpdateTimestamp
 	private LocalDateTime updateDate;
 	private int views;
 	private int likeCount;

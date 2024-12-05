@@ -20,12 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TokenProvider {
     // SECRET_KEY는 문자열 형태로 간단한 비밀 키로 설정
-<<<<<<< HEAD
-	private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);  // 비밀 키 생성  // 비밀 키
-=======
-	private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);  // 비밀 키 생성
 
->>>>>>> test
+	private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);  // 비밀 키 생성  // 비밀 키
+
+
     // 토큰 생성
     public String create(NongEntity nongEntity) {
         // 기한 지금으로부터 1일로 설정

@@ -52,11 +52,6 @@ export function signin(userDTO) {
                 console.log("넘겨받은데이터 : ",response);
                 
                 localStorage.setItem("ACCESS_TOKEN", response.token);
-                sessionStorage.setItem('loginsuccess', 'true');
-                sessionStorage.setItem('userId', response.user.userId);
-                sessionStorage.setItem('clientNum', response.user.clientNum);
-                sessionStorage.setItem('userNick', response.user.userNick);
-                localStorage.setItem('loginsuccess', 'true');
                 localStorage.setItem('userId', response.user.userId);
                 localStorage.setItem('clientNum', response.user.clientNum);
                 localStorage.setItem('userNick', response.user.userNick);

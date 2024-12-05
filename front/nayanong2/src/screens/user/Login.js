@@ -64,13 +64,6 @@ function Login() {
 
       if (response.token) {
         
-
-        // 세션 스토리지에 상태 저장
-        sessionStorage.setItem('loginsuccess', 'true');
-        sessionStorage.setItem('userId', response.userId);
-        sessionStorage.setItem('clientNum', response.clientNum);
-        sessionStorage.setItem('userNick', response.userNick);
-
         // 부모 상태 업데이트
         setLoginSuccess(true);
         setClientNum(response.clientNum);

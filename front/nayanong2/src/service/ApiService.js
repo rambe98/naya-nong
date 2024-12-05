@@ -49,7 +49,12 @@ export function signin(userDTO) {
     return call("/users/signin", "POST", userDTO)
         .then((response) => {
             if (response && response.token) {
+                console.log("넘겨받은데이터 : ",response);
+                
                 localStorage.setItem("ACCESS_TOKEN", response.token);
+                localStorage.setItem('userId', response.user.userId);
+                localStorage.setItem('clientNum', response.user.clientNum);
+                localStorage.setItem('userNick', response.user.userNick);
                 return response; // 성공 시 데이터 반환
             } else {
                 throw new Error("토큰이 반환되지 않았습니다.");

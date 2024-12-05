@@ -1,10 +1,13 @@
 package com.test.project.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.test.project.dto.CommentDTO;
 import com.test.project.dto.ParentCommentDTO;
 import com.test.project.entity.CommentEntity;
 import com.test.project.entity.NongEntity;
@@ -25,6 +28,12 @@ public class ParentCommentService {
 	
 	@Autowired
 	private NongRepository nongRepository;
+	
+	//댓글 전체 조회
+		public List<ParentCommentDTO> showAllParentComment() {
+			return parentCommentRepository.findAll().stream().map(ParentCommentDTO :: new).collect(Collectors.toList());
+			
+		}
 
 	public ParentCommentDTO addComment(Long comId, String userNick, String content) {
 	    // 부모 댓글 찾기

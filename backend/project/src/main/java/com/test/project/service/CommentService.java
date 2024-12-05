@@ -1,6 +1,8 @@
 package com.test.project.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,12 @@ public class CommentService {
 
 	@Autowired
 	private BoardRepository boardRepository;
+	
+	//댓글 전체 조회
+	public List<CommentDTO> showAllComment() {
+		return commentRepository.findAll().stream().map(CommentDTO :: new).collect(Collectors.toList());
+		
+	}
 
 	// 댓글 저장
 	public CommentDTO addComment(int bodNum, String userNick, String content) {

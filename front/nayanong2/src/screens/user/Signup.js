@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "../../css/Signup.css";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,16 @@ function Signup() {
   const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // body에 클래스 추가
+    document.body.classList.add('no-scroll');
+
+    // 언마운트 시 클래스 제거
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
 
   // 기존 객체의 키, 값 형태로 폼데이터 업데이트
   const handleChange = (e) => {

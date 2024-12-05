@@ -34,6 +34,17 @@ const UserInfo = () => {
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 여부
 
+  //스크롤 없애기
+  useEffect(() => {
+    // body에 클래스 추가
+    document.body.classList.add('no-scroll');
+
+    // 언마운트 시 클래스 제거
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
+
   // 사용자 정보 로드
   useEffect(() => {
     const loadUserDetails = async () => {

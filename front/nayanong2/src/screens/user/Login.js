@@ -17,7 +17,18 @@ function Login() {
   const setClientNum = useSetRecoilState(clientNumAtom);
   const setUserNick = useSetRecoilState(userNicksuccessAtom);
 
+    //로그인 페이지에 html(최상위) css 적용
+    useEffect(() => {
+      // body에 클래스 추가
+      document.body.classList.add('no-scroll');
   
+      // 언마운트 시 클래스 제거
+      return () => {
+        document.body.classList.remove('no-scroll');
+      };
+    }, []);
+
+  //뒤로가기
   const handleBack = () => {
     setUserId('');
     setUserPwd('');
@@ -65,12 +76,13 @@ function Login() {
         setLoginSuccess(true);
         setClientNum(user.clientNum);
         setUserNick(user.userNick)
-
+        setUserPwd('');
         alert('로그인 성공');
 
         // 이전 경로로 리다이렉트
         const redirectPath = location.state?.from || '/';
         navigate(redirectPath);
+        
       } else {
         throw new Error('Unexpected response status: ' + response.status);
       }
@@ -82,66 +94,64 @@ function Login() {
 
   return (
     <div className="loginContainer">
-       <img src={logo} alt="Logo" className="mainLogo" onClick={() => navigate('/')} />
-      <h2 className="loginH2">로 그 인</h2>
-      <form
-        className="loginForm"
-        onSubmit={handleLogin} // 폼 제출 이벤트 처리
+  <div className="loginContent">
+    <img
+      src={logo}
+      alt="Logo"
+      className="mainLogo"
+      onClick={() => navigate('/')}
+    />
+    <h2 className="loginH2">로 그 인</h2>
+    <form className="loginForm" onSubmit={handleLogin}>
+      <input
+        type="text"
+        placeholder="아이디 입력"
+        value={userId}
+        autoComplete="off"
+        onChange={(e) => setUserId(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleLogin(e);
+          }
+        }}
+        className="loginInput"
+      />
+      <input
+        type="password"
+        placeholder="비밀번호 입력"
+        autoComplete="off"
+        value={userPwd}
+        onChange={(e) => setUserPwd(e.target.value)}
+        className="loginInput"
+      />
+      {message && <p className="loginerrorText">{message}</p>}
+      <button type="submit" className="loginButton">
+        로그인
+      </button>
+      <button type="button" className="loginButton" onClick={handleBack}>
+        이전
+      </button>
+    </form>
+    <div className="loginLinkContainer">
+      <button
+        type="button"
+        className="loginLinkButton"
+        onClick={() => navigate('/finduserId')}
       >
-        <input
-          type="text"
-          placeholder="아이디 입력"
-          value={userId}
-          autocomplete="off"
-          onChange={(e) => setUserId(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault(); // 기본 동작 방지
-              handleLogin(e); // 로그인 처리 함수 호출
-            }
-          }}
-          className="loginInput"
-        />
-        <input
-          type="password"
-          placeholder="비밀번호 입력"
-          autocomplete="off"
-          value={userPwd}
-          onChange={(e) => setUserPwd(e.target.value)}
-          className="loginInput"
-        />
-        {message && <p className="loginerrorText">{message}</p>}
-        <button
-          type="submit" // 폼 제출 버튼
-          className="loginButton"
-        >
-          로그인
-        </button>
-        <button
-          type="button"
-          className="loginButton"
-          onClick={handleBack}
-        >
-          이전
-        </button>
-      </form>
-      <div className="loginLinkContainer">
-        <button
-          type="button"
-          className="loginLinkButton"
-          onClick={() => navigate('/finduserId')}
-        >
-          아이디/비밀번호 찾기
-        </button>
-        <button
-          type="button"
-          className="loginLinkButton"
-          onClick={() => navigate('/signup')}
-        >
-          회원가입
-        </button>
-      </div>
+        아이디/비밀번호 찾기
+      </button>
+      <button
+        type="button"
+        className="loginLinkButton"
+        onClick={() => navigate('/signup')}
+      >
+        회원가입
+      </button>
     </div>
+  </div>
+</div>
+
   );
 }
 

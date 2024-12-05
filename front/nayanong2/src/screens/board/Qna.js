@@ -19,6 +19,16 @@ const Qna = () => {
     const [date, setDate] = useState(''); //작성일자
     const clientNum = useRecoilValue(clientNumAtom) //로컬스토리지에 클라이언트넘을 변수에저장
     
+    useEffect(() => {
+        // body에 클래스 추가
+        document.body.classList.add('no-scroll');
+    
+        // 언마운트 시 클래스 제거
+        return () => {
+          document.body.classList.remove('no-scroll');
+        };
+      }, []);
+
     //날짜 함수
     useEffect(() => {
         const updateDate = () => {
@@ -108,7 +118,7 @@ const Qna = () => {
         <div className="qnaContainer">
         <span className="QnaHeader">QnA</span>
         {/* 입력 폼 */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='qnaForm'>
 
             {/* 닉네임 */}
             <input

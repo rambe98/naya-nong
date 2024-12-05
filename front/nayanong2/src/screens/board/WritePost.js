@@ -82,13 +82,14 @@ const WritePost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 제목과 내용이 비어 있으면 알림
-        if (!formData.bodTitle) {
+         // 제목과 내용이 비어 있으면 알림
+         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
             return alert('제목을 입력하세요');
         }
-        if (!formData.bodDtail) {
+        if (!formData.bodDtail || formData.bodDtail.trim() === '') {
             return alert('내용을 입력하세요');
         }
+
 
         try {
             const response = await axios.post('http://localhost:7070/board', formData, {

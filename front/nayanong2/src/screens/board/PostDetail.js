@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import '../../css/PostDetail.css';
+import '../../css/Comment.css'
 import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
+import { userNickAtom } from "../../recoil/UserRecoil";
 
 const PostDetail = () => {
     const navigate = useNavigate()
@@ -28,6 +30,8 @@ const PostDetail = () => {
     const [boards, setBoards] = useState([]) // 모든 게시글 목록
     const [loading, setLoading] = useState(true) // 로딩 상태
     const [currentIndex, setCurrentIndex] = useState(null) // 현재 게시글의 index
+    const [comments, setComments] = useState([]); // 댓글 목록
+    const [newComment, setNewComment] = useState(""); // 새 댓글
 
     //페이지가 렌더링되면 초기 좋아요수 가져오는 함수
     useEffect(() => {
@@ -67,9 +71,8 @@ const PostDetail = () => {
         }
     }
 
+    //상세 게시글 불러오는 함수
     useEffect(() => {
-
-        //게시글 불러오는 함수
         const getBoardData = async () => {
             try {
                 const boardsResponse = await axios.get("http://localhost:7070/board")
@@ -103,10 +106,11 @@ const PostDetail = () => {
         getBoardData()
     }, [bodNum])
 
+    //로딩중
     if (loading) {
         return <p>로딩 중입니다...</p>;
     }
-
+    //게시글이 없을때 나타나는 메시지
     if (!board) {
         return <p>게시글을 찾을 수 없습니다.</p>;
     }
@@ -183,6 +187,22 @@ const PostDetail = () => {
         }
     };
 
+    //댓글 작성
+    const commentsAdd = async() =>{
+        try {
+            const response = await axios.post(`http://localhost:7070/comments/add`,{
+                content: newComment, //댓글 내용
+                userNick : sessionUserNick, //세션스토리지의 유저닉네임값
+                bodNum: parseInt(bodNum) //url에서 따온 bodNum을 정수형으로 반환
+            })
+            console.log("댓글 추가 성공", response.data);
+            alert("댓글 추가 성공")
+        } catch (error) {
+            console.log("댓글 추가 에러",error);
+            alert("댓글 추가 실패")
+        }
+    };
+
 
     return (
         <div className="postDetailContainer">
@@ -213,6 +233,31 @@ const PostDetail = () => {
                 <button onClick={() => navigate("/board")} >목록으로</button>
                 <button onClick={handleUpdate}>수정</button>
             </div>
+            {/* 댓글 */}
+            <div className="commentsContainer">
+            <h3>댓글</h3>
+            <div className="commentList">
+                {comments.map((comment) => (
+                    <div key={comment.id} className="commentItem">
+                        <p>
+                            <strong>{comment.userNick}:</strong> {comment.content}
+                        </p>
+                        <span>{comment.date}</span>
+                        {comment.userNick === sessionUserNick && (
+                            <button >삭제</button>
+                        )}
+                    </div>
+                ))}
+            </div>
+            <div className="commentInput">
+                <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="댓글을 입력하세요."
+                />
+                <button onClick={commentsAdd}>댓글 작성</button>
+            </div>
+        </div>
         </div>
     );
 };

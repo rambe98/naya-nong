@@ -2,6 +2,8 @@ package com.test.project.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,12 +18,13 @@ import lombok.NoArgsConstructor;
 public class ProductEntity {
 
 	@Id
-    private String productNo;  // 품목코드 (PK)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;  // 기본키
 
-    @Column(nullable = false)
-    private String categoryCode;  // 부류코드
-
-    @Column(nullable = false)
-    private String productName;  // 품목명
+    private String productClsCode;  // 구분 (01:소매, 02:도매)
+    private String productClsName;  // 구분 이름
+    private String categoryCode;    // 부류코드
+    private String condition;       // 요청 메세지
+    private String price;           // 응답 메세지
 	
 }

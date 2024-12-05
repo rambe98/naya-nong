@@ -4,8 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.test.project.entity.ProductEntity;
 
-public interface ProductRepository extends JpaRepository<ProductEntity, String> {
-
-	ProductEntity findByProductNo(String productNo);
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
 }

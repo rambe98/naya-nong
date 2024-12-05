@@ -13,13 +13,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OpenApiProductDTO {
 
-	@JsonProperty("productno") // 품목코드
-	private String productNo;
+	@JsonProperty("condition")
+	private String condition; // 요청 메세지
 
-	@JsonProperty("category_code") // 부류코드
-	private String categoryCode;
+	@JsonProperty("price")
+	private String price; // 응답 메세지
 
-	@JsonProperty("productName") // 품목명
-	private String productName;
+	@JsonProperty("product_cls_code")
+	private String productClsCode; // 구분 (01:소매, 02:도매)
 
+	@JsonProperty("product_cls_name")
+	private String productClsName; // 구분 이름
+
+	@JsonProperty("category_code")
+	private String categoryCode; // 부류코드
 }

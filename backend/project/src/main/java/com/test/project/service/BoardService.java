@@ -107,6 +107,7 @@ public class BoardService {
       NongEntity userEntity = nongRepository.findByUserNick(dto.getUserNick())
             .orElseThrow(() -> new RuntimeException("User not found"));
       BoardEntity entity = dto.toEntity(dto);
+      entity.setWriteDate(LocalDateTime.now());
       entity.setProject(userEntity);
       return new BoardDTO(boardRepository.save(entity));
    }// addBoard end
@@ -122,6 +123,7 @@ public class BoardService {
          board.setBodTitle(entity.getBodTitle());
          board.setBodDtail(entity.getBodDtail());
          board.setUpdateDate(LocalDateTime.now());
+         boardRepository.saveAndFlush(board);
          boardRepository.save(board);
          BoardDTO updatedDTO = new BoardDTO(board);
          return updatedDTO;

@@ -82,13 +82,14 @@ const WritePost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 제목과 내용이 비어 있으면 알림
-        if (!formData.bodTitle) {
+         // 제목과 내용이 비어 있으면 알림
+         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
             return alert('제목을 입력하세요');
         }
-        if (!formData.bodDtail) {
+        if (!formData.bodDtail || formData.bodDtail.trim() === '') {
             return alert('내용을 입력하세요');
         }
+
 
         try {
             const response = await axios.post('http://localhost:7070/board', formData, {
@@ -111,6 +112,22 @@ const WritePost = () => {
             alert('게시글 작성이 실패했습니다.');
         }
     };
+
+     //이전 버튼
+     const handleBack = () => {
+        if (formData.bodDtail.trim() !== '') {
+            const userConfirmed = window.confirm(
+                '작성 중인 내용이 사라집니다. \n정말 이전 페이지로 이동하시겠습니까?'
+            );
+            if (userConfirmed) {
+                //예 선택시 /board로 이동
+                navigate('/board', { state: { from: '/write' } });
+            }
+        } else {
+            // 작성중인 내용이 없으면 /board로 이동
+            navigate('/board');
+        }
+    }
 
     return (
         <div className="writeContainer">
@@ -151,7 +168,7 @@ const WritePost = () => {
 
                 {/* 제출 버튼 */}
                 <button type="submit" className="writeButton">작성</button>
-                <button type="button" className="writeButton" onClick={() => navigate('/board')}>이전</button>
+                <button type="button" className="writeButton" onClick={handleBack}>이전</button>
             </form>
         </div>
     );

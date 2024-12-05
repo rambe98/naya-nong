@@ -128,15 +128,14 @@
   text-align: center;
   font-size: 16px;
   line-height: 1.5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;  /* 변경: flex에서 block으로 변경 */
+  width: 150px;    /* 최대 너비 설정 */
+  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+  overflow: hidden;    /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis;  /* 넘치는 텍스트 대신 '...' 표시 */
   padding: 5px 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  box-sizing: border-box;  /* 패딩 포함하여 정확한 너비 설정 */
 }
-
 /* 게시글 목록 */
 .boardList {
   display: flex;
@@ -148,17 +147,18 @@
   font-size: 16px;
 }
 
-/* 링크 기본 스타일 */
-.boardListItem.title a {
-  text-decoration: none;
-  color: #d4a373; /* 메인 색상 */
-  font-weight: 600;
+/* boardListItem 내 링크의 밑줄 제거 */
+.boardListItem.boardTitle a {
+  text-decoration: none;  /* 기본 밑줄 제거 */
+  color: #000000; /* 링크 색상 */
+  font-weight: 600;  /* 글씨 굵게 */
 }
 
 /* 링크 호버 스타일 */
-.boardListItem.title a:hover {
-  text-decoration: underline;
-  color: #b08968; /* 강조된 메인 색상 */
+.boardListItem.boardTitle a:hover {
+  text-decoration: none;  /* 호버 시에도 밑줄 제거 */
+  color: #b08968; /* 강조된 색상 */
+  font-weight: 600;  /* 글씨 굵게 */
 }
 
 /* 페이지네이션 */

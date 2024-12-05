@@ -1,123 +1,189 @@
-import React, { useState, useEffect } from 'react'
-import logo from '../../assets/logo.png'
-import '../../css/UserInfo.css'
-import axios from 'axios'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import logo from "../../assets/logo.png";
+import "../../css/UserInfo.css";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  formDataAtom,
+  confirmPwdAtom,
+  userNicksuccessAtom,
+  validationMessageAtom,
+  validationRegexAtom,
+  validateForm,
+  messageAtom,
+  smessageAtom,
+} from "../../recoil/UserRecoil";
 
 const UserInfo = () => {
-  const { clientNum } = useParams(); // URL에서 clientNum을 가져옵니다.
   const navigate = useNavigate();
+
+  const [userPwd, setUserPwd] = useRecoilState(confirmPwdAtom); // 입력된 비밀번호
+  const [userInfo, setUserInfo] = useRecoilState(formDataAtom); // userInfo의 초기값
+  const setUserNick = useSetRecoilState(userNicksuccessAtom);
+
+  const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
+  const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
+  const [message, setMessage] = useRecoilState(messageAtom); // 클라이언트 메시지
+  const [smessage, setSMessage] = useRecoilState(smessageAtom); // 서버 메시지
+
+  const { clientNum } = useParams(); // URL에서 clientNum을 가져옴
 
   const [edit, setEdit] = useState(false);
   const [backupUserInfo, setBackupUserInfo] = useState(null); // 백업 상태
-  const [showModal, setShowModal] = useState(false); //모달 표시상태
-  const [password, setPassword] = useState(''); //입력된비밀번호
-  const [showPassword, setShowPassword] = useState(false);
+  const [showModal, setShowModal] = useState(false); // 모달 표시 상태
+  const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 여부
 
-  const [userInfo, setUserInfo] = useState({
-    userId: "",
-    userName: "",
-    userPwd: "",
-    userNick: "",
-    userEmail: "",
-    userPnum: "",
-    phoneCom: "",
-  })
-
-  // 사용자마다 고유 index 번호가 있는데 사용자가 변경될 때마다 렌더링된다.
+  //스크롤 없애기
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    // body에 클래스 추가
+    document.body.classList.add('no-scroll');
+
+    // 언마운트 시 클래스 제거
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
+
+  // 사용자 정보 로드
+  useEffect(() => {
+    const loadUserDetails = async () => {
       if (!clientNum) return;
 
       try {
-        // 서버에서 사용자 정보 요청
-        const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
+        const response = await axios.get(
+          `http://localhost:7070/users/${clientNum}`
+        );
 
         if (response.data.clientNum) {
-          setUserInfo(response.data);
+          setUserInfo(response.data); // 서버에서 사용자 정보를 받아 Recoil 상태 업데이트
         } else {
-          throw new Error('회원 정보를 불러올 수 없습니다.');
+          throw new Error("회원 정보를 불러올 수 없습니다.");
         }
       } catch (error) {
-        console.error('회원정보 로드 실패:', error);
+        console.error("회원정보 로드 실패:", error);
       }
     };
 
     if (clientNum) {
-      fetchUserInfo();
+      loadUserDetails();
     }
-  }, [clientNum]);
+  }, [clientNum, setUserInfo]);
 
-  // 수정버튼을 눌렀을 때  비밀번호 모달창에 비밀번호를 서버에 전송해서 db와 비교하는 post요청
+  // 비밀번호 확인
   const handlePasswordClick = async () => {
     try {
-      const response = await axios.post('http://localhost:7070/users/verifypassword', {
-        clientNum: clientNum,
-        userPwd: password,
-      },
-    );
+      const response = await axios.post(
+        "http://localhost:7070/users/verifypassword",
+        {
+          clientNum: clientNum,
+          userPwd: userPwd,
+        }
+      );
+
       if (response.status === 200) {
-        alert('비밀번호가 확인 되었습니다.');
-        setEdit(true); // 수정 모드 진입하기
-        setShowModal(false); //모달 닫기
+        alert("비밀번호가 확인되었습니다.");
+        setEdit(true); // 수정 모드 활성화
+        setShowModal(false); // 모달 닫기
       } else {
-        
+        alert("비밀번호가 일치하지 않습니다.");
       }
     } catch (error) {
       console.error(error);
-      alert('비밀번호가 일치하지 않습니다.')
-
+      alert("비밀번호가 일치하지 않습니다.");
     }
-  }
+  };
 
-  // 수정이 완료되면 서버에 PUT 요청
+  // 정보 저장
   const handleSaveClick = async () => {
-    try {
-      const response = await axios.put(`http://localhost:7070/users/${clientNum}`, userInfo);
-      alert('수정이 완료되었습니다.');
-      setEdit(false); // userInfo를 업데이트하는 PUT 요청을 보내면 수정 버튼 비활성화
-    } catch (error) {
-      console.log("저장 실패:", error);
-      alert('저장 중 문제가 발생했습니다.');
-    }
-  }
+    const isValid = validateForm(
+      userInfo,
+      validationMessage,
+      validationRegex,
+      setMessage
+    );
 
-  // 수정상태의 입력값 변경
+    if (!isValid) return;
+
+    const updatedUserInfo = { ...userInfo, userPwd };
+
+    try {
+      const response = await axios.put(
+        `http://localhost:7070/users/${clientNum}`,
+        updatedUserInfo
+      );
+
+      if (response.status === 200) {
+        const updatedUser = response.data;
+
+        setUserNick(updatedUser.userNick);
+
+        sessionStorage.setItem("userNick", updatedUser.userNick);
+
+        alert("수정이 완료되었습니다.");
+        setEdit(false);
+        setUserPwd("");
+        setMessage(""); // 메시지 초기화
+        setSMessage(""); // 서버 메시지 초기화
+      }
+    } catch (error) {
+      console.error("저장 실패:", error);
+
+      // 서버에서 반환된 메시지 처리
+      if (error.response && error.response.status === 400) {
+        setSMessage(error.response.data); // 서버 메시지 설정
+      } else {
+        setSMessage("저장 중 문제가 발생했습니다."); // 기본 오류 메시지
+      }
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
 
-  // 수정버튼
+    if (name === "userPwd") {
+      setUserPwd(value);
+    } else {
+      setUserInfo((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+    setMessage(""); // 입력 중 클라이언트 메시지 초기화
+    setSMessage(""); // 입력 중 서버 메시지 초기화
+  };
+
+  //수정모드 진입
   const handleEditClick = () => {
-    console.log('모달 열림 이전 상태:', showModal)
     setShowModal(true);
-    console.log('모달 열림 이후 상태:', showModal);
     setBackupUserInfo({ ...userInfo });
-  }
+  };
 
-  // 취소버튼
+  //취소버튼 
   const handleCancelClick = () => {
     if (backupUserInfo) {
       setUserInfo({ ...backupUserInfo });
     }
     setEdit(false);
-  }
+    setMessage("");
+    setSMessage("");
+  };
 
-  //비밀번호 보이기&숨기기
+  //비밀번호 숨기기 / 보이기
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
-  }
+  };
 
+  //모달 취소버튼
+  const modalCancelClick = () => {
+    setUserPwd("");
+    setShowModal(false);
+  };
 
   return (
-    <div className='userInfoContainer'>
-      <img src={logo} alt='logo' className='userInfoLogo' />
-      <h2 className='userInfoHeader'>회원정보수정</h2>
-  
+    <div className="userInfoContainer">
+      <h2 className="userInfoHeader">회원정보수정</h2>
+
       <form className="userInfoForm">
         {edit ? (
           <>
@@ -133,25 +199,17 @@ const UserInfo = () => {
               <label className="userInfoFormLabel">비밀번호:</label>
               <input
                 className="userInfoFormInput"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="userPwd"
-                value={userInfo.userPwd}
+                value={userPwd}
                 onChange={handleInputChange}
               />
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                style={{
-                  marginLeft: '10px',
-                  padding: '5px 10px',
-                  backgroundColor: '#D9CBB6',
-                  border: 'none',
-                  borderRadius: '5px',
-                  color: 'white',
-                  cursor: 'pointer',
-                }}
+                className="togglePasswordButton"
               >
-                {showPassword ? '숨기기' : '보이기'}
+                {showPassword ? "숨기기" : "보이기"}
               </button>
             </div>
             <div className="userInfoFormGroup">
@@ -178,6 +236,12 @@ const UserInfo = () => {
               <label className="userInfoFormLabel">핸드폰번호:</label>
               <span className="userInfoFormText">{userInfo.userPnum}</span>
             </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">통신사:</label>
+              <span className="userInfoFormText">{userInfo.phoneCom}</span>
+            </div>
+            {message && <p className="errorText">{message}</p>}
+            {smessage && <p className="errorText">{smessage}</p>}
             <button
               className="userInfoFormButton"
               type="button"
@@ -205,7 +269,9 @@ const UserInfo = () => {
             </div>
             <div className="userInfoFormGroup">
               <label className="userInfoFormLabel">비밀번호:</label>
-              <span className="userInfoFormText">{"*".repeat(userInfo.userPwd.length)}</span>
+              <span className="userInfoFormText">
+                {"*".repeat(userInfo.userPwd?.length || 0)}
+              </span>
             </div>
             <div className="userInfoFormGroup">
               <label className="userInfoFormLabel">닉네임:</label>
@@ -219,6 +285,10 @@ const UserInfo = () => {
               <label className="userInfoFormLabel">핸드폰번호:</label>
               <span className="userInfoFormText">{userInfo.userPnum}</span>
             </div>
+            <div className="userInfoFormGroup">
+              <label className="userInfoFormLabel">통신사:</label>
+              <span className="userInfoFormText">{userInfo.phoneCom}</span>
+            </div>
             <button
               className="userInfoFormButton"
               type="button"
@@ -229,30 +299,29 @@ const UserInfo = () => {
             <button
               className="userInfoFormButton userInfoFormCancelButton"
               type="button"
-              onClick={() => navigate('/')}
+              onClick={() => navigate("/")}
             >
               돌아가기
             </button>
           </>
         )}
       </form>
-  
-      {/* 모달 UI 추가 */}
+
       {showModal && (
         <div className="modalOverlay">
           <form
             className="modalContent"
             onSubmit={(e) => {
-              e.preventDefault(); // 기본 제출 동작 방지
-              handlePasswordClick(); // 비밀번호 확인 처리
+              e.preventDefault();
+              handlePasswordClick();
             }}
           >
             <h3>비밀번호 확인</h3>
             <input
               type="password"
               placeholder="비밀번호를 입력하세요"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={userPwd}
+              onChange={(e) => setUserPwd(e.target.value)}
               className="modalInput"
             />
             <div className="modalButtons">
@@ -261,7 +330,7 @@ const UserInfo = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setShowModal(false)}
+                onClick={modalCancelClick}
                 className="modalCancelButton"
               >
                 취소
@@ -272,7 +341,6 @@ const UserInfo = () => {
       )}
     </div>
   );
-  
 };
 
 export default UserInfo;

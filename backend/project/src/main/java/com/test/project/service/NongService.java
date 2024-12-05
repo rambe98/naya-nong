@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.test.project.dto.NongDTO;
 import com.test.project.entity.NongEntity;
 import com.test.project.persistence.NongRepository;
+import com.test.project.security.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,9 @@ public class NongService {
 
 	@Autowired
 	private NongRepository repository;
+	
+	@Autowired
+	private TokenProvider tokenProvider;
 
 	// entity가 비었는지 확인
 	private void validate(final NongEntity entity) {
@@ -109,23 +113,31 @@ public class NongService {
 	}// deleteUsers end
 	
 
-	// 로그인
+	// 토큰 생성
+	public String generateToken(NongEntity nongEntity) {
+	    return tokenProvider.create(nongEntity); // 기존에 작성한 TokenProvider 사용
+	}
+
+	// 로그인 처리 시 토큰 반환
 	public NongEntity getBycredentials(String userId, String userPwd) {
-		// 우선 userId로 해당 사용자가 있는지 확인
-		Optional<NongEntity> userEntity = repository.findByUserId(userId);
-		if (userEntity.isEmpty()) {
-			// 아이디가 없으면 null 반환 또는 예외 던지기
-			throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
-		}
-		// 아이디가 존재하면 비밀번호를 비교
-		NongEntity entity = userEntity.get();
-		if (!entity.getUserPwd().equals(userPwd)) {
-			// 비밀번호가 틀리면 예외 던지기
-			throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-		}
-		// 아이디와 비밀번호가 모두 맞으면 entity 반환
-		return entity;
-	}//getBycredentials end
+	    // 아이디로 사용자 확인
+	    Optional<NongEntity> userEntity = repository.findByUserId(userId);
+	    if (userEntity.isEmpty()) {
+	        throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
+	    }
+
+	    // 비밀번호 확인
+	    NongEntity entity = userEntity.get();
+	    if (!entity.getUserPwd().equals(userPwd)) {
+	        throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+	    }
+
+	    // 인증 성공 시 토큰 생성
+	    String token = generateToken(entity);
+	    entity.setToken(token); // 사용자의 토큰을 저장 (선택 사항)
+
+	    return entity; // 인증된 엔티티 반환
+	}
 	
 
 	// 비밀번호 확인

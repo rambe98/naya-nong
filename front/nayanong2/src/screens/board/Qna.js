@@ -2,20 +2,33 @@ import React, { useEffect, useState, } from 'react';
 import logo from '../../assets/logo.png'
 import '../../css/Qna.css';
 import { Link, useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
 
 const Qna = () => {
     const navigate = useNavigate('');
-    const [userNick, setUserNick] = useState(); //닉네임 상태
+   
+    const [userNick,setUserNick] = useRecoilState(userNickAtom)
+    
     const [formData, setFormData] = useState({ //폼데이터를 보내기위한 초기값,
         userNick : userNick,
         qnaTitle : '',
         qnaDtail:'',
     })
     const [date, setDate] = useState(''); //작성일자
-    const clientNum = localStorage.getItem('clientNum'); //로컬스토리지에 클라이언트넘을 변수에저장
+    const clientNum = useRecoilValue(clientNumAtom) //로컬스토리지에 클라이언트넘을 변수에저장
     
+    useEffect(() => {
+        // body에 클래스 추가
+        document.body.classList.add('no-scroll');
+    
+        // 언마운트 시 클래스 제거
+        return () => {
+          document.body.classList.remove('no-scroll');
+        };
+      }, []);
+
     //날짜 함수
     useEffect(() => {
         const updateDate = () => {
@@ -103,48 +116,46 @@ const Qna = () => {
     return (
 
         <div className="qnaContainer">
-       
+        <span className="QnaHeader">QnA</span>
+        {/* 입력 폼 */}
+        <form onSubmit={handleSubmit} className='qnaForm'>
 
-            {/* 입력 폼 */}
-            <form className="qnaForm" onSubmit={handleSubmit}>
-            <div className="qnaInputContainer">
-                {/* 닉네임 */}
-                <input
-                    type="text"
-                    name="userNick"
-                    placeholder="이름을 입력해주세요"
-                    className="qnaInput"
-                    value={userNick}
-                    readOnly // 읽기 전용
-                />
+            {/* 닉네임 */}
+            <input
+              type="text"
+              name="userNick"
+              placeholder="이름을 입력해주세요"
+              className="qnaInput"
+              value={userNick}
+              readOnly // 읽기 전용
+            />
+      
+            {/* 제목 */}
+            <input
+              type="text"
+              name="qnaTitle"
+              placeholder="제목을 입력해주세요"
+              className="qnaInput"
+              value={formData.qnaTitle}
+              onChange={handleChange}
+              required // 필수 입력
+            />
+      
+            {/* 내용 */}
+            <textarea
+              name="qnaDtail"
+              placeholder="내용을 입력해주세요"
+              className="qnaInputtext"
+              value={formData.qnaDtail}
+              onChange={handleChange}
+              required // 필수 입력
+            />
 
-                {/* 제목 */}
-                <input
-                    type="text"
-                    name="qnaTitle"
-                    placeholder="제목을 입력해주세요"
-                    className="qnaInput"
-                    value={formData.qnaTitle}
-                    onChange={handleChange}
-                    required // 필수 입력
-                />
-
-                {/* 내용 */}
-                <textarea
-                    name="qnaDtail"
-                    placeholder="내용을 입력해주세요"
-                    className="qnaInputtext"
-                    value={formData.qnaDtail}
-                    onChange={handleChange}
-                    required // 필수 입력
-                />
-
-                {/* 제출 버튼 */}
-                <button type="submit" className="qnaButton">보내기</button>
-            </div>
+          {/* 제출 버튼 */}
+          <button type="submit" className="qnaButton">보내기</button>
         </form>
-        </div>
-
+      </div>
+      
 
     );
 };

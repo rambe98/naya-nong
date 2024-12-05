@@ -1,17 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import '../../css/WritePost.css'
+import '../../css/WritePost.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
 
 const WritePost = () => {
     const navigate = useNavigate();
 
-    const [title, setTitle] = useState('') //제목
-    const [content, setContent] = useState('') //내용
-    const [userNick, setUserNick] = useState(''); //닉네임 상태
-    const [date, setDate] = useState(''); //작성일자
+    const [userNick, setUserNick] = useRecoilState(userNickAtom); // 닉네임 상태
+    const clientNum = useRecoilValue(clientNumAtom); // 로컬스토리지에 클라이언트 넘을 변수에 저장
 
-    const clientNum = localStorage.getItem('clientNum'); //로컬스토리지에 클라이언트넘을 변수에저장
+    const [formData, setFormData] = useState({
+        userNick: userNick,
+        bodTitle: '', // 제목
+        bodDtail: '', // 내용
+    });
+
+    useEffect(() => {
+        // body에 클래스 추가
+        document.body.classList.add('no-scroll');
+    
+        // 언마운트 시 클래스 제거
+        return () => {
+          document.body.classList.remove('no-scroll');
+        };
+      }, []);
+
+    // 날짜 상태 (작성일자)
+    const [date, setDate] = useState('');
 
     useEffect(() => {
         const updateDate = () => {
@@ -22,85 +39,139 @@ const WritePost = () => {
         const interval = setInterval(updateDate, 1000); // 1초마다 실행
 
         return () => clearInterval(interval);
-        // qna페이지에서 나갈때 1초마다 재실행되면 메모리사용을 하니 방지하기 위해
-        // clearInterval 사용 즉, 타이머가 멈춘다
-    }, [clientNum, navigate])
-    // []를 사용하는이유는 페이지가 최초 렌더링 될때 한번만실행해야하고
-    // []가 없을경우에는 상태가 변할때마다 업데이트되기때문에 원하는 값이 안나올수있다.(중복된 타이머가 발생)
+    }, [clientNum, navigate]);
 
-    //닉네임 조회
+    // 로그인 선행
     useEffect(() => {
-        const fetchNickName = async () => {
+        if (!clientNum) {
+            const userConfirmed = window.confirm(
+                '로그인을 해야 이용 가능한 서비스입니다. \n로그인 페이지로 이동하시겠습니까?'
+            );
+            if (userConfirmed) {
+                navigate('/login', { state: { from: '/write' } });
+            } else {
+                navigate('/');
+            }
+        }
+    }, [clientNum, navigate]);
+
+    // 닉네임 조회
+    useEffect(() => {
+        const getUserNick = async () => {
             try {
-                if (clientNum) { // clientNum이 존재하는 경우에만 실행
+                if (clientNum) {
                     const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
                     if (response.status === 200) {
-                        setUserNick(response.data.userNick); // 서버에서 받은 닉네임
+                        setUserNick(response.data.userNick);
                     }
                 }
             } catch (error) {
                 console.error('닉네임 조회 실패:', error);
             }
         };
+        getUserNick(); // useEffect 실행 시 닉네임 조회
+    }, [clientNum, setUserNick]);
 
-        fetchNickName(); // useEffect 실행 시 닉네임 조회
-    }, [clientNum]); // clientNum이 변경될 때마다 실행
+    // 폼 데이터 변경
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-    //게시글 작성 요청 함수
-    const savePost = async (e) => {
-        //페이지 새로고침 방지
-        e.preventDefault()
+    // 게시글 작성 요청
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-        //제목과 내용을 작성해야함
-        if (!title) {
-            return alert('제목을 입력하세요')
+         // 제목과 내용이 비어 있으면 알림
+         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
+            return alert('제목을 입력하세요');
         }
-        if (!content) {
-            return alert('내용을 입력하세요.')
+        if (!formData.bodDtail || formData.bodDtail.trim() === '') {
+            return alert('내용을 입력하세요');
         }
-        const data = {
-            userNick : userNick,
-            bodTitle : title,
-            bodDtail : content,
-        }
+
+
         try {
-            //게시글 작성 API 요청
-            const response = await axios.post('http://localhost:7070/board', data)
+            const response = await axios.post('http://localhost:7070/board', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
             if (response.status === 200) {
-                alert('게시글이 작성되었습니다.')
-                navigate('/board')
+                alert('게시글이 작성되었습니다.');
+                setFormData({
+                    userNick: userNick,
+                    bodTitle: '',
+                    bodDtail: '',
+                });
+                navigate('/board');
             }
         } catch (error) {
-            console.error('게시글 작성 에러', error);
-            alert('게시글이 작성되지 않았습니다.')
+            console.error('게시글 작성 실패:', error);
+            alert('게시글 작성이 실패했습니다.');
+        }
+    };
+
+     //이전 버튼
+     const handleBack = () => {
+        if (formData.bodDtail.trim() !== '') {
+            const userConfirmed = window.confirm(
+                '작성 중인 내용이 사라집니다. \n정말 이전 페이지로 이동하시겠습니까?'
+            );
+            if (userConfirmed) {
+                //예 선택시 /board로 이동
+                navigate('/board', { state: { from: '/write' } });
+            }
+        } else {
+            // 작성중인 내용이 없으면 /board로 이동
+            navigate('/board');
         }
     }
 
     return (
         <div className="writeContainer">
-            <div className="writeInputContainer">
-                <input
-                    className="writeInput"
-                    value={userNick}
-                    readOnly
-                />
+            <span className="writeHeader">글쓰기</span>
+
+            {/* 폼 */}
+            <form onSubmit={handleSubmit} className="writeInputContainer">
+                {/* 닉네임 */}
                 <input
                     type="text"
+                    name="userNick"
+                    placeholder="닉네임"
+                    className="writeInput"
+                    value={userNick}
+                    readOnly // 읽기 전용
+                />
+
+                {/* 제목 */}
+                <input
+                    type="text"
+                    name="bodTitle"
                     placeholder="제목을 입력해주세요"
                     className="writeInput"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={formData.bodTitle}
+                    onChange={handleChange}
+                    required
                 />
+
+                {/* 내용 */}
                 <textarea
+                    name="bodDtail"
                     placeholder="내용을 입력해주세요"
                     className="writeInputtext"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    value={formData.bodDtail}
+                    onChange={handleChange}
+                    required
                 />
-                <button className="writeButton" onClick={savePost}>보내기</button>
-            </div>
+
+                {/* 제출 버튼 */}
+                <button type="submit" className="writeButton">작성</button>
+                <button type="button" className="writeButton" onClick={handleBack}>이전</button>
+            </form>
         </div>
     );
 };
 
-export default WritePost
+export default WritePost;

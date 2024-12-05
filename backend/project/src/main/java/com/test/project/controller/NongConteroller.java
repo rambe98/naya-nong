@@ -55,6 +55,30 @@ public class NongConteroller {
 		}
 	}// adduser end
 	
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticate(@RequestBody NongDTO dto) {
+	    String userId = dto.getUserId();
+	    String userPwd = dto.getUserPwd();
+
+	    if (userId == null || userPwd == null) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("아이디 또는 비밀번호를 찾을 수 없습니다.");
+	    }
+
+	    try {
+	        // 자격 증명 확인
+	        NongEntity user = service.getBycredentials(userId, userPwd);
+
+	        // JWT 토큰 생성
+	        String token = service.generateToken(user);
+
+	        // 응답에 토큰 추가
+	        return ResponseEntity.ok(Map.of("token", token, "user", new NongDTO(user)));
+
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+	    }
+	}
+	
 
 	@PostMapping("/verifypassword")
 	public ResponseEntity<?> verifyPassword(@RequestBody NongDTO dto) {
@@ -111,21 +135,6 @@ public class NongConteroller {
 	}// deleteUsers end
 	
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticate(@RequestBody NongDTO dto) {
-		String userId = dto.getUserId();
-		String userPwd = dto.getUserPwd();
-		if (userId == null || userPwd == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("아이디 또는 비밀번호를 찾을 수 없습니다.");
-		}
-		try {
-			// 서비스에서 자격 증명 확인
-			NongEntity user = service.getBycredentials(userId, userPwd);
-			return ResponseEntity.ok(new NongDTO(user));
-
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-		}
-	}//authenticate end
+	
 
 }// class end

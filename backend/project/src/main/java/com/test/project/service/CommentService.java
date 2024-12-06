@@ -27,7 +27,7 @@ public class CommentService {
 	@Autowired
 	private BoardRepository boardRepository;
 	
-	//댓글 전체 조회
+	//댓글 조회
 	public List<CommentDTO> showAllComment(int bodNum) {
 		
 		List<CommentEntity> commentsList =commentRepository.findByBoardBodNum(bodNum);

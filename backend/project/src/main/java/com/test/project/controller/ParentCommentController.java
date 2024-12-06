@@ -24,7 +24,7 @@ public class ParentCommentController {
 	ParentCommentService service;
 	
 	@GetMapping("/{comId}")
-	public ResponseEntity<List<ParentCommentDTO>> showAllParentComment(@PathVariable Long comId){
+	public ResponseEntity<List<ParentCommentDTO>> showAllParentComment(@PathVariable("comId") Long comId){
 		List<ParentCommentDTO> comment =  service.showAllParentComment(comId);
 		return ResponseEntity.ok(comment);
 	}

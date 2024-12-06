@@ -36,6 +36,7 @@ const PostDetail = () => {
     const [editingCommentContent, setEditingCommentContent] = useState(""); //수정모드의 입력필드
     const [replyingTo, setReplyingTo] = useState(null); // 대댓글 작성 대상 ID
     const [newReply, setNewReply] = useState(""); // 대댓글 내용
+    const [trigger, setTrigger] = useState(false); //리렌더링 상태
 
     //페이지가 렌더링되면 초기 좋아요수 가져오는 함수
     useEffect(() => {
@@ -127,14 +128,14 @@ const PostDetail = () => {
     // 페이지 로드 시 댓글 목록 불러오기
     useEffect(() => {
         commentsget();
-    }, []);
+    }, [trigger]);
 
     // 게시글 내용 수정
     const handleUpdate = () => {
         // 게시글 작성자 userNick과 현재 사용자의 userNick 비교
         console.log('게시글 작성자 userNick:', board.project.userNick) // 게시글 작성자 userNick 확인
         console.log('현재 사용자 userNick:', localStorageUserNick) // 현재 사용자 userNick 확인
-
+        
         // 게시글 작성자의 userNick과 현재 이용자의 userNick을 비교
         if (board.project.userNick !== localStorageUserNick) {
             alert("수정 권한이 없습니다. 작성자만 수정할 수 있습니다.")
@@ -209,7 +210,7 @@ const PostDetail = () => {
     //댓글이 입력되면 리렌더링
     useEffect(() => {
         commentsget();
-    })
+    },[])
 
     //페이지가 렌더링 되면 댓글 리스트 출력
         const commentsget = async () => {
@@ -342,13 +343,17 @@ const PostDetail = () => {
 
     // 대댓글 삭제
     const replyDelete = async (pComId) => {
-
+        const token = localStorage.getItem('ACCESS_TOKEN');
         console.log("Deleting reply with ID:", pComId); // pComId 값 확인
         try {
             const userConfirmed = window.confirm('대댓글을 삭제하시겠습니까? 삭제된 대댓글은 복구할 수 없습니다.');
 
             if (userConfirmed) {
-                const response = await axios.delete(`http://localhost:7070/pComment/delete/${pComId}`);
+                const response = await axios.delete(`http://localhost:7070/pComment/delete/${pComId}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    },
+                });
                 console.log("대댓글 삭제 성공:", response.data);
                 alert("대댓글이 삭제되었습니다.");
                 commentsget(); // 댓글 목록 새로고침

@@ -32,8 +32,8 @@ const PostDetail = () => {
         setBodNum(bodNum); // 현재 게시글 번호를 Recoil 상태로 저장
     }, [bodNum, setBodNum]);
 
-    //댓글과 대댓글 초기화
     useEffect(() => {
+
         const getBoardData = async () => {
             const token = localStorage.getItem('ACCESS_TOKEN');
             try {
@@ -76,6 +76,7 @@ const PostDetail = () => {
         getBoardData()
     }, [bodNum]) 
 
+    // 좋아요 토글
     const toggleLike = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
@@ -107,8 +108,6 @@ const PostDetail = () => {
         }
     };
     
-    
-
     // 게시글 삭제
     const handleDelete = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");

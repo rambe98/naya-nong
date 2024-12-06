@@ -180,6 +180,7 @@ const UserInfo = () => {
   const handleDelete = () => {
     setIsDeleteMode(true)
     setShowModal(true)
+    
   }
 
 
@@ -231,9 +232,11 @@ const UserInfo = () => {
         // 탈퇴 후, 토큰 및 사용자 정보 삭제
         localStorage.removeItem("ACCESS_TOKEN");
         localStorage.removeItem("userNick");
+        localStorage.removeItem('clientNum');
+        localStorage.removeItem('userId');
 
         alert("회원 탈퇴가 완료되었습니다.");
-        navigate('/board'); 
+        navigate('/'); 
       }
     } catch (error) {
       console.error("회원 탈퇴 중 오류 발생", error);

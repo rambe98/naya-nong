@@ -36,7 +36,7 @@ const Comments = () => {
                         `http://localhost:7070/pComment/${comment.comId}`,
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
-                    return { ...comment, replies: repliesResponse.data || [] };
+                    return { ...comment, replies: repliesResponse.data.reverse() || [] };
                 })
             );
     
@@ -210,6 +210,11 @@ const Comments = () => {
                                         value={newReply}
                                         onChange={(e) => setNewReply(e.target.value)}
                                         placeholder="답글을 입력하세요."
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                replyAdd(comment.comId);
+                                            }
+                                        }}
                                     />
                                     <div className="actionButtons">
                                         <button onClick={() => replyAdd(comment.comId)}>작성</button>

@@ -25,46 +25,45 @@ const Board = () => {
         setSortBy(e.target.value);
     };
 
-    const getList = async () => {
-        const token = localStorage.getItem('ACCESS_TOKEN');
-        try {
-            const response = await axios.get('http://localhost:7070/board',{
-                headers: {
-                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
-                },
+   const getList = async () => {
+    const token = localStorage.getItem('ACCESS_TOKEN'); // 토큰 가져오기
+    try {
+        const response = await axios.get('http://localhost:7070/board', {
+            headers: token
+                ? { Authorization: `Bearer ${token}` } // 토큰이 있으면 Authorization 추가
+                : {}, // 토큰이 없으면 빈 헤더 사용
         });
-            if (response.status === 200) {
-                setPosts(response.data.reverse());
-                let sortedPost = response.data;
+        if (response.status === 200) {
+            setPosts(response.data.reverse());
+            let sortedPost = response.data;
 
-                switch (sortBy) {
-                    case 'date':
-                        //(a, b) => { ... } : a - b가 음수면 a->b / 양수면 b->a /0이면 그대로
-                        sortedPost = [...sortedPost]; // 배열 복사
-                        sortedPost = sortedPost.sort((a, b) => {
-                            const dateA = new Date(a.created_at);
-                            const dateB = new Date(b.created_at);
-                            return dateB - dateA; // 최신순
-                        });
-                        break;
-                    case 'views':
-                        sortedPost = sortedPost.sort((a, b) => b.views - a.views); // 조회수 순
-                        break;
-                    case 'title':
-                        sortedPost = sortedPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)); // 제목 ㄱㄴㄷ,123,abc 순
-                        break;
-                    default:
-                        break;
-                }
-                setPosts(sortedPost);
+            switch (sortBy) {
+                case 'date':
+                    sortedPost = [...sortedPost].sort((a, b) => {
+                        const dateA = new Date(a.created_at);
+                        const dateB = new Date(b.created_at);
+                        return dateB - dateA; // 최신순
+                    });
+                    break;
+                case 'views':
+                    sortedPost = sortedPost.sort((a, b) => b.views - a.views); // 조회수 순
+                    break;
+                case 'title':
+                    sortedPost = sortedPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)); // 제목순
+                    break;
+                default:
+                    break;
             }
-        } catch (error) {
-            console.error('목록을 가져올 수 없습니다.');
-            alert('게시글 목록 error');
-        } finally {
-            setLoading(false);
+            setPosts(sortedPost);
         }
-    };
+    } catch (error) {
+        console.error('목록을 가져올 수 없습니다.');
+        alert('게시글 목록을 불러오는 데 실패했습니다.');
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     useEffect(() => {
         getList();

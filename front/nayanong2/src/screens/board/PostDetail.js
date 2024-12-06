@@ -141,6 +141,7 @@ const PostDetail = () => {
 
     //게시글 삭제
     const handleDelete = async () => {
+        const token = localStorage.getItem('ACCESS_TOKEN');
         try {
             // 게시글 작성자 userNick과 현재 사용자의 userNick 비교
             console.log('게시글 작성자 userNick:', board.project.userNick) // 게시글 작성자 userNick 확인
@@ -158,7 +159,11 @@ const PostDetail = () => {
                 console.log('게시글 삭제 요청, bodNum:', bodNum)
 
                 // 게시글 삭제 요청
-                const deleteResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`);
+                const deleteResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    },
+                });
                 console.log('삭제 요청 후 응답:', deleteResponse)// 응답 데이터 확인
 
                 // 응답 데이터 확인 후 처리

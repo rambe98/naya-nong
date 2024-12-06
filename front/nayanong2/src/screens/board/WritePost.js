@@ -8,32 +8,14 @@ import { clientNumAtom } from '../../recoil/UserRecoil';
 const WritePost = () => {
     const navigate = useNavigate();
 
-<<<<<<< HEAD
-    const [userNick, setUserNick] = useRecoilState(userNickAtom); // 닉네임 상태
-    const clientNum = useRecoilValue(clientNumAtom); // 로컬스토리지에 클라이언트 넘을 변수에 저장
-=======
-    const clientNum = useRecoilValue(clientNumAtom); // 클라이언트 넘버 가져오기
+    const clientNum = localStorage.getItem("clientNum");
 
->>>>>>> test
     const [formData, setFormData] = useState({
         userNick: localStorage.getItem('userNick') || '', // 로컬스토리지에서 닉네임 가져오기
         bodTitle: '', // 제목
         bodDtail: '', // 내용
     });
 
-<<<<<<< HEAD
-    useEffect(() => {
-        // body에 클래스 추가
-        document.body.classList.add('no-scroll');
-
-        // 언마운트 시 클래스 제거
-        return () => {
-            document.body.classList.remove('no-scroll');
-        };
-    }, []);
-
-=======
->>>>>>> test
     // 날짜 상태 (작성일자)
     const [date, setDate] = useState('');
 
@@ -74,11 +56,6 @@ const WritePost = () => {
 
         // 제목과 내용이 비어 있으면 알림
         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
-<<<<<<< HEAD
-         // 제목과 내용이 비어 있으면 알림
-         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
-=======
->>>>>>> test
             return alert('제목을 입력하세요');
         }
         if (!formData.bodDtail || formData.bodDtail.trim() === '') {
@@ -87,9 +64,6 @@ const WritePost = () => {
         const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
         try {
             const response = await axios.post('http://localhost:7070/board', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰 추가
                   },
@@ -109,17 +83,9 @@ const WritePost = () => {
             alert('게시글 작성이 실패했습니다.');
         }
     };
-}
 
-<<<<<<< HEAD
-    //이전 버튼
-    const handleBack = () => {
-     //이전 버튼
-     const handleBack = () => {
-=======
     // 이전 버튼
     const handleBack = () => {
->>>>>>> test
         if (formData.bodDtail.trim() !== '') {
             const userConfirmed = window.confirm(
                 '작성 중인 내용이 사라집니다. \n정말 이전 페이지로 이동하시겠습니까?'
@@ -132,12 +98,8 @@ const WritePost = () => {
             // 작성중인 내용이 없으면 /board로 이동
             navigate('/board');
         }
-<<<<<<< HEAD
-    }
-=======
     };
 
->>>>>>> test
     return (
         <div className="writeContainer">
             <span className="writeHeader">글쓰기</span>
@@ -182,5 +144,5 @@ const WritePost = () => {
         </div>
     );
 };
-}
+
 export default WritePost;

@@ -9,8 +9,10 @@ import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
 const Qna = () => {
     const navigate = useNavigate('');
    
-    // const [userNick,setUserNick] = useRecoilState(userNickAtom)
+    //로컬스토리지에서 유저닉을 가져옴
     const userNick = localStorage.getItem("userNick");
+    //로컬스토리지에서 클라이언트넘을 가져옴
+    const clientNum = localStorage.getItem("clientNum");
     
     const [formData, setFormData] = useState({ //폼데이터를 보내기위한 초기값,
         userNick : userNick,
@@ -18,7 +20,6 @@ const Qna = () => {
         qnaDtail:'',
     })
     const [date, setDate] = useState(''); //작성일자
-    const clientNum = useRecoilValue(clientNumAtom) //로컬스토리지에 클라이언트넘을 변수에저장
     
     useEffect(() => {
         // body에 클래스 추가
@@ -66,22 +67,22 @@ const Qna = () => {
         setFormData({ ...formData, [name]: value });
     };
     // //clientNum이 변경될때마다 서버에서 닉네임을 받아온다.
-    // useEffect(() => {
-    //     const fetchNickName = async () => {
-    //         try {
-    //             if (clientNum) { // clientNum이 존재하는 경우에만 실행
-    //                 const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
-    //                 if (response.status === 200) {
-    //                     setUserNick(response.data.userNick); // 서버에서 받은 닉네임
-    //                 }
-    //             }
-    //         } catch (error) {
-    //             console.error('닉네임 조회 실패:', error);
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchNickName = async () => {
+            try {
+                if (clientNum) { // clientNum이 존재하는 경우에만 실행
+                    const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
+                    if (response.status === 200) {
+                        localStorage.setItem(response.data.userNick); // 서버에서 받은 닉네임
+                    }
+                }
+            } catch (error) {
+                console.error('닉네임 조회 실패:', error);
+            }
+        };
     
-    //     fetchNickName(); // useEffect 실행 시 닉네임 조회
-    // }, [clientNum]);
+        fetchNickName(); // useEffect 실행 시 닉네임 조회
+    }, [clientNum]);
     
     // userNick이 변경될 때 formData.userNick 동기화
     useEffect(() => {
@@ -94,11 +95,12 @@ const Qna = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+        const token = localStorage.getItem('ACCESS_TOKEN');
         try {
             const response = await axios.post(`http://localhost:7070/qna`,formData,{
                 headers: {
-                    "Content-Type": "application/json",
-                  },
+                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                },
             });
            alert('문의하기가 완료되었습니다.');
            setFormData({

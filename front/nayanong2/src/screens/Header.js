@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import '../css/Main.css';
+import { useResetRecoilState } from "recoil";
+import { userIdAtom, userPwdAtom } from '../recoil/UserRecoil';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -11,14 +13,17 @@ const Header = () => {
   // 로컬스토리지에서 로그인 상태 및 사용자 정보 가져오기
   const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
   const userNick = localStorage.getItem("userNick");
+  const resetUserId = useResetRecoilState(userIdAtom);
+  const resetUserPwd = useResetRecoilState(userPwdAtom);
 
   // 로그아웃 함수
   const handleLogout = () => {
+    resetUserId();
+    resetUserPwd();
     localStorage.removeItem("ACCESS_TOKEN");
     localStorage.removeItem("loginsuccess");
     localStorage.removeItem("clientNum");
     localStorage.removeItem("userNick");
-    localStorage.removeItem("userId");
     alert('로그아웃 되었습니다.');
     navigate('/');
   };

@@ -22,7 +22,7 @@ public class NongService {
 
 	@Autowired
 	private NongRepository repository;
-	
+
 	@Autowired
 	private TokenProvider tokenProvider;
 
@@ -38,18 +38,20 @@ public class NongService {
 	public List<NongDTO> showAllUsers() {
 		return repository.findAll().stream().map(NongDTO::new).collect(Collectors.toList());
 	}// showAllUsers end
-	
 
+	
 	// 개별 조회
 	public NongDTO showUser(int clientNum) {
 		NongEntity entity = repository.findById(clientNum).orElseThrow(() -> new RuntimeException("User not found"));
 		return new NongDTO(entity);
-	}//showUser end
+	}// showUser end
+	
 	// userId로 조회
 	public NongEntity showUser(String userId) {
-	    return repository.findByUserId(userId)
-	                     .orElseThrow(() -> new RuntimeException("User not found with userId: " + userId));
+		return repository.findByUserId(userId)
+				.orElseThrow(() -> new RuntimeException("User not found with userId: " + userId));
 	}
+
 	// 추가
 	public NongDTO adduser(NongDTO dto) {
 		// DTO를 Entity로 변환
@@ -69,39 +71,37 @@ public class NongService {
 		// 중복이 없으면 새 사용자 저장
 		NongEntity savedEntity = repository.save(entity);
 		return new NongDTO(savedEntity); // 저장된 엔티티를 DTO로 변환하여 반환
-	}//adduser end
-	
+	}// adduser end
 
 	// 수정
 	public NongDTO updateUsers(NongDTO dto) {
-	       NongEntity entity = dto.toEntity(dto);
-	       
-	       // 이메일과 닉네임 중복 체크
-	       Optional<NongEntity> existingEmail = repository.findByUserEmail(entity.getUserEmail());
-	       Optional<NongEntity> existingNick = repository.findByUserNick(entity.getUserNick());
-	       
-	       // 이메일이나 닉네임이 이미 존재하는 경우, 수정 불가
-	       if (existingEmail.isPresent() && existingEmail.get().getClientNum() != entity.getClientNum()) {
-	           throw new IllegalArgumentException("이메일이 이미 존재합니다.");
-	       }
-	       
-	       if (existingNick.isPresent() && existingNick.get().getClientNum() != entity.getClientNum()) {
-	           throw new IllegalArgumentException("닉네임이 이미 존재합니다.");
-	       }
+		NongEntity entity = dto.toEntity(dto);
 
-	       Optional<NongEntity> original = repository.findById(entity.getClientNum());
-	       if (original.isPresent()) {
-	           NongEntity nong = original.get();
-	           nong.setUserId(entity.getUserId()); // 관리자 권한으로 백엔드에서 수동으로 설정할 수 있게 만듦
-	           nong.setUserPwd(entity.getUserPwd());
-	           nong.setUserEmail(entity.getUserEmail());
-	           nong.setUserNick(entity.getUserNick());
-	           repository.save(nong);
-	           return new NongDTO(nong);
-	       }
-	       return null; // 찾지 못한 경우
-	   }
-	
+		// 이메일과 닉네임 중복 체크
+		Optional<NongEntity> existingEmail = repository.findByUserEmail(entity.getUserEmail());
+		Optional<NongEntity> existingNick = repository.findByUserNick(entity.getUserNick());
+
+		// 이메일이나 닉네임이 이미 존재하는 경우, 수정 불가
+		if (existingEmail.isPresent() && existingEmail.get().getClientNum() != entity.getClientNum()) {
+			throw new IllegalArgumentException("이메일이 이미 존재합니다.");
+		}
+
+		if (existingNick.isPresent() && existingNick.get().getClientNum() != entity.getClientNum()) {
+			throw new IllegalArgumentException("닉네임이 이미 존재합니다.");
+		}
+
+		Optional<NongEntity> original = repository.findById(entity.getClientNum());
+		if (original.isPresent()) {
+			NongEntity nong = original.get();
+			nong.setUserId(entity.getUserId()); // 관리자 권한으로 백엔드에서 수동으로 설정할 수 있게 만듦
+			nong.setUserPwd(entity.getUserPwd());
+			nong.setUserEmail(entity.getUserEmail());
+			nong.setUserNick(entity.getUserNick());
+			repository.save(nong);
+			return new NongDTO(nong);
+		}
+		return null; // 찾지 못한 경우
+	}
 
 	// 삭제
 	public boolean deleteUsers(NongDTO dto) {
@@ -115,32 +115,29 @@ public class NongService {
 			return false;
 		} // else end
 	}// deleteUsers end
-	
 
 	// 토큰 생성
 	public String generateToken(NongEntity nongEntity) {
-	    return tokenProvider.create(nongEntity); // 기존에 작성한 TokenProvider 사용
+		return tokenProvider.create(nongEntity); // 기존에 작성한 TokenProvider 사용
 	}
 
 	// 로그인 처리 시 토큰 반환
 	public String authenticateAndGenerateToken(String userId, String userPwd) {
-	    // 아이디로 사용자 확인
-	    Optional<NongEntity> userEntity = repository.findByUserId(userId);
-	    if (userEntity.isEmpty()) {
-	        throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
-	    }
+		// 아이디로 사용자 확인
+		Optional<NongEntity> userEntity = repository.findByUserId(userId);
+		if (userEntity.isEmpty()) {
+			throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
+		}
 
-	    // 비밀번호 확인
-	    NongEntity entity = userEntity.get();
-	    if (!entity.getUserPwd().equals(userPwd)) {
-	        throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-	    }
+		// 비밀번호 확인
+		NongEntity entity = userEntity.get();
+		if (!entity.getUserPwd().equals(userPwd)) {
+			throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+		}
 
-	    // 인증 성공 시 토큰 생성
-	    return generateToken(entity); // 엔티티를 변경하지 않고 토큰만 반환
+		// 인증 성공 시 토큰 생성
+		return generateToken(entity); // 엔티티를 변경하지 않고 토큰만 반환
 	}
-
-	
 
 	// 비밀번호 확인
 	public void verifyPassword(int clientNum, String userPwd) {
@@ -148,6 +145,6 @@ public class NongService {
 		if (userEntity.isEmpty() || !userEntity.get().getUserPwd().equals(userPwd)) {
 			throw new IllegalArgumentException("비밀번호가 틀립니다.");
 		}
-	}//verifyPassword end
+	}// verifyPassword end
 
 }// class end

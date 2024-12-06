@@ -24,6 +24,7 @@ const Header = () => {
     localStorage.removeItem("loginsuccess");
     localStorage.removeItem("clientNum");
     localStorage.removeItem("userNick");
+    localStorage.removeItem('userId');
     alert('로그아웃 되었습니다.');
     navigate('/');
   };

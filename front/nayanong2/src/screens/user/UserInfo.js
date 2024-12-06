@@ -33,7 +33,6 @@ const UserInfo = () => {
   const [edit, setEdit] = useState(false);
   const [backupUserInfo, setBackupUserInfo] = useState(null); // 백업 상태
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
-  const [deleteModal, setDeleteModal] = useState(false) //회원 탈퇴 모달 표시 상태
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 여부
 
   //스크롤 없애기
@@ -50,19 +49,6 @@ const UserInfo = () => {
   // 사용자 정보 로드
   useEffect(() => {
     const loadUserDetails = async () => {
-<<<<<<< HEAD
-      if (!clientNum) return;
-        const accessToken = localStorage.getItem("ACCESS_TOKEN")
-      try {
-        const response = await axios.get(
-          `http://localhost:7070/users/${clientNum}`,
-          {
-            headers:{
-              Authorization:`Bearer ${accessToken}`,
-            },
-          }
-        );
-=======
       const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
       try {
         // 요청 보내기
@@ -75,7 +61,6 @@ const UserInfo = () => {
         );
   
         // 서버에서 데이터 받아서 상태 업데이트
->>>>>>> test
         if (response.data.clientNum) {
           setUserInfo(response.data); // Recoil 상태 업데이트
         } else {
@@ -155,6 +140,7 @@ const UserInfo = () => {
         setPassword("");
         setMessage(""); // 메시지 초기화
         setSMessage(""); // 서버 메시지 초기화
+        window.location.reload();
       }
     } catch (error) {
       console.error("저장 실패:", error);
@@ -187,7 +173,7 @@ const UserInfo = () => {
   const handleEditClick = () => {
     setShowModal(true);
     setBackupUserInfo({ ...userInfo });
-
+    
   };
 
   //취소버튼 
@@ -212,10 +198,6 @@ const UserInfo = () => {
     setShowModal(false);
   };
 
-  //회원탈퇴 버튼
-  const hadleDeleteUser = () => {
-    setDeleteModal(true)
-  }
 
   return (
     <div className="userInfoContainer">
@@ -339,13 +321,6 @@ const UserInfo = () => {
               onClick={() => navigate("/")}
             >
               돌아가기
-            </button>
-            <button
-              className="userInfoFormButton userInfoFormCancelButton"
-              type="button"
-              onClick={hadleDeleteUser}
-            >
-              회원탈퇴
             </button>
           </>
         )}

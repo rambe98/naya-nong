@@ -21,10 +21,7 @@ public class NongDTO {
    private String userName;
    private String userNick;
    private String phoneCom;
-<<<<<<< HEAD
 
-=======
->>>>>>> test
    
    //Entity - > dto
    public NongDTO(NongEntity entity) {

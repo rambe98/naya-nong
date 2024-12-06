@@ -10,7 +10,7 @@ const Board = () => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [posts, setPosts] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState("");
-    const [searchCategory, setSearchCategory] = useState("");
+    const [searchCategory, setSearchCategory] = useState("title");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
@@ -25,55 +25,51 @@ const Board = () => {
         setSortBy(e.target.value);
     };
 
-   const getList = async () => {
-    const token = localStorage.getItem('ACCESS_TOKEN'); // 토큰 가져오기
-    try {
-        const response = await axios.get('http://localhost:7070/board', {
-            headers: token
-                ? { Authorization: `Bearer ${token}` } // 토큰이 있으면 Authorization 추가
-                : {}, // 토큰이 없으면 빈 헤더 사용
-        });
-        if (response.status === 200) {
-            setPosts(response.data.reverse());
-            let sortedPost = response.data;
+    const getList = async () => {
+        const token = localStorage.getItem('ACCESS_TOKEN');
+        try {
+            const response = await axios.get('http://localhost:7070/board',
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            if (response.status === 200) {
+                setPosts(response.data.reverse());
+                let sortedPost = response.data;
 
-            switch (sortBy) {
-                case 'date':
-                    sortedPost = [...sortedPost].sort((a, b) => {
-                        const dateA = new Date(a.created_at);
-                        const dateB = new Date(b.created_at);
-                        return dateB - dateA; // 최신순
-                    });
-                    break;
-                case 'views':
-                    sortedPost = sortedPost.sort((a, b) => b.views - a.views); // 조회수 순
-                    break;
-                case 'title':
-                    sortedPost = sortedPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)); // 제목순
-                    break;
-                default:
-                    break;
+                switch (sortBy) {
+                    case 'date':
+                        sortedPost = [...sortedPost].sort((a, b) => {
+                            const dateA = new Date(a.created_at);
+                            const dateB = new Date(b.created_at);
+                            return dateB - dateA; // 최신순
+                        });
+                        break;
+                    case 'views':
+                        sortedPost = sortedPost.sort((a, b) => b.views - a.views); // 조회수 순
+                        break;
+                    case 'title':
+                        sortedPost = sortedPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)); // 제목순
+                        break;
+                    default:
+                        break;
+                }
+                setPosts(sortedPost);
             }
-            setPosts(sortedPost);
+        } catch (error) {
+            console.error('목록을 가져올 수 없습니다.');
+            alert('게시글 목록을 불러오는 데 실패했습니다.');
+        } finally {
+            setLoading(false);
         }
-    } catch (error) {
-        console.error('목록을 가져올 수 없습니다.');
-        alert('게시글 목록을 불러오는 데 실패했습니다.');
-    } finally {
-        setLoading(false);
-    }
-};
+    };
 
 
-    useEffect(() => {
-        getList();
-    }, [sortBy]);
-
+    // 한 페이지에 렌더링되는 게시글의 수 설정
     // 페이지 변경
     const handlePageChange = (page) => {
-    // 한 페이지에 렌더링되는 게시글의 수 설정
-       // 페이지 변경
-       const handlePageChange = (page) => {
         setCurrentPage(page);
 
         //페이지 업데이트시 스크롤을 상단을 위치
@@ -83,10 +79,14 @@ const Board = () => {
 
     // 검색 함수
     const handleSearch = async () => {
+        console.log("123:", searchCategory);
+
         if (!searchKeyword.trim()) {
             alert("검색어를 입력해주세요.");
             return;
         }
+
+        console.log("Current search category:", searchCategory);
 
         let url = "";
         let params = {};
@@ -116,13 +116,20 @@ const Board = () => {
                 alert("잘못된 검색 범주입니다.");
                 return;
         }
-
+        const token = localStorage.getItem("ACCESS_TOKEN");
         try {
-            const response = await axios.get(url, { params });
+            const response = await axios.get(url, {
+                params,
+                headers: {
+                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                },
+            });
             if (response.status === 200) {
                 setPosts(response.data.reverse());
                 setCurrentPage(1);
             } else {
+                console.error("검색 실패 200아님", response.status);
+
                 setPosts([]);
             }
         } catch (error) {
@@ -137,6 +144,10 @@ const Board = () => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    useEffect(() => {
+        getList();
+    }, [sortBy]);
 
     return (
         <div className="boardContainer">
@@ -187,6 +198,7 @@ const Board = () => {
                     className="boardContainerButton2"
                     onSubmit={(e) => {
                         e.preventDefault();
+                        console.log("검색 시작");
                         handleSearch();
                     }}
                 >
@@ -261,5 +273,5 @@ const Board = () => {
 
     );
 };
-}
+
 export default Board;

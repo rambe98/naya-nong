@@ -136,11 +136,6 @@
   padding: 5px 10px;
   box-sizing: border-box;  /* 패딩 포함하여 정확한 너비 설정 */
 }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> test
 /* 게시글 목록 */
 .boardList {
   display: flex;
@@ -165,7 +160,6 @@
   color: #b08968; /* 강조된 색상 */
   font-weight: 600;  /* 글씨 굵게 */
 }
-
 
 /* 페이지네이션 */
 .boardPagination {

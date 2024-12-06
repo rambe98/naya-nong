@@ -123,18 +123,18 @@ public class NongConteroller {
 	
 
 	@DeleteMapping("/{clientNum}")
-	public ResponseEntity<?> deleteUsers(NongDTO dto) {
-		boolean isDeleted = service.deleteUsers(dto);
-		try {
-			if (isDeleted) {
-				return ResponseEntity.ok("회원이 탈퇴되었습니다.");
-			} else {
-				return ResponseEntity.status(404).body("회원정보를 찾을 수 없습니다.");
-			}
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("데이터에러");
-		} // catch end
-	}// deleteUsers end
+    public ResponseEntity<?> deleteUsers(@PathVariable("clientNum") int clientNum) {
+        try {
+            boolean isDeleted = service.deleteUsers(clientNum);
+            if (isDeleted) {
+                return ResponseEntity.ok("회원 및 관련 데이터가 삭제되었습니다.");
+            } else {
+                return ResponseEntity.status(404).body("회원정보를 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("서버 에러가 발생했습니다: " + e.getMessage());
+        }
+    }
 	
 
 	

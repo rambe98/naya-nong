@@ -1,6 +1,7 @@
 package com.test.project.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +47,9 @@ public class BoardEntity {
 	private LocalDateTime updateDate;
 	private int views;
 	private int likeCount;
+	
+	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<CommentEntity> comments;
 	
 	
 

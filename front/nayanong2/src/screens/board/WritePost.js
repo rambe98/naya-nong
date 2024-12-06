@@ -39,7 +39,7 @@ const WritePost = () => {
             if (userConfirmed) {
                 navigate('/login', { state: { from: '/write' } });
             } else {
-                navigate('/');
+                navigate('/board');
             }
         }
     }, [clientNum, navigate]);

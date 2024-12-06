@@ -28,8 +28,11 @@ public class CommentService {
 	private BoardRepository boardRepository;
 	
 	//댓글 전체 조회
-	public List<CommentDTO> showAllComment() {
-		return commentRepository.findAll().stream().map(CommentDTO :: new).collect(Collectors.toList());
+	public List<CommentDTO> showAllComment(int bodNum) {
+		
+		List<CommentEntity> commentsList =commentRepository.findByBoardBodNum(bodNum);
+		
+		return commentsList.stream().map(CommentDTO :: new).collect(Collectors.toList());
 		
 	}
 

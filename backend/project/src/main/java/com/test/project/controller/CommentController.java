@@ -25,9 +25,9 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 	
-	@GetMapping
-	public ResponseEntity<List<CommentDTO>> showAllComment(){
-		List<CommentDTO> comment =  commentService.showAllComment();
+	@GetMapping("/{bodNum}")
+	public ResponseEntity<List<CommentDTO>> showAllComment(@PathVariable("bodNum") int bodNum){
+		List<CommentDTO> comment =  commentService.showAllComment(bodNum);
 		return ResponseEntity.ok(comment);
 	}
 

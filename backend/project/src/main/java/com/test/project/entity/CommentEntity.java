@@ -46,6 +46,5 @@ public class CommentEntity {
 	    @CreationTimestamp
 	    private LocalDateTime createDate;
 	    
-	    
 	    private LocalDateTime updateDate;
 }

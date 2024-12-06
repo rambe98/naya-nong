@@ -31,8 +31,10 @@ public class ParentCommentService {
 	private NongRepository nongRepository;
 	
 	//댓글 전체 조회
-		public List<ParentCommentDTO> showAllParentComment() {
-			return parentCommentRepository.findAll().stream().map(ParentCommentDTO :: new).collect(Collectors.toList());
+		public List<ParentCommentDTO> showAllParentComment(Long comId) {
+			
+			List<ParentCommentEntity> comIdList = parentCommentRepository.findByCommentComId(comId);
+			return comIdList.stream().map(ParentCommentDTO :: new).collect(Collectors.toList());
 			
 		}
 

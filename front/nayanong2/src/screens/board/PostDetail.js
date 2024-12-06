@@ -206,24 +206,34 @@ const PostDetail = () => {
         }
     };
 
-    //페이지가 렌더링 되면 댓글 리스트 출력
-    const commentsget = async () => {
-        const token = localStorage.getItem('ACCESS_TOKEN');
-        try {
-            const response = await axios.get(`http://localhost:7070/comments`, {
-                headers: {
-                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
-                },
-            });
-            console.log("현재데이터야", response.data); // 응답 데이터 로그
-            const reversedComments = [...response.data].reverse(); //배열상태의 데이터를 복사후 반전
-            setComments(reversedComments); //상태 업데이트
-            console.log(reversedComments);
+    //댓글이 입력되면 리렌더링
+    useEffect(() => {
+        commentsget();
+    },[])
 
-        } catch (error) {
-            console.error("댓글리스트 불러오기 실패:", error); // 오류 로그
-        }
-    };
+    //페이지가 렌더링 되면 댓글 리스트 출력
+        const commentsget = async () => {
+            const token = localStorage.getItem('ACCESS_TOKEN');
+            console.log("보드넘", bodNum);
+            
+            try {
+                const response = await axios.get(`http://localhost:7070/comments/${bodNum}`, {
+                    bodNum : bodNum,
+                    headers: {
+                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    },
+                });
+                console.log("현재데이터야", response.data); // 응답 데이터 로그
+                const reversedComments = [...response.data].reverse(); //배열상태의 데이터를 복사후 반전
+                setComments(reversedComments); //상태 업데이트
+                console.log(reversedComments);
+    
+            } catch (error) {
+                console.error("댓글리스트 불러오기 실패:", error); // 오류 로그
+            }
+        };
+
+
 
     //댓글추가(작성)
     const commentsAdd = async () => {

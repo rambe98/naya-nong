@@ -23,9 +23,9 @@ public class ParentCommentController {
 	@Autowired
 	ParentCommentService service;
 	
-	@GetMapping
-	public ResponseEntity<List<ParentCommentDTO>> showAllParentComment(){
-		List<ParentCommentDTO> comment =  service.showAllParentComment();
+	@GetMapping("/{comId}")
+	public ResponseEntity<List<ParentCommentDTO>> showAllParentComment(@PathVariable Long comId){
+		List<ParentCommentDTO> comment =  service.showAllParentComment(comId);
 		return ResponseEntity.ok(comment);
 	}
 	

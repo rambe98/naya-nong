@@ -81,27 +81,33 @@ const PostDetail = () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
             const response = await axios.post(
-                "http://localhost:7070/heart",
+                "http://localhost:7070/heart/like",
+                { userNick: localStorageUserNick, bodNum: parseInt(bodNum) },
                 {
-                    userNick: localStorageUserNick,
-                    bodNum: parseInt(bodNum),
-                },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+    
+            const likedStatus = response.data; // 서버에서 반환된 좋아요 상태 (true or false)
+            setLiked(likedStatus); // 좋아요 상태 업데이트
+    
+            // 서버에서 동기화된 좋아요 수 가져오기
+            const likeCountResponse = await axios.get(
+                `http://localhost:7070/heart/${bodNum}/likeCount`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-            if (response.data === "좋아요가 추가되었습니다.") {
-                setLiked(true);
-                setLikeCount((prev) => prev + 1);
-            } else if (response.data === "좋아요가 취소되었습니다.") {
-                setLiked(false);
-                setLikeCount((prev) => prev - 1);
-            }
+            setLikeCount(likeCountResponse.data); // 좋아요 수 동기화
         } catch (error) {
             console.error("좋아요 처리 실패:", error);
+            alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
-
+    
     // 게시글 삭제
     const handleDelete = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");

@@ -8,10 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.test.project.dto.NongDTO;
 import com.test.project.entity.NongEntity;
+import com.test.project.persistence.BoardRepository;
+import com.test.project.persistence.CommentRepository;
+import com.test.project.persistence.HeartRepository;
 import com.test.project.persistence.NongRepository;
+import com.test.project.persistence.ParentCommentRepository;
 import com.test.project.security.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -23,8 +28,22 @@ public class NongService {
 	@Autowired
 	private NongRepository repository;
 
+	@Autowired 
+	private BoardRepository bodrepository;
+	
+	@Autowired
+	private CommentRepository conrepository;
+	
+	@Autowired
+	private ParentCommentRepository conconrepository;
+	
+	@Autowired
+	private HeartRepository heartrepository;
+	
 	@Autowired
 	private TokenProvider tokenProvider;
+	
+	
 
 	// entity가 비었는지 확인
 	private void validate(final NongEntity entity) {
@@ -104,17 +123,23 @@ public class NongService {
 	}
 
 	// 삭제
-	public boolean deleteUsers(NongDTO dto) {
-		NongEntity entity = dto.toEntity(dto);
-		Optional<NongEntity> original = repository.findById(entity.getClientNum());
-		if (original.isPresent()) {
-			repository.delete(entity);
-			return true;
-		} // if end
-		else {
-			return false;
-		} // else end
-	}// deleteUsers end
+	@Transactional
+	public boolean deleteUsers(int clientNum) {
+        Optional<NongEntity> user = repository.findById(clientNum);
+        if (user.isPresent()) {
+            // 회원과 관련된 데이터 삭제
+        	NongEntity userEntity = user.get();
+            // 좋아요 데이터 삭제
+        	bodrepository.deleteByProject(userEntity); // 게시글 삭제
+        	conrepository.deleteByNong(userEntity); // 댓글 삭제
+        	heartrepository.deleteByNong(userEntity); // 좋아요 삭제
+        	conconrepository.deleteByNong(userEntity); // 대댓글 삭제
+        	repository.deleteById(clientNum);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	// 토큰 생성
 	public String generateToken(NongEntity nongEntity) {

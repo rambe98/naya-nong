@@ -30,7 +30,7 @@ public class ParentCommentService {
 	@Autowired
 	private NongRepository nongRepository;
 	
-	//댓글 전체 조회
+	//댓글 조회
 		public List<ParentCommentDTO> showAllParentComment(Long comId) {
 			
 			List<ParentCommentEntity> comIdList = parentCommentRepository.findByCommentComId(comId);

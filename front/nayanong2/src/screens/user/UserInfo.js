@@ -140,6 +140,7 @@ const UserInfo = () => {
         setPassword("");
         setMessage(""); // 메시지 초기화
         setSMessage(""); // 서버 메시지 초기화
+        window.location.reload();
       }
     } catch (error) {
       console.error("저장 실패:", error);
@@ -172,7 +173,7 @@ const UserInfo = () => {
   const handleEditClick = () => {
     setShowModal(true);
     setBackupUserInfo({ ...userInfo });
-
+    
   };
 
   //취소버튼 
@@ -196,6 +197,7 @@ const UserInfo = () => {
     setPassword("");
     setShowModal(false);
   };
+
 
   return (
     <div className="userInfoContainer">

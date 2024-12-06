@@ -26,13 +26,9 @@ const Board = () => {
     };
 
    const getList = async () => {
-    const token = localStorage.getItem('ACCESS_TOKEN'); // 토큰 가져오기
+    
     try {
-        const response = await axios.get('http://localhost:7070/board', {
-            headers: token
-                ? { Authorization: `Bearer ${token}` } // 토큰이 있으면 Authorization 추가
-                : {}, // 토큰이 없으면 빈 헤더 사용
-        });
+        const response = await axios.get('http://localhost:7070/board',  );
         if (response.status === 200) {
             setPosts(response.data.reverse());
             let sortedPost = response.data;

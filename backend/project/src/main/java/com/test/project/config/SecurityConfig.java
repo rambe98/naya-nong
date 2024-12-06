@@ -26,8 +26,9 @@ public class SecurityConfig {
         	.and()
 
             .authorizeHttpRequests()
-            .requestMatchers("/users/signin", "/users/signup", "/usrs/*").permitAll() // 로그인, 회원가입은 모두 허용
-            .anyRequest().authenticated(); // 나머지 요청은 인증 필요
+            .requestMatchers("/users/signin", "/users/signup", "/users/*, ","/board", "/board/*").permitAll() // 로그인, 회원가입은 모두 허용
+            .anyRequest().authenticated();
+         
         	
 
         // JWT 필터 추가

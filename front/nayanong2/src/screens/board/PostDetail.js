@@ -56,10 +56,14 @@ const PostDetail = () => {
 
     //좋아요 토글 함수
     const toggleLike = async () => {
+        const token = localStorage.getItem("ACCESS_TOKEN")
         try {
             const response = await axios.post("http://localhost:7070/heart", {
                 userNick: localStorageUserNick,
                 bodNum: parseInt(bodNum),
+                headers: {
+                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                },
             });
 
             if (response.data === "좋아요가 추가되었습니다.") {
@@ -81,14 +85,14 @@ const PostDetail = () => {
         const getBoardData = async () => {
             const token = localStorage.getItem('ACCESS_TOKEN');
             try {
-                const boardsResponse = await axios.get("http://localhost:7070/board",{
+                const boardsResponse = await axios.get("http://localhost:7070/board", {
                     headers: {
                         Authorization: `Bearer ${token}`, // 인증 토큰 추가
                     },
                 })
                 setBoards(boardsResponse.data)
 
-                const response = await axios.get(`http://localhost:7070/board/${bodNum}`,{
+                const response = await axios.get(`http://localhost:7070/board/${bodNum}`, {
                     headers: {
                         Authorization: `Bearer ${token}`, // 인증 토큰 추가
                     },
@@ -159,7 +163,7 @@ const PostDetail = () => {
                 console.log('게시글 삭제 요청, bodNum:', bodNum)
 
                 // 게시글 삭제 요청
-                const deleteResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`,{
+                const deleteResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`, {
                     headers: {
                         Authorization: `Bearer ${token}`, // 인증 토큰 추가
                     },
@@ -206,7 +210,7 @@ const PostDetail = () => {
     const commentsget = async () => {
         const token = localStorage.getItem('ACCESS_TOKEN');
         try {
-            const response = await axios.get(`http://localhost:7070/comments`,{
+            const response = await axios.get(`http://localhost:7070/comments`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰 추가
                 },
@@ -215,7 +219,7 @@ const PostDetail = () => {
             const reversedComments = [...response.data].reverse(); //배열상태의 데이터를 복사후 반전
             setComments(reversedComments); //상태 업데이트
             console.log(reversedComments);
-            
+
         } catch (error) {
             console.error("댓글리스트 불러오기 실패:", error); // 오류 로그
         }
@@ -229,12 +233,12 @@ const PostDetail = () => {
                 content: newComment, //댓글 내용
                 userNick: localStorageUserNick, //세션스토리지의 유저닉네임값
                 bodNum: parseInt(bodNum)//url에서 따온 bodNum을 정수형으로 반환
-               },
+            },
                 {
-                headers: {
-                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
-                },
-            })
+                    headers: {
+                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    },
+                })
             console.log("댓글 추가 성공", response.data);
             alert("댓글이 추가되었습니다.")
 
@@ -249,6 +253,7 @@ const PostDetail = () => {
 
     // 댓글 삭제
     const commentsDelete = async (comId) => {
+        const token = localStorage.getItem('ACCESS_TOKEN');
         try {
             // 사용자에게 삭제 확인 메시지 표시
             const userConfirmed = window.confirm(
@@ -257,7 +262,12 @@ const PostDetail = () => {
 
             // 사용자가 확인 버튼을 눌렀을 경우에만 삭제 진행
             if (userConfirmed) {
-                const response = await axios.delete(`http://localhost:7070/comments/delete/${comId}`);
+                const response = await axios.delete(`http://localhost:7070/comments/delete/${comId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                        },
+                    });
                 console.log("댓글 삭제 성공:", response.data);
                 alert("댓글이 삭제되었습니다.");
                 commentsget(); // 댓글 목록 새로고침
@@ -276,7 +286,7 @@ const PostDetail = () => {
         try {
             const response = await axios.put(`http://localhost:7070/comments/update/${comId}`, {
                 content: updatedContent,
-            },{
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰 추가
                 },
@@ -300,7 +310,7 @@ const PostDetail = () => {
             const response = await axios.post(`http://localhost:7070/pComment/addReply/${parentId}`, {
                 content: newReply,
                 userNick: localStorageUserNick,
-            },{
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰 추가
                 },
@@ -322,6 +332,7 @@ const PostDetail = () => {
 
     // 대댓글 삭제
     const replyDelete = async (pComId) => {
+
         console.log("Deleting reply with ID:", pComId); // pComId 값 확인
         try {
             const userConfirmed = window.confirm('대댓글을 삭제하시겠습니까? 삭제된 대댓글은 복구할 수 없습니다.');
@@ -411,9 +422,7 @@ const PostDetail = () => {
                         const updateTime = comment.updateDate
                             ? new Date(comment.updateDate).toLocaleString() // 수정일자 변환
                             : null; // 수정일자가 없는 경우
-                            console.log("업데이트시간:",updateTime);
-                        console.log("원래시간:",createTime);
-                        
+
                         return (
                             <div key={comment.comId} className="commentItem">
                                 {/* editingCommentId가 comId와 같을 때 수정 모드 진입 */}
@@ -441,8 +450,8 @@ const PostDetail = () => {
                                         </p>
                                         {/* 작성일자 */}
                                         {!updateTime && <span>  작성일자: {createTime}</span>}
-        
-                                        
+
+
                                         {/* 수정일자가 있을 경우에만 표시 */}
                                         {updateTime && <span>수정일자: {updateTime}</span>}
                                         <div className="commentButtons">
@@ -481,14 +490,18 @@ const PostDetail = () => {
                                 )}
                                 <div className="replies">
                                     {comment.replies &&
-                                        comment.replies.map((reply) => (
-                                            <div key={reply.pComId} className="replyItem">
-                                                <p>
-                                                    <strong>{reply.userNick}:</strong> {reply.content}
-                                                </p>
-                                                <button onClick={() => replyDelete(reply.pComId)}>삭제</button>
-                                            </div>
-                                        ))}
+                                        comment.replies.map((reply) => {
+                                            const replyTime = new Date(reply.createDate).toLocaleString();
+                                            return (
+                                                <div key={reply.pComId} className="replyItem">
+                                                    <p>
+                                                        <strong>{reply.userNick}:</strong> {reply.content}
+                                                        <span>작성일자 : {replyTime}</span>
+                                                    </p>
+                                                    <button onClick={() => replyDelete(reply.pComId)}>삭제</button>
+                                                </div>
+                                            );
+                                        })}
                                 </div>
                             </div>
                         );

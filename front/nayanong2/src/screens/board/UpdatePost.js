@@ -19,6 +19,17 @@ const UpdatePost = () => {
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [error, setError] = useState(null); // 오류 상태
 
+      //스크롤 없애기
+  useEffect(() => {
+    // body에 클래스 추가
+    document.body.classList.add('no-scroll');
+
+    // 언마운트 시 클래스 제거
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
+
     // 게시글 데이터를 불러오는 함수
     useEffect(() => {
         const getBoardData = async () => {
@@ -115,7 +126,7 @@ const UpdatePost = () => {
             </div>
             <div>
                 <button onClick={editCompleted} className="updateButton" >
-                    수정 완료
+                    완료
                 </button>
                 <button onClick={() => navigate(`/board/${bodNum}`)} className="updateButton">
                     이전

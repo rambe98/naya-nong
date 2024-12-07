@@ -16,6 +16,17 @@ const WritePost = () => {
         bodDtail: '', // 내용
     });
 
+      //스크롤 없애기
+  useEffect(() => {
+    // body에 클래스 추가
+    document.body.classList.add('no-scroll');
+
+    // 언마운트 시 클래스 제거
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
+
     // 날짜 상태 (작성일자)
     const [date, setDate] = useState('');
 
@@ -102,7 +113,7 @@ const WritePost = () => {
 
     return (
         <div className="writeContainer">
-            <span className="writeHeader">글쓰기</span>
+            <span className="writeHeader">게시글 작성</span>
 
             {/* 폼 */}
             <form onSubmit={handleSubmit} className="writeInputContainer">

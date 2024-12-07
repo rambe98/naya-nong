@@ -80,7 +80,7 @@ function Signup() {
       });
       console.log("회원추가 성공", response.data);
       alert("회원이 추가되었습니다.");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       // 서버에서 받은 에러 메시지 처리
       if (error.response && error.response.data) {

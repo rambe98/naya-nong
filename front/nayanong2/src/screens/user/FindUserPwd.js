@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../../css/FindUser.css'
-import logo from '../../assets/logo.png';
 import { messageAtom, userPwdAtom } from "../../recoil/UserRecoil";
 import { useRecoilState } from "recoil";
 
@@ -16,6 +15,17 @@ const FindUserPwd = () => {
   const [confirmPwd, setConfirmPwd] = useState("");
   
   const navigate = useNavigate();
+
+      //스크롤 없애기
+      useEffect(() => {
+        // body에 클래스 추가
+        document.body.classList.add('no-scroll');
+    
+        // 언마운트 시 클래스 제거
+        return () => {
+          document.body.classList.remove('no-scroll');
+        };
+      }, []);
 
   const handlePwdChange = (e) => {
     setUserPwd(e.target.value);
@@ -48,7 +58,6 @@ const FindUserPwd = () => {
 
   return (
     <div className="findUserContainer">
-      <img src={logo} alt="Logo" className="findUserLogo" />
       <span className="findUserHeader">비밀번호 변경</span>
       <div className="findUserForm">
         <label className='findUserLabel'>아이디</label>

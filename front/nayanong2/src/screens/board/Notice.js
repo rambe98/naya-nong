@@ -28,7 +28,7 @@ const Notice = () => {
     const getList = async () => {
         const token = localStorage.getItem('ACCESS_TOKEN');
         try {
-            const response = await axios.get('http://localhost:7070/notice', // Changed to /notice
+            const response = await axios.get('http://localhost:7070/notice', 
                 {
                     headers: {
                         Authorization: `Bearer ${token}`

@@ -19,3 +19,7 @@ spring:
 jwt:
   secret: eyJhbGciOiJIUzUxMiJ9eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcyNzk3NzQ2OSwiaWF0IjoxNzI3OTc3NDY5fQ3WUk1X983GsejnQZJSNQKjZBfBeSzOK4cAxpndz0G3pSItFPDiDVnSfD0ZsQzVCSkSMKQozyMVDjt9VYTcJw
   expiration: 3600000 # 1 hour
+
+api:
+  url: "https://www.kamis.or.kr/service/price/xml.do"
+  api_key: "202671f9-de02-4f98-a13b-87747d743f06"

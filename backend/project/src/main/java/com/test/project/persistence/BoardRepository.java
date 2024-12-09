@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.test.project.entity.BoardEntity;
+import com.test.project.entity.NongEntity;
 
 
 @Repository
@@ -34,5 +35,8 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
             "b.bodDtail LIKE %:keyword% OR " +
             "b.project.userNick LIKE %:keyword%")
      List<BoardEntity> findByAllKeyword(@Param("keyword") String keyword);
+
+    // 회원 탈퇴시 clientNum으로 조회
+    void deleteByProject(NongEntity project);
 
 }

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
-import '../../css/Board.css';
+import '../../css/Notice.css'; // Updated to Notice.css
 import '../../css/SideBar.css';
 import axios from 'axios';
 
-const Board = () => {
+const Notice = () => {
     const navigate = useNavigate();
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [posts, setPosts] = useState([]);
@@ -28,7 +28,7 @@ const Board = () => {
     const getList = async () => {
         const token = localStorage.getItem('ACCESS_TOKEN');
         try {
-            const response = await axios.get('http://localhost:7070/board',
+            const response = await axios.get('http://localhost:7070/notice', // Changed to /notice
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -60,7 +60,7 @@ const Board = () => {
             }
         } catch (error) {
             console.error('목록을 가져올 수 없습니다.');
-            alert('게시글 목록을 불러오는 데 실패했습니다.');
+            alert('공지사항 목록을 불러오는 데 실패했습니다.');
         } finally {
             setLoading(false);
         }
@@ -93,23 +93,23 @@ const Board = () => {
 
         switch (searchCategory) {
             case "title":
-                url = "http://localhost:7070/board/search/title";
+                url = "http://localhost:7070/notice/search/title"; // Changed to /notice
                 params = { keyword: searchKeyword };
                 break;
             case "content":
-                url = "http://localhost:7070/board/search/content";
+                url = "http://localhost:7070/notice/search/content"; // Changed to /notice
                 params = { keyword: searchKeyword };
                 break;
             case "titleOrContent":
-                url = "http://localhost:7070/board/search/titleAndContent";
+                url = "http://localhost:7070/notice/search/titleAndContent"; // Changed to /notice
                 params = { titleKeyword: searchKeyword, contentKeyword: searchKeyword };
                 break;
             case "userNick":
-                url = "http://localhost:7070/board/search/userNick";
+                url = "http://localhost:7070/notice/search/userNick"; // Changed to /notice
                 params = { keyword: searchKeyword };
                 break;
             case "all":
-                url = "http://localhost:7070/board/search/all";
+                url = "http://localhost:7070/notice/search/all"; // Changed to /notice
                 params = { keyword: searchKeyword };
                 break;
             default:
@@ -150,21 +150,21 @@ const Board = () => {
     }, [sortBy]);
 
     return (
-        <div className="boardContainer">
+        <div className="noticeContainer">
             {/* 사이드바 */}
             <div className={`sidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
                 <div>
                     <ul>
-                        <li><a href="/notice">공지사항</a></li>
+                        <li><a href="#">공지사항</a></li>
                         <li><a href="#">자유게시판</a></li>
                     </ul>
                 </div>
             </div>
             {/* 작성일 및 페이지당 항목 수 선택 섹션 */}
-            <div className="boardOptionsContainer">
+            <div className="noticeOptionsContainer">
                 <div>
                     <select
-                        className="boardSortBySelect"
+                        className="noticeSortBySelect"
                         value={sortBy}
                         onChange={handleSortChange}
                     >
@@ -173,7 +173,7 @@ const Board = () => {
                         <option value="title">제목</option>
                     </select>
                     <select
-                        className="boardItemsPerPageSelect"
+                        className="noticeItemsPerPageSelect"
                         value={itemsPerPage}
                         onChange={(e) => setItemsPerPage(Number(e.target.value))}
                     >
@@ -185,17 +185,17 @@ const Board = () => {
             </div>
 
             {/* 검색 및 글쓰기 섹션 */}
-            <div className="boardInputContainer">
-                <div className="boardContainerButton">
+            <div className="noticeInputContainer">
+                <div className="noticeContainerButton">
                     <button className="sidebarToggleButton" onClick={toggleSidebar}>
                         <FaBars />
                     </button>
-                    <button className="boardWriteButton" onClick={() => navigate('/write')}>
+                    {/* <button className="noticeWriteButton" onClick={() => navigate('/write')}>
                         글쓰기
-                    </button>
+                    </button> */}
                 </div>
                 <form
-                    className="boardContainerButton2"
+                    className="noticeContainerButton2"
                     onSubmit={(e) => {
                         e.preventDefault();
                         console.log("검색 시작");
@@ -203,7 +203,7 @@ const Board = () => {
                     }}
                 >
                     <select
-                        className="boardSearchCategory"
+                        className="noticeSearchCategory"
                         value={searchCategory}
                         onChange={(e) => setSearchCategory(e.target.value)}
                     >
@@ -216,53 +216,56 @@ const Board = () => {
                     <input
                         type="text"
                         placeholder="검색어를 입력하세요."
-                        className="boardSearchInput"
-                        value={searchKeyword}
+                        className="noticeSearchInput"
                         onChange={(e) => setSearchKeyword(e.target.value)}
                     />
-                    <button type="submit" className="boardSearchButton">
+                    <button type="submit" className="noticeSearchButton">
                         검색
                     </button>
                 </form>
             </div>
 
             {/* 게시글 목록 */}
-            <div className="boardListContainer">
-                <div className="boardListHeader">
-                    <p className="boardListItem boardNumber">번호</p>
-                    <p className="boardListItem boardTitle">제목</p>
-                    <p className="boardListItem boardAuthor">작성자</p>
-                    <p className="boardListItem boardDate">등록일</p>
-                    <p className="boardListItem boardViews">조회수</p>
+            <div className="noticeListContainer">
+                <div className="noticeListHeader">
+                    <p className="noticeListItem noticeNumber">번호</p>
+                    <p className="noticeListItem noticeTitle">제목</p>
+                    <p className="noticeListItem noticeAuthor">작성자</p>
+                    <p className="noticeListItem noticeDate">등록일</p>
+                    <p className="noticeListItem noticeViews">조회수</p>
                 </div>
                 {currentPosts.length > 0 ? (
                     currentPosts.map((post, index) => (
-                        <div key={post.bodNum} className="boardList">
-                            <p className="boardListItem boardNumber">{index + 1 + (currentPage - 1) * itemsPerPage}</p>
-                            <p className="boardListItem boardTitle">
-                                <Link to={`/board/${post.bodNum}`}>{post.bodTitle}</Link>
+                        <div key={post.bodNum} className="noticeList">
+                            <p className="noticeListItem noticeNumber">
+                                {index + 1 + (currentPage - 1) * itemsPerPage}
                             </p>
-                            <p className="boardListItem boardAuthor">{post.userNick}</p>
-                            <p className="boardListItem boardDate">
+                            <p className="noticeListItem noticeTitle">
+                                <Link to={`/notice/${post.bodNum}`}>{post.bodTitle}</Link>
+                            </p>
+                            <p className="noticeListItem noticeAuthor">
+                            </p>
+                            <p className="noticeListItem noticeDate">
                                 {new Date(post.writeDate).toLocaleDateString("ko-KR", {
                                     year: "numeric",
                                     month: "2-digit",
                                     day: "numeric",
                                 }).replace(/\.$/, "")}
                             </p>
-                            <p className="boardListItem boardViews">{post.views}</p>
+                            <p className="noticeListItem noticeViews">
+                            </p>
                         </div>
                     ))
                 ) : (
-                    <p className="boardNoPosts">게시글이 없습니다.</p>
+                    <p className="noticeNoPosts">게시글이 없습니다.</p>
                 )}
             </div>
 
-            <div className="boardPagination">
+            <div className="noticePagination">
                 {Array.from({ length: totalPages }, (_, i) => (
                     <button
                         key={i}
-                        className={`boardPageButton ${i + 1 === currentPage ? "boardActivePage" : ""}`}
+                        className={`noticePageButton ${i + 1 === currentPage ? "noticeActivePage" : ""}`}
                         onClick={() => handlePageChange(i + 1)}
                     >
                         {i + 1}
@@ -270,8 +273,7 @@ const Board = () => {
                 ))}
             </div>
         </div>
-
     );
 };
 
-export default Board;
+export default Notice;

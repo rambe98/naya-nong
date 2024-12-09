@@ -71,10 +71,11 @@ function Signup() {
 
   // 회원가입 요청
   const addUser = async (formData) => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       const response = await axios.post("http://localhost:7070/users/signup", formData, {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // 인증 토큰 추가
         },
       });
       console.log("회원추가 성공", response.data);

@@ -21,6 +21,7 @@ public class NongDTO {
    private String userName;
    private String userNick;
    private String phoneCom;
+
    
    //Entity - > dto
    public NongDTO(NongEntity entity) {
@@ -32,6 +33,7 @@ public class NongDTO {
       this.userName = entity.getUserName();
       this.userNick = entity.getUserNick();
       this.phoneCom = entity.getPhoneCom();
+  
    }//NongDTO end
    
    

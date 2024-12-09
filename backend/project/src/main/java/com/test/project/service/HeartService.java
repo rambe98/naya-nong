@@ -62,6 +62,7 @@ public class HeartService {
 	    HeartEntity heartEntity = new HeartEntity();
 	    heartEntity.setNong(userEntity);  // 사용자 정보 설정
 	    heartEntity.setBoard(boardEntity);  // 게시판 정보 설정
+	    heartEntity.setHIkon("좋아요 추가");
 	    heartRepository.save(heartEntity);  // HeartRepository를 사용하여 저장
 	    updateAndGetLikeCount(bodNum);  // 좋아요 수 갱신
 	    return true;  // 좋아요가 추가되었음을 반환

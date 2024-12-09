@@ -33,4 +33,6 @@ public class HeartEntity {
 	@JoinColumn(name = "bod_num", referencedColumnName = "bodNum")
     private BoardEntity board;
 	
+	private String hIkon;
+	
 }

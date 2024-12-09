@@ -47,6 +47,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
         // Spring Boot Web 의존성 (웹 애플리케이션이면 추가)
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    
+      implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.0' // Jackson XML 모듈 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot 웹 스타터 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA 의존성 (필요시)
 
 }
 

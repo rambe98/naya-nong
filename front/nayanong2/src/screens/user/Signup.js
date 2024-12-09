@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import "../../css/Signup.css";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,9 @@ import {
   smessageAtom,
   validationMessageAtom,
   validationRegexAtom,
-  validateForm
+  validateForm,
+  userPwdAtom,
+  confirmPwdAtom
 } from "../../recoil/UserRecoil";
 
 function Signup() {
@@ -20,12 +22,15 @@ function Signup() {
   const [message, setMessage] = useRecoilState(messageAtom);
   const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
   const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
+  const [userPwd, setUserPwd] = useRecoilState(userPwdAtom) //비밀번호 Atom 불러오기
+  const [confirmPwd, setConfirmPwd] = useRecoilState(confirmPwdAtom)// 비밀번호 Atom 확인 불러오기
+
 
   const navigate = useNavigate();
 
-  useEffect(() =>{
+  useEffect(() => {
     resetFormData();
-  },[])
+  }, [])
 
   useEffect(() => {
     // body에 클래스 추가
@@ -93,6 +98,28 @@ function Signup() {
     }
   };
 
+  // 실시간 비밀번호 확인
+  const checkConfirmPwd = (e)=>{
+    if(formData.userPwd !== confirmPwd){
+      setMessage("비밀번호가 일치하지 않습니다.")
+      console.log("비밀번호 불일치",formData.userPwd);
+      console.log("비밀번호 불일치",confirmPwd);
+    }else{
+      setMessage("비밀번호가 일치합니다.")
+      console.log("비밀번호 일치");
+    }
+  }
+
+  const handlePwdConfirm=(e) =>{
+    e.preventDefault()
+    if(formData.userPwd !== formData.confirmPwd){
+      setMessage('비밀번호가 일치하지 않습니다.')
+    }else{
+      setMessage("")
+    }
+  }
+
+
   // 취소 버튼 동작
   const cancelButton = () => {
     setFormData(""); // 폼 데이터 초기화
@@ -128,6 +155,17 @@ function Signup() {
             placeholder="비밀번호"
             value={formData.userPwd}
             onChange={handleChange}
+            className="signupInput"
+          />
+          <input
+            type="password"
+            name="userPwd"
+            placeholder="비밀번호 확인"
+            value={formData.confirmPwd}
+            onChange={(e)=>{
+              handlePwdConfirm(e) //비밀번호 확인 값 업데이트
+              checkConfirmPwd()
+            }}
             className="signupInput"
           />
           <input

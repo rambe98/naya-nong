@@ -25,11 +25,11 @@ public class HeartEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int heartNum;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "user_nick", referencedColumnName = "userNick")
     private NongEntity nong;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "bod_num", referencedColumnName = "bodNum")
     private BoardEntity board;
 	

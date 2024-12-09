@@ -32,8 +32,8 @@ const PostDetail = () => {
         setBodNum(bodNum); // 현재 게시글 번호를 Recoil 상태로 저장
     }, [bodNum, setBodNum]);
 
+    //게시글 가져오는 함수
     useEffect(() => {
-
         const getBoardData = async () => {
             const token = localStorage.getItem('ACCESS_TOKEN');
             try {
@@ -76,37 +76,79 @@ const PostDetail = () => {
         getBoardData()
     }, [bodNum]) 
 
-    // 좋아요 토글
-    const toggleLike = async () => {
+    const fetchLikeCount = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
+            const response = await axios.get(`http://localhost:7070/heart/${bodNum}/likeCount`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // 인증 토큰
+                },
+            });
+            setLikeCount(response.data); // 서버에서 받은 좋아요 개수를 상태에 저장
+        } catch (error) {
+            console.error("좋아요 개수 불러오기 실패:", error);
+        }
+    };
+    
+
+       // 좋아요 토글
+       const toggleLike = async () => {
+        const token = localStorage.getItem("ACCESS_TOKEN");
+        console.log("현재 bodNum",bodNum);
+        
+    
+        if (!token) {
+            console.error("ACCESS_TOKEN이 없습니다. 로그인이 필요합니다.");
+            alert("로그인이 필요합니다.");
+            return;
+        }
+    
+        try {
+            // 요청 데이터 로깅
+            console.log("요청 데이터:", { userNick: localStorageUserNick, bodNum: parseInt(bodNum) });
+    
+            // 서버로 요청 전송
             const response = await axios.post(
                 "http://localhost:7070/heart/like",
-                { userNick: localStorageUserNick, bodNum: parseInt(bodNum) },
+                {
+                    userNick: localStorageUserNick, // 사용자 닉네임
+                    bodNum: parseInt(bodNum),      // 게시물 번호
+                },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`, // 인증 토큰
                     },
                 }
             );
     
-            const likedStatus = response.data; // 서버에서 반환된 좋아요 상태 (true or false)
-            setLiked(likedStatus); // 좋아요 상태 업데이트
+            console.log("서버 응답:", response.data); // 서버 응답 로깅
     
-            // 서버에서 동기화된 좋아요 수 가져오기
-            const likeCountResponse = await axios.get(
-                `http://localhost:7070/heart/${bodNum}/likeCount`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-            setLikeCount(likeCountResponse.data); // 좋아요 수 동기화
+            // 서버 응답 처리
+            if (response.data === true) {
+                // 좋아요 추가
+                setLiked(true);
+                setLikeCount((prev) => prev + 1);
+            } else if (response.data === false) {
+                // 좋아요 취소
+                setLiked(false);
+                setLikeCount((prev) => Math.max(prev - 1, 0));
+            } else {
+                console.error("예상치 못한 서버 응답:", response.data);
+                alert("예상치 못한 문제가 발생했습니다. 다시 시도해주세요.");
+            }
         } catch (error) {
-            console.error("좋아요 처리 실패:", error);
+            // 오류 처리
+            console.error("좋아요 처리 실패:", error.response?.data || error.message);
             alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
+    
+    
+
+    // 페이지 로드 시 좋아요 개수 초기화
+    useEffect(() => {
+        fetchLikeCount();
+    }, [bodNum]); // 게시글 번호가 변경될 때마다 실행
     
     // 게시글 삭제
     const handleDelete = async () => {

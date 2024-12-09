@@ -236,7 +236,7 @@ const UserInfo = () => {
         localStorage.removeItem('userId');
 
         alert("회원 탈퇴가 완료되었습니다.");
-        navigate('/'); 
+        navigate('/board'); 
       }
     } catch (error) {
       console.error("회원 탈퇴 중 오류 발생", error);

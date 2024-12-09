@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import logo from '../../assets/logo.png'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import '../../css/FindUser.css';
 import { useNavigate } from 'react-router-dom'
@@ -14,8 +13,19 @@ const FindUserId = () => {
   const [userPnum, setUserPnum] = useState('')
   const [verificationCode, setVerificationCode] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
-
   const navigate = useNavigate();
+
+    //스크롤 없애기
+    useEffect(() => {
+      // body에 클래스 추가
+      document.body.classList.add('no-scroll');
+  
+      // 언마운트 시 클래스 제거
+      return () => {
+        document.body.classList.remove('no-scroll');
+      };
+    }, []);
+
 
   //인증번호 전송
   const sendVerificationCode = async () => {
@@ -58,7 +68,6 @@ const FindUserId = () => {
   }
   return (
     <div className="findUserContainer">
-      <img src={logo} alt="Logo" className="findUserLogo" />
       <span className="findUserHeader">아이디 찾기</span>
       <div className="findUserForm">
         <label className='findUserLabel'>이름</label>

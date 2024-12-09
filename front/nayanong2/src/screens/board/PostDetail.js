@@ -207,7 +207,7 @@ const PostDetail = () => {
                         onClick={toggleLike}
                         style={{ cursor: "pointer", fontSize: "1.5rem" }}
                     >
-                        {liked ? <FaThumbsUp color="blue" /> : <FaRegThumbsUp color="gray" />}
+                        {liked ? <FaThumbsUp color="lightblue" /> : <FaRegThumbsUp color="gray" />}
                     </span>
                     좋아요: {likeCount}
                 </div>

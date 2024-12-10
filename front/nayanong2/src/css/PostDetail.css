@@ -157,12 +157,13 @@
     display: flex;
     justify-content: space-between; /* 버튼들을 양쪽 끝에 배치 */
     gap: 10px; /* 버튼 간의 간격 */
-    margin-top: 20px;
     width: 100%;
+    align-items: center;
 }
 
 /* 버튼 스타일 */
 .postButtonLargeRow button {
+    flex: 1; /* 버튼 크기를 동일하게 유지 */
     padding: 10px 20px;
     font-size: 1rem;
     font-weight: bold;
@@ -172,12 +173,23 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    visibility: visible; /* 기본적으로 버튼 보임 */
+    opacity: 1;
 }
 
+/* 버튼 hover 효과 */
 .postButtonLargeRow button:hover {
-    background-color: #BFA084; /* 진한 브라운 */
-    transform: scale(1.05); /* 크기 확대 */
+    background-color: #BFA084; /* 더 진한 브라운 */
+    transform: scale(1.05); /* 크기 살짝 확대 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 약간의 그림자 */
 }
+
+/* 숨겨진 버튼을 보이지 않게 하지만 공간은 유지 */
+.postButtonLargeRow button.hidden {
+    visibility: hidden; /* 버튼을 보이지 않게 */
+    opacity: 0; /* 완전히 투명 */
+}
+
 
 
 

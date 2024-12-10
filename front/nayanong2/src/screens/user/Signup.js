@@ -1,6 +1,5 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import "../../css/Signup.css";
-import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState, useResetRecoilState } from "recoil";
@@ -10,7 +9,7 @@ import {
   smessageAtom,
   validationMessageAtom,
   validationRegexAtom,
-  validateForm
+  validateForm,
 } from "../../recoil/UserRecoil";
 
 function Signup() {
@@ -20,12 +19,12 @@ function Signup() {
   const [message, setMessage] = useRecoilState(messageAtom);
   const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
   const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
-
+ 
   const navigate = useNavigate();
 
-  useEffect(() =>{
+  useEffect(() => {
     resetFormData();
-  },[])
+  }, [])
 
   useEffect(() => {
     // body에 클래스 추가
@@ -43,17 +42,26 @@ function Signup() {
     setFormData({ ...formData, [name]: value });
 
     // 입력값 변경 시 에러 메시지 초기화
-    if (name === "userId" || name === "userNick" || name === "userEmail") {
+    if (name === "userId" || name === "userNick" || name === "userEmail" || name === "userPwd") {
       setSmessage(""); // 서버 관련 에러 초기화
     }
     setMessage(""); // 클라이언트 관련 에러 초기화
   };
+
+
 
   // 회원가입 폼 요청
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("회원가입 정보:", formData);
 
+    if (formData.userPwd !== formData.confirmPwd) {
+      console.log(formData.userPwd);
+      console.log(formData.confirmPwd);
+      
+      setMessage('비밀번호가 일치하지 않습니다.')
+      return
+    }
     // 유효성 검사 실행
     const isValid = validateForm(
       formData,
@@ -61,13 +69,14 @@ function Signup() {
       validationRegex,
       setMessage
     );
-
     // 유효하지 않을 경우 중단
     if (!isValid) return;
 
     addUser(formData);
     setSmessage("");
   };
+
+
 
   // 회원가입 요청
   const addUser = async (formData) => {
@@ -92,6 +101,7 @@ function Signup() {
       }
     }
   };
+
 
   // 취소 버튼 동작
   const cancelButton = () => {
@@ -127,6 +137,14 @@ function Signup() {
             name="userPwd"
             placeholder="비밀번호"
             value={formData.userPwd}
+            onChange={handleChange}
+            className="signupInput"
+          />
+          <input
+            type="password"
+            name="confirmPwd"
+            placeholder="비밀번호 확인"
+            value={formData.confirmPwd}
             onChange={handleChange}
             className="signupInput"
           />

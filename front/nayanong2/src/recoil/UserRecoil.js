@@ -59,6 +59,7 @@ export const formDataAtom = atom({
         userName: "",
         userId: "",
         userPwd: "",
+        confirmPwd:"",
         userNick: "",
         userEmail: "",
         userPnum: "",

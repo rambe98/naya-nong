@@ -23,4 +23,9 @@ export const bodNumAtom = atom({
     default: null,
 })
 
+//검색결과 저장 
+export const searchResultsAtom = atom({
+    key: "searchResultsAtom",
+    default: [], 
+});
 

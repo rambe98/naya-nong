@@ -3,15 +3,18 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import '../../css/PostDetail.css';
 import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
-import { useSetRecoilState } from "recoil";
-import { bodNumAtom } from "../../recoil/BoardRecoil"; // Recoil 상태 가져오기
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { bodNumAtom, searchResultsAtom } from "../../recoil/BoardRecoil"; // Recoil 상태 가져오기
 import Comments from "./Comments"; // Comments 컴포넌트 추가
 
 const PostDetail = () => {
     const navigate = useNavigate();
-    const { bodNum } = useParams();
+    let { bodNum } = useParams();
+    bodNum = parseInt(bodNum, 10); // 덮어쓰기 (정수형으로 변환)
     const setBodNum = useSetRecoilState(bodNumAtom); // Recoil 상태 업데이트 함수
     const localStorageUserNick = localStorage.getItem("userNick");
+    const searchResults = useRecoilValue(searchResultsAtom);
+    const resetSearchResults = useSetRecoilState(searchResultsAtom);
 
     const [board, setBoard] = useState({
         bodTitle: "",
@@ -32,50 +35,126 @@ const PostDetail = () => {
         setBodNum(bodNum); // 현재 게시글 번호를 Recoil 상태로 저장
     }, [bodNum, setBodNum]);
 
-    //게시글 가져오는 함수
+
+    // 현재 배열 가져오기 (공지사항 제외)
+    const getCurrentArray = () => {
+        if (searchResults.length > 0) {
+            const reversedResults = [...searchResults].reverse();
+            if (reversedResults.some((post) => post.bodNum === bodNum)) {
+                return reversedResults.filter((post) => post.userNick !== "관리자");
+            }
+        }
+        return boards.filter((post) => post.userNick !== "관리자");
+    };
+
+
     useEffect(() => {
         const getBoardData = async () => {
-            const token = localStorage.getItem('ACCESS_TOKEN');
+            const token = localStorage.getItem("ACCESS_TOKEN");
             try {
                 const boardsResponse = await axios.get("http://localhost:7070/board", {
                     headers: {
-                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                        Authorization: `Bearer ${token}`,
                     },
-                })
-                setBoards(boardsResponse.data)
+                });
+                setBoards(boardsResponse.data);
 
-                const response = await axios.get(`http://localhost:7070/board/${bodNum}`, {
+                const postResponse = await axios.get(`http://localhost:7070/board/${bodNum}`, {
                     headers: {
-                        Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                        Authorization: `Bearer ${token}`,
                     },
-                })
-                console.log("서버 응답 데이터:", response.data)
-                const data = response.data
-                const updateData = { ...data, project: { userNick: data.userNick } }
-                setBoard(updateData) // 게시글 데이터 설정
-
-                // 현재 게시글의 index를 찾아서 저장
-                // boardsResponse.data : 서버에서 받아온 게시글 정보가 들어있는 배열
-                // (item) : 각 배열의 요소 , 각 게시글 하나하나를 나타냄
-                // item.bodNum : 각 게시글의 bodNum
-                // parseInt(bodNum) : 찾으려는 게시글의 bodNum을 숫자로 변환
-                // findIndex((item) => item.bodNum === bodNum) : 
-                // 전체 게시글 배열에서 찾으려는 bodNum과 일치하는 게시글을 찾아 그 인덱스를 반환
-                const index = boardsResponse.data.findIndex((item) => item.bodNum === parseInt(bodNum))
-                // 반환된 index를 상태로 저장하여 currentIndex의 값을 update
-                setCurrentIndex(index)
-                console.log(index)
-
+                });
+                setBoard({
+                    ...postResponse.data,
+                    project: { userNick: postResponse.data.userNick },
+                });
             } catch (error) {
-                console.error("게시글 데이터를 불러오는 중 오류 발생:", error)
-                alert("게시글을 불러오는 데 실패했습니다.")
+                console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
-        getBoardData()
-    }, [bodNum]) 
+        };
+        getBoardData();
+    }, [bodNum]);
 
+
+    useEffect(() => {
+        const currentArray = getCurrentArray();
+        console.log("useEffect: 현재 배열:", currentArray);
+        console.log("useEffect: 현재 bodNum:", bodNum);
+
+        // currentIndex 설정
+        const index = currentArray.findIndex((post) => post.bodNum === bodNum);
+        if (index === -1) {
+            console.error("현재 bodNum이 배열에 없습니다:", bodNum, currentArray);
+            setCurrentIndex(null);
+        } else {
+            console.log("현재 게시글 인덱스:", index);
+            setCurrentIndex(index); // 현재 게시글 인덱스 설정
+        }
+    }, [bodNum, searchResults, boards]);
+
+    const handleBack = () => {
+        const currentArray = getCurrentArray();
+        if (!currentArray.length || currentIndex === null || currentIndex <= 0) {
+            alert("마지막 게시글입니다.");
+            return;
+        }
+        const previousPost = currentArray[currentIndex - 1];
+        if (previousPost) {
+            navigate(`/board/${previousPost.bodNum}`);
+        } else {
+            console.error("이전 게시글을 찾을 수 없습니다.");
+        }
+    };
+
+    const handleNext = () => {
+        const currentArray = getCurrentArray();
+        if (!currentArray.length || currentIndex === null || currentIndex >= currentArray.length - 1) {
+            alert("처음 게시글입니다.");
+            return;
+        }
+        const nextPost = currentArray[currentIndex + 1];
+        if (nextPost) {
+            navigate(`/board/${nextPost.bodNum}`);
+        } else {
+            console.error("다음 게시글을 찾을 수 없습니다.");
+        }
+    };
+
+
+    useEffect(() => {
+        console.log("searchResults 상태:", searchResults);
+        console.log("boards 상태:", boards);
+        console.log("currentIndex 상태:", currentIndex);
+    }, [searchResults, boards, currentIndex]);
+
+    useEffect(() => {
+        const currentArray = getCurrentArray();
+        console.log("useEffect: 현재 배열:", currentArray);
+        console.log("useEffect: 현재 bodNum:", bodNum);
+
+        const index = currentArray.findIndex((post) => post.bodNum === bodNum);
+        if (index === -1) {
+            console.error("현재 bodNum이 배열에 없습니다:", bodNum, currentArray);
+            setCurrentIndex(null);
+        } else {
+            console.log("현재 게시글 인덱스:", index);
+            setCurrentIndex(index);
+        }
+    }, [bodNum, searchResults, boards]);
+
+
+
+
+    // 페이지 이동 시 reset 호출
+    const goToBoard = () => {
+        resetSearchResults([]); // 검색 결과 초기화
+        navigate("/board"); // 전체 리스트로 이동
+    };
+
+
+    //좋아요 카운트 서버에서 가져오는 함수
     const fetchLikeCount = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
@@ -89,27 +168,25 @@ const PostDetail = () => {
             console.error("좋아요 개수 불러오기 실패:", error);
         }
     };
-    
 
-       // 좋아요 토글
-       const toggleLike = async () => {
+    // 좋아요 토글
+    const toggleLike = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
-        console.log("현재 bodNum",bodNum);
-        
-    
+        console.log("현재 bodNum", bodNum);
+
+
         if (!token) {
-            console.error("ACCESS_TOKEN이 없습니다. 로그인이 필요합니다.");
             alert("로그인이 필요합니다.");
             return;
         }
-    
+
         try {
             // 요청 데이터 로깅
             console.log("요청 데이터:", { userNick: localStorageUserNick, bodNum: parseInt(bodNum) });
-    
+
             // 서버로 요청 전송
             const response = await axios.post(
-                "http://localhost:7070/heart/like",
+                "http://localhost:7070/heart",
                 {
                     userNick: localStorageUserNick, // 사용자 닉네임
                     bodNum: parseInt(bodNum),      // 게시물 번호
@@ -120,15 +197,15 @@ const PostDetail = () => {
                     },
                 }
             );
-    
+
             console.log("서버 응답:", response.data); // 서버 응답 로깅
-    
+
             // 서버 응답 처리
-            if (response.data === true) {
+            if (response.data === "좋아요가 추가되었습니다.") {
                 // 좋아요 추가
                 setLiked(true);
                 setLikeCount((prev) => prev + 1);
-            } else if (response.data === false) {
+            } else if (response.data === "좋아요가 취소되었습니다.") {
                 // 좋아요 취소
                 setLiked(false);
                 setLikeCount((prev) => Math.max(prev - 1, 0));
@@ -142,14 +219,13 @@ const PostDetail = () => {
             alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
-    
-    
 
     // 페이지 로드 시 좋아요 개수 초기화
     useEffect(() => {
         fetchLikeCount();
+
     }, [bodNum]); // 게시글 번호가 변경될 때마다 실행
-    
+
     // 게시글 삭제
     const handleDelete = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
@@ -170,24 +246,10 @@ const PostDetail = () => {
         }
     };
 
-    // 다음/이전 게시글 이동
-    const handleNext = () => {
-        if (currentIndex > 0) {
-            const nextPostId = boards[currentIndex - 1].bodNum;
-            navigate(`/board/${nextPostId}`);
-        } else {
-            alert("마지막 게시글입니다.");
-        }
-    };
 
-    const handleBack = () => {
-        if (currentIndex < boards.length - 1) {
-            const backPostId = boards[currentIndex + 1].bodNum;
-            navigate(`/board/${backPostId}`);
-        } else {
-            alert("첫 번째 게시글입니다.");
-        }
-    };
+
+
+
 
     if (loading) return <p>로딩 중입니다...</p>;
 
@@ -207,27 +269,38 @@ const PostDetail = () => {
                         onClick={toggleLike}
                         style={{ cursor: "pointer", fontSize: "1.5rem" }}
                     >
-                        {liked ? <FaThumbsUp color="lightblue" /> : <FaRegThumbsUp color="gray" />}
+                        <FaRegThumbsUp color="gray" />
                     </span>
                     좋아요: {likeCount}
                 </div>
                 <div className="postButtonLargeRow">
-                    <button onClick={handleBack}>이전</button>
-                    <button onClick={handleNext}>다음</button>
-                    {board.project?.userNick === localStorageUserNick && (
+                    {board.project?.userNick !== "관리자" && (
                         <>
-                            <button onClick={() => navigate(`/update/${bodNum}`)}>수정</button>
-                            <button onClick={handleDelete}>삭제</button>
+                            <button onClick={handleNext}>이전</button>
+                            <button onClick={handleBack}>다음</button>
                         </>
                     )}
-                    <button onClick={() => navigate("/board")}>목록으로</button>
+                    <button
+                        className={board.project?.userNick === localStorageUserNick ? "" : "hidden"}
+                        onClick={() => navigate(`/update/${bodNum}`)}
+                    >
+                        수정
+                    </button>
+                    <button
+                        className={board.project?.userNick === localStorageUserNick ? "" : "hidden"}
+                        onClick={handleDelete}
+                    >
+                        삭제
+                    </button>
+                    <button onClick={goToBoard}>목록으로</button>
+
                 </div>
             </div>
-            {/* Comments 컴포넌트 삽입 */}
-            <Comments />
+            {/* 관리자가 작성한 게시글은 댓글기능x */}
+            {board.project?.userNick !== '관리자' ? <Comments /> : null}
         </div>
     );
-    
+
 };
 
 export default PostDetail;

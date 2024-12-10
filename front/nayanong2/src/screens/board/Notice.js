@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
-import '../../css/Notice.css'; // Updated to Notice.css
+import '../../css/Notice.css';
 import '../../css/SideBar.css';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { formDataAtom } from '../../recoil/UserRecoil';
 
 const Notice = () => {
     const navigate = useNavigate();
@@ -14,8 +16,11 @@ const Notice = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
-
     const [sortBy, setSortBy] = useState('date');
+
+    //로컬스토리지에서 유저의 닉네임 가져오기
+    const adminUserNick = localStorage.getItem("userNick")
+
 
     const toggleSidebar = () => {
         setIsSidebarVisible((prevState) => !prevState);
@@ -25,19 +30,32 @@ const Notice = () => {
         setSortBy(e.target.value);
     };
 
+
     const getList = async () => {
         const token = localStorage.getItem('ACCESS_TOKEN');
         try {
-            const response = await axios.get('http://localhost:7070/notice', // Changed to /notice
+            const response = await axios.get('http://localhost:7070/board', {
+                userNick: adminUserNick, //userNick을 쿼리 파라미터로 저장
+            },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
-                    }
+
+                    },
                 }
             );
             if (response.status === 200) {
-                setPosts(response.data.reverse());
-                let sortedPost = response.data;
+
+                //response.data : 서버에서 받은 게시글 목록
+                //filter(post => post.userNick === "rhksflwk")
+                // : posts 배열 안에 게시글 중 작성자의 userNick이 "rhksflwk"인 게시글 필터링 
+                //filterPost : 필터링된 게시글을 filterPost변수에 저장
+                const filterPost = response.data.filter(post => post.userNick === "관리자")
+                setPosts(filterPost.reverse());
+
+                let sortedPost = filterPost
+                console.log('User Nick:', adminUserNick);
+                console.log("게시글 데이터:", sortedPost);
 
                 switch (sortBy) {
                     case 'date':
@@ -149,14 +167,19 @@ const Notice = () => {
         getList();
     }, [sortBy]);
 
+
     return (
         <div className="noticeContainer">
             {/* 사이드바 */}
             <div className={`sidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
                 <div>
                     <ul>
-                        <li><a href="#">공지사항</a></li>
-                        <li><a href="#">자유게시판</a></li>
+                        <li>
+                            <Link to="/notice">공지사항</Link>
+                        </li>
+                        <li>
+                            <Link to="/board">자유게시판</Link>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -186,16 +209,17 @@ const Notice = () => {
 
             {/* 검색 및 글쓰기 섹션 */}
             <div className="noticeInputContainer">
-                <div className="noticeContainerButton">
+                <div>
                     <button className="sidebarToggleButton" onClick={toggleSidebar}>
                         <FaBars />
                     </button>
-                    {/* <button className="noticeWriteButton" onClick={() => navigate('/write')}>
+                    <button className="noticeWriteButton" onClick={() => navigate('/write')}
+                        style={{ display: adminUserNick === '관리자' ? 'visible' : 'none' }}
+                    >
                         글쓰기
-                    </button> */}
+                    </button>
                 </div>
                 <form
-                    className="noticeContainerButton2"
                     onSubmit={(e) => {
                         e.preventDefault();
                         console.log("검색 시작");
@@ -217,6 +241,7 @@ const Notice = () => {
                         type="text"
                         placeholder="검색어를 입력하세요."
                         className="noticeSearchInput"
+                        value={searchKeyword}
                         onChange={(e) => setSearchKeyword(e.target.value)}
                     />
                     <button type="submit" className="noticeSearchButton">
@@ -237,14 +262,11 @@ const Notice = () => {
                 {currentPosts.length > 0 ? (
                     currentPosts.map((post, index) => (
                         <div key={post.bodNum} className="noticeList">
-                            <p className="noticeListItem noticeNumber">
-                                {index + 1 + (currentPage - 1) * itemsPerPage}
-                            </p>
+                            <p className="noticeListItem noticeNumber">{index + 1 + (currentPage - 1) * itemsPerPage}</p>
                             <p className="noticeListItem noticeTitle">
-                                <Link to={`/notice/${post.bodNum}`}>{post.bodTitle}</Link>
+                                <Link to={`/board/${post.bodNum}`}>{post.bodTitle}</Link>
                             </p>
-                            <p className="noticeListItem noticeAuthor">
-                            </p>
+                            <p className="noticeListItem noticeAuthor">{post.userNick}</p>
                             <p className="noticeListItem noticeDate">
                                 {new Date(post.writeDate).toLocaleDateString("ko-KR", {
                                     year: "numeric",
@@ -252,8 +274,7 @@ const Notice = () => {
                                     day: "numeric",
                                 }).replace(/\.$/, "")}
                             </p>
-                            <p className="noticeListItem noticeViews">
-                            </p>
+                            <p className="noticeListItem noticeViews">{post.views}</p>
                         </div>
                     ))
                 ) : (

@@ -1,9 +1,16 @@
 package com.test.project.api;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Builder
 @Data
-public class PriceInfoDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PriceDataDTO {
     private String itemname;
     private String kindname;
     private String countyname;
@@ -11,4 +18,7 @@ public class PriceInfoDTO {
     private String yyyy;
     private String regday;
     private String price;
+    
+    
+  
 }

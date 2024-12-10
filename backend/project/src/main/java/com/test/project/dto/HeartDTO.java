@@ -25,14 +25,12 @@ public class HeartDTO {
 		this.heartNum = entity.getHeartNum();
 		this.userNick = entity.getNong().getUserNick();
 		this.bodNum =entity.getBoard().getBodNum();
-		this.hIkon = entity.getHIkon();
 	}
 	
 	public static HeartEntity toEntity(HeartDTO dto) {
 		
 		return HeartEntity.builder()
 						  .heartNum(dto.getHeartNum())
-						  .hIkon(dto.getHIkon())
 						  .build();
 	}
 }

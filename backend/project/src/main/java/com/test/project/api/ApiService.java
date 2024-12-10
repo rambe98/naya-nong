@@ -69,6 +69,8 @@ public class ApiService {
                 dto.setKindname(node.path("kindname").asText());
                 dto.setCountyname(node.path("countyname").asText());
                 dto.setMarketname(node.path("marketname").asText());
+                dto.setYyyy(node.path("yyyy").asText());
+                dto.setRegday(node.path("regday").asText());
                 dto.setPrice(node.path("price").asText());
                 priceDataList.add(dto);
             }
@@ -76,5 +78,23 @@ public class ApiService {
             throw new RuntimeException("Error parsing API response", e);
         }
         return priceDataList;
+    }
+    
+    
+    public List<PriceDataDTO> filterByAverageCountyName(List<PriceDataDTO> priceDataList) {
+        List<PriceDataDTO> filteredList = new ArrayList<>();
+        for (PriceDataDTO dto : priceDataList) {
+            if ("평균".equals(dto.getCountyname())) {
+                // 필요한 필드만 설정하여 List에 추가
+                PriceDataDTO filteredDto = new PriceDataDTO();
+                filteredDto.setCountyname(dto.getCountyname());
+                filteredDto.setYyyy(dto.getYyyy());
+                filteredDto.setRegday(dto.getRegday());
+                filteredDto.setPrice(dto.getPrice());
+
+                filteredList.add(filteredDto);
+            }
+        }
+        return filteredList;
     }
 }

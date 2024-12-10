@@ -32,7 +32,4 @@ public class HeartEntity {
 	@ManyToOne
 	@JoinColumn(name = "bod_num", referencedColumnName = "bodNum")
     private BoardEntity board;
-	
-	private String hIkon;
-	
 }

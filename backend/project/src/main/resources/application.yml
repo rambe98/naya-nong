@@ -23,3 +23,5 @@ api:
   cert:
     key: "06fe5a48-5168-4efd-9c3c-3169d3575f43"
     id: "5078"
+    base-url: "http://www.kamis.or.kr/service/price/xml.do"
+    return-type: "json"  # 기본적으로 json 반환

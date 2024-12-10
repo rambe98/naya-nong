@@ -43,25 +43,35 @@
 }
 
 /* 사이드바 목록 스타일 */
-.sidebar ul {
+ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-/* 사이드바 항목 스타일 */
-.sidebar li {
-  margin: 20px 0;
+/* 각 리스트 항목 스타일 */
+.sidebarContainer li {
+  padding: 15px 0; /* 항목 간의 위/아래 여백 */
+  text-align: center; /* 텍스트를 가운데 정렬 */
+  font-size: 16px; /* 텍스트 크기 */
+  line-height: 1.5; /* 줄 간격 */
+  background-color: #ffffff; /* 항목의 배경 색 */
+  border-bottom: 1px solid #ddd; /* 항목 간 구분선 (밑줄) */
+  transition: background-color 0.3s ease; /* 배경 색상 변화 시 부드러운 전환 효과 */
 }
 
-/* 링크 스타일 */
-.sidebar a {
-  color: black; /* 검정 텍스트 */
-  text-decoration: none;
-  font-size: 18px;
+/* 각 링크 스타일 */
+.sidebarContainer li a {
+  text-decoration: none; /* 링크의 기본 밑줄 제거 */
+  color: black; /* 텍스트 색상 (어두운 회색) */
+  display: block; /* 링크를 블록 요소로 만들어 전체 항목 클릭 가능 */
+  padding: 10px; /* 링크 내부 여백 추가 */
+  font-weight: bold; /* 링크 텍스트를 조금 더 두껍게 */
+  transition: color 0.3s ease, background-color 0.3s ease; /* 마우스 오버 시 색상과 배경 색상 부드럽게 변경 */
 }
 
-.sidebar a:hover {
-  text-decoration: underline;
-  color: #d4a373; /* 메인 색상 */
+/* 링크에 마우스를 올렸을 때 스타일 */
+.sidebarContainer li a:hover {
+  background-color: #FFF8E6;
+  color: #b08968; 
 }

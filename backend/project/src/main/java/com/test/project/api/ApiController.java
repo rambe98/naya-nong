@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,55 +15,82 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ApiController {
 
-    @Autowired
-    private ApiService apiService;
+	@Autowired
+	private ApiService apiService;
+	
 
-    @GetMapping("/price")
-    public ResponseEntity<List<PriceDataDTO>> getPriceInfo(
-            @RequestParam(name = "p_startday") String p_startday,
-            @RequestParam(name = "p_endday") String p_endday,
-            @RequestParam(name = "p_itemcategorycode") String p_itemcategorycode,
-            @RequestParam(name = "p_itemcode") String p_itemcode,
-            @RequestParam(name = "p_kindcode") String p_kindcode,
-            @RequestParam(name = "p_productrankcode") String p_productrankcode,
-            @RequestParam(name = "p_countrycode") String p_countrycode,
-            @RequestParam(name = "p_returntype", defaultValue = "json") String p_returntype) {
-
+    // 전체 가격 데이터 조회 메서드
+    @PostMapping("/price/all")
+    public ResponseEntity<List<PriceDataDTO>> getAllPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
         try {
-            // ApiService 호출
-            List<PriceDataDTO> priceDataList = apiService.getPriceData(
-                    p_startday, p_endday, p_itemcategorycode, p_itemcode,
-                    p_kindcode, p_productrankcode, p_countrycode, p_returntype);
+            // ApiService 호출하여 전체 데이터 리스트 얻기
+            List<PriceDataDTO> allPriceDataList = apiService.getAllPriceData(
+                    priceRequestDTO.getP_startday(),
+                    priceRequestDTO.getP_endday(),
+                    priceRequestDTO.getP_itemcategorycode(),
+                    priceRequestDTO.getP_itemcode(),
+                    priceRequestDTO.getP_kindcode(),
+                    priceRequestDTO.getP_productrankcode(),
+                    priceRequestDTO.getP_countrycode(),
+                    priceRequestDTO.getP_returntype()
+            );
 
-            return ResponseEntity.ok(priceDataList);
+            return ResponseEntity.ok(allPriceDataList);
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
     }
     
-    @GetMapping("/price/average")
-    public ResponseEntity<List<PriceDataDTO>> getPriceInfoAverage(
-            @RequestParam(name = "p_startday") String p_startday,
-            @RequestParam(name = "p_endday") String p_endday,
-            @RequestParam(name = "p_itemcategorycode") String p_itemcategorycode,
-            @RequestParam(name = "p_itemcode") String p_itemcode,
-            @RequestParam(name = "p_kindcode") String p_kindcode,
-            @RequestParam(name = "p_productrankcode") String p_productrankcode,
-            @RequestParam(name = "p_countrycode") String p_countrycode,
-            @RequestParam(name = "p_returntype", defaultValue = "json") String p_returntype) {
 
-    	 try {
-             // ApiService 호출하여 PriceDataDTO 리스트를 가져옵니다.
-             List<PriceDataDTO> priceDataList = apiService.getPriceData(
-                     p_startday, p_endday, p_itemcategorycode, p_itemcode,
-                     p_kindcode, p_productrankcode, p_countrycode, p_returntype);
+	@PostMapping("/price")
+	public ResponseEntity<List<PriceDataDTO>> getPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
+		try {
+			// ApiService 호출하여 원본 데이터 리스트 얻기
+			List<PriceDataDTO> priceDataList = apiService.getPriceData(priceRequestDTO.getP_startday(),
+					priceRequestDTO.getP_endday(), priceRequestDTO.getP_itemcategorycode(),
+					priceRequestDTO.getP_itemcode(), priceRequestDTO.getP_kindcode(),
+					priceRequestDTO.getP_productrankcode(), priceRequestDTO.getP_countrycode(),
+					priceRequestDTO.getP_returntype());
 
-             // 필터링된 데이터 리스트만 반환
-             List<PriceDataDTO> filteredPriceDataList = apiService.filterByAverageCountyName(priceDataList);
+			// "평균" 데이터만 필터링
+			List<PriceDataDTO> filteredPriceDataList = apiService.filterByCountynameAverage(priceDataList);
 
-             return ResponseEntity.ok(filteredPriceDataList);
-         } catch (Exception e) {
-             return ResponseEntity.status(500).build();
-         }
-     }
- }
+			// 필터링된 데이터 반환
+			if (filteredPriceDataList.isEmpty()) {
+				return ResponseEntity.noContent().build(); // 필터링된 데이터가 없으면 204 상태 코드 반환
+			}
+
+			return ResponseEntity.ok(filteredPriceDataList); // 필터링된 데이터를 200 상태 코드로 반환
+		} catch (Exception e) {
+			// 예외 발생 시 500 상태 코드 반환
+			return ResponseEntity.status(500).body(null);
+		}
+	}
+	
+	@PostMapping("/price/marketname")
+	public ResponseEntity<List<PriceDataDTO>> getPriceInfoByMarketname(@RequestBody PriceRequestDTO priceRequestDTO) {
+	    try {
+	        // ApiService 호출하여 전체 데이터 리스트 얻기
+	        List<PriceDataDTO> priceDataList = apiService.getPriceData(
+	                priceRequestDTO.getP_startday(),
+	                priceRequestDTO.getP_endday(),
+	                priceRequestDTO.getP_itemcategorycode(),
+	                priceRequestDTO.getP_itemcode(),
+	                priceRequestDTO.getP_kindcode(),
+	                priceRequestDTO.getP_productrankcode(),
+	                priceRequestDTO.getP_countrycode(),
+	                priceRequestDTO.getP_returntype()
+	        );
+
+	        // marketname이 null이 아닌 데이터만 필터링
+	        List<PriceDataDTO> filteredPriceDataList = apiService.filterByMarketnameNotNull(priceDataList);
+
+	        return ResponseEntity.ok(filteredPriceDataList);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).build();
+	    }
+	}
+	
+	
+	
+}

@@ -70,6 +70,7 @@
     display: flex;
     align-items: center;
     margin-top: 10px;
+    justify-content: space-between;
 }
 
 .likeIcon {
@@ -188,6 +189,12 @@
 .postButtonLargeRow button.hidden {
     visibility: hidden; /* 버튼을 보이지 않게 */
     opacity: 0; /* 완전히 투명 */
+}
+
+.postPageInfo { 
+    font-family: 'SSFlowerRoad', sans-serif;
+    margin-top: 20px;
+    font-size: 24px;
 }
 
 

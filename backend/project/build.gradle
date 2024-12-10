@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.test'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // MySQL Connector
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.3.0'
+    
+    // JWT dependencies
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-gson', version: '0.11.5'
+
+    // Spring Security 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // OAuth2 의존성 추가 (필요한 경우)
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // Apache POI (Excel 파일 처리)
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+    // JSON 처리
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+
+    // Thymeleaf 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    
+     // Apache HttpComponents 의존성 추가
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.13'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-parameters']
+}

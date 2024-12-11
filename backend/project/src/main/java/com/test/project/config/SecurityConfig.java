@@ -25,7 +25,7 @@ public class SecurityConfig {
         .cors() // CORS 활성화
         .and()
             .authorizeHttpRequests()
-            .requestMatchers("/users/signin", "/users/signup", "/users/*, ","/board", "/board/*", "/heart/**","/api/**").permitAll() // 로그인, 회원가입은 모두 허용
+            .requestMatchers("/users/signin", "/users/signup", "/users/**, ","/board", "/board/*", "/heart/**","/api/**", "/api/price/all").permitAll() // 로그인, 회원가입은 모두 허용
             .anyRequest().authenticated();
          
            

@@ -1,21 +1,25 @@
 import { atom } from "recoil";
 import itemMappings from "../assets/FarmData.json"
 
-// 'YYYY-MM-DD' 형식으로 시작 날짜 설정
+// p_startday 코드
 const startDateState = new Date();
+startDateState.setDate(startDateState.getDate() - 1);
+
 const startDateStateString = startDateState.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
-
-// 시작 날짜
 export const startDateStateAtom = atom({
-    key: 'startDateState',
-    default: '',
+    key: 'startDateState',  // 고유한 키
+    default: startDateStateString,  // 기본값을 오늘 날짜로 설정
 });
 
-// 종료 날짜
+
+// p_endday 코드
+const endDateState = new Date();
+const endDateStateString = endDateState.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
 export const endDateStateAtom = atom({
-    key: 'endDateState',
-    default: '',
+    key: 'endDateState',  // 고유한 키
+    default: endDateStateString,  // 기본값을 오늘 날짜로 설정
 });
+
 
 // 지역 코드
 export const countryCodeStateAtom = atom({
@@ -33,8 +37,8 @@ export const returnTypeState = atom({
 export const priceRequestDTOAtom = atom({
     key: "priceRequestDTO",
     default: {
-        p_startday: startDateStateString, // 조회 시작 날짜
-        p_endday: startDateStateString,   // 조회 종료 날짜
+        p_startday: startDateStateString,// 조회 시작 날짜
+        p_endday: endDateStateString,   // 조회 종료 날짜
         p_itemcategorycode: "",  // 부류 코드
         p_itemcode: "", // 품목 코드 
         p_kindcode: "",                   // 품종 코드
@@ -50,6 +54,6 @@ export const priceDataAtom = atom({
 });
 
 export const farmDataAtom = atom({
-    key:"farmDataAtom",
-    default:itemMappings,
+    key: "farmDataAtom",
+    default: itemMappings,
 }) 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import "../../css/Signup.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -19,8 +19,29 @@ function Signup() {
   const [message, setMessage] = useRecoilState(messageAtom);
   const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
   const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
- 
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);//모바일모드
+  
+  useEffect(() => {
+    const updateScrollBehavior = () => {
+      if (window.innerWidth <= 768) {
+        document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
+      } else {
+        document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
+      }
+    };
+  
+    // 초기 실행
+    updateScrollBehavior();
+  
+    // 리사이즈 이벤트 리스너 등록
+    window.addEventListener('resize', updateScrollBehavior);
+  
+    // 정리: 리스너 제거
+    return () => window.removeEventListener('resize', updateScrollBehavior);
+  }, []);
+  
+ 
 
   useEffect(() => {
     resetFormData();

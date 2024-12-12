@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaSearch } from 'react-icons/fa';
 import '../../css/Board.css';
 import '../../css/SideBar.css';
 import axios from 'axios';
+import { useSetRecoilState } from "recoil";
+import { searchResultsAtom } from "../../recoil/BoardRecoil"
+
+
 
 const Board = () => {
     const navigate = useNavigate();
@@ -14,8 +18,9 @@ const Board = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
-
     const [sortBy, setSortBy] = useState('date');
+    const setSearchResults = useSetRecoilState(searchResultsAtom);
+
 
     const toggleSidebar = () => {
         setIsSidebarVisible((prevState) => !prevState);
@@ -26,7 +31,7 @@ const Board = () => {
     };
 
     const getList = async () => {
-        const token = localStorage.getItem('ACCESS_TOKEN');
+        const token = localStorage.getItem('ACCESS_TOKEN')
         try {
             const response = await axios.get('http://localhost:7070/board',
                 {
@@ -36,35 +41,47 @@ const Board = () => {
                 }
             );
             if (response.status === 200) {
-                setPosts(response.data.reverse());
-                let sortedPost = response.data;
+                // 원본 데이터를 sortedPost로 복사
+                let sortedPost = response.data
+
+                // 작성자의 게시글과 다른 유저의 게시글 분리
+                const adminPost = sortedPost.filter(post => post.userNick === "관리자").reverse();
+                const otherPost = sortedPost.filter(post => post.userNick !== "관리자")
+
+                // 다른 유저의 게시글을 정렬
+                let sortedOtherPost = [...otherPost]
 
                 switch (sortBy) {
                     case 'date':
-                        sortedPost = [...sortedPost].sort((a, b) => {
-                            const dateA = new Date(a.created_at);
-                            const dateB = new Date(b.created_at);
-                            return dateB - dateA; // 최신순
-                        });
-                        break;
+                        sortedOtherPost = sortedOtherPost.sort((a, b) => {
+                            const dateA = new Date(a.created_at)
+                            const dateB = new Date(b.created_at)
+                            return dateB - dateA
+                        }).reverse()// 최신순
+                        break
                     case 'views':
-                        sortedPost = sortedPost.sort((a, b) => b.views - a.views); // 조회수 순
-                        break;
+                        sortedOtherPost = sortedOtherPost.sort((a, b) => b.views - a.views);// 조회수 순
+                        break
                     case 'title':
-                        sortedPost = sortedPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)); // 제목순
-                        break;
+                        sortedOtherPost = sortedOtherPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)) // 제목순
+                        break
                     default:
-                        break;
+                        break
                 }
-                setPosts(sortedPost);
+
+                // 관리자 게시글을 최상단에 두고 나머지 게시글들을 정렬 후 합침
+                sortedPost = [...adminPost, ...sortedOtherPost]
+
+                // 최종 업데이트
+                setPosts(sortedPost)
             }
         } catch (error) {
-            console.error('목록을 가져올 수 없습니다.');
-            alert('게시글 목록을 불러오는 데 실패했습니다.');
+            console.error('목록을 가져올 수 없습니다.')
+            alert('게시글 목록을 불러오는 데 실패했습니다.')
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
 
     // 한 페이지에 렌더링되는 게시글의 수 설정
@@ -79,14 +96,10 @@ const Board = () => {
 
     // 검색 함수
     const handleSearch = async () => {
-        console.log("123:", searchCategory);
-
         if (!searchKeyword.trim()) {
             alert("검색어를 입력해주세요.");
             return;
         }
-
-        console.log("Current search category:", searchCategory);
 
         let url = "";
         let params = {};
@@ -116,27 +129,58 @@ const Board = () => {
                 alert("잘못된 검색 범주입니다.");
                 return;
         }
+
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
             const response = await axios.get(url, {
                 params,
                 headers: {
-                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    Authorization: `Bearer ${token}`,
                 },
             });
+
             if (response.status === 200) {
-                setPosts(response.data.reverse());
+                const adminPosts = response.data.filter((post) => post.userNick === "관리자").reverse();
+                const otherPosts = response.data.filter((post) => post.userNick !== "관리자");
+
+                let sortedOtherPosts = [...otherPosts];
+                switch (sortBy) {
+                    case "date":
+                        sortedOtherPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                        break;
+                    case "views":
+                        sortedOtherPosts.sort((a, b) => b.views - a.views);
+                        break;
+                    case "title":
+                        sortedOtherPosts.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle));
+                        break;
+                    default:
+                        break;
+                }
+
+                const finalPosts = [...adminPosts, ...sortedOtherPosts];
+
+                if (finalPosts.length === 0) {
+                    alert("검색 결과가 없습니다.");
+                }
+
+                setSearchResults(finalPosts); // 검색 결과를 Recoil 상태로 저장
+                setPosts(finalPosts); // 검색된 게시글 리스트 업데이트
                 setCurrentPage(1);
             } else {
-                console.error("검색 실패 200아님", response.status);
-
+                console.error("검색 실패", response.status);
+                setSearchResults([]); // 검색 결과 초기화
                 setPosts([]);
             }
         } catch (error) {
             console.error("검색 중 오류가 발생했습니다.", error);
             alert("검색 실패");
+            setSearchResults([]); // 검색 결과 초기화
+            setPosts([]);
         }
     };
+
+
 
     const totalPages = Math.ceil(posts.length / itemsPerPage);
 
@@ -145,9 +189,15 @@ const Board = () => {
         currentPage * itemsPerPage
     );
 
+    //posts배열에서 userNick값이 관리자인 게시글만 필터링한다.
+    //필터 메서드는 조건을 만족하는 요소들만 모아 새로운 배열을 반환한다.
+    //필터링된 배열의 길이를 반환한다. 즉, 관리자가 작성한 게시글의 개수를 계산함
+    const adminCount = useMemo(() => posts.filter(post => post.userNick === "관리자").length, [posts]);
+
     useEffect(() => {
         getList();
     }, [sortBy]);
+
 
     return (
         <div className="boardContainer">
@@ -155,8 +205,12 @@ const Board = () => {
             <div className={`sidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
                 <div>
                     <ul>
-                        <li><a href="/notice">공지사항</a></li>
-                        <li><a href="#">자유게시판</a></li>
+                        <li>
+                            <Link to="/notice">공지사항</Link>
+                        </li>
+                        <li>
+                            <Link to="/board">자유게시판</Link>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -186,7 +240,7 @@ const Board = () => {
 
             {/* 검색 및 글쓰기 섹션 */}
             <div className="boardInputContainer">
-                <div className="boardContainerButton">
+                <div>
                     <button className="sidebarToggleButton" onClick={toggleSidebar}>
                         <FaBars />
                     </button>
@@ -194,36 +248,38 @@ const Board = () => {
                         글쓰기
                     </button>
                 </div>
-                <form
-                    className="boardContainerButton2"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        console.log("검색 시작");
-                        handleSearch();
-                    }}
-                >
-                    <select
-                        className="boardSearchCategory"
-                        value={searchCategory}
-                        onChange={(e) => setSearchCategory(e.target.value)}
+                <div className='boardSearchForm'>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSearch();
+                        }}
                     >
-                        <option value="all">전체</option>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
-                        <option value="titleOrContent">제목+내용</option>
-                        <option value="userNick">닉네임</option>
-                    </select>
-                    <input
-                        type="text"
-                        placeholder="검색어를 입력하세요."
-                        className="boardSearchInput"
-                        value={searchKeyword}
-                        onChange={(e) => setSearchKeyword(e.target.value)}
-                    />
-                    <button type="submit" className="boardSearchButton">
-                        검색
-                    </button>
-                </form>
+                        <select
+                            className="boardSearchCategory"
+                            value={searchCategory}
+                            onChange={(e) => setSearchCategory(e.target.value)}
+                        >
+                            <option value="all">전체</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                            <option value="titleOrContent">제목+내용</option>
+                            <option value="userNick">닉네임</option>
+                        </select>
+
+                        <input
+                            type="text"
+                            placeholder="검색어를 입력하세요."
+                            className="boardSearchInput"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                        />
+                        <button type="submit" className="boardSearchButton">
+                            <FaSearch />
+                        </button>
+                    </form>
+                </div>
+
             </div>
 
             {/* 게시글 목록 */}
@@ -237,8 +293,13 @@ const Board = () => {
                 </div>
                 {currentPosts.length > 0 ? (
                     currentPosts.map((post, index) => (
-                        <div key={post.bodNum} className="boardList">
-                            <p className="boardListItem boardNumber">{index + 1 + (currentPage - 1) * itemsPerPage}</p>
+                        <div key={post.bodNum} className={`boardList ${post.userNick === '관리자' ? 'adminBoardList' : ''}`}>
+                            <p className={`boardListItem boardNumber ${post.userNick === '관리자' ? 'highlightAdminPost' : ''}`}>
+                                {post.userNick === "관리자"
+                                    ? '* 공지 *'
+                                    : index + 1 + (currentPage - 1) * itemsPerPage - adminCount // 공지사항 개수만큼 번호에서 뺌
+                                }
+                            </p>
                             <p className="boardListItem boardTitle">
                                 <Link to={`/board/${post.bodNum}`}>{post.bodTitle}</Link>
                             </p>

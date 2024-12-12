@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class ApiService {
+public class ApiRetailService {
 
 	private final RestTemplate restTemplate;
 
@@ -23,12 +23,12 @@ public class ApiService {
 	@Value("${api.cert.id}")
 	private String certId;
 
-	public ApiService(RestTemplate restTemplate) {
+	public ApiRetailService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 
-	// 전체 가격 데이터 조회 메서드
-	public List<PriceDataDTO> getAllPriceData(String p_startday, String p_endday, String p_itemcategorycode,
+	// 전체 소매가격 데이터 조회
+	public List<PriceDataDTO> getAllRetailPriceData(String p_startday, String p_endday, String p_itemcategorycode,
 			String p_itemcode, String p_kindcode, String p_productrankcode, String p_countrycode, String p_returntype) {
 		try {
 			// API URL 구성
@@ -51,38 +51,43 @@ public class ApiService {
 			ResponseEntity<String> response = restTemplate.getForEntity(uriBuilder.toUriString(), String.class);
 
 			// 응답 JSON 파싱
-			return parsePriceData(response.getBody());
+			return parseRetailPriceData(response.getBody());
 		} catch (Exception e) {
 			throw new RuntimeException("Error fetching price data", e);
 		}
 	}
 
 	
-	public List<PriceDataDTO> getPriceData(String p_startday, String p_endday, String p_itemcategorycode,
+	public List<PriceDataDTO> getRetailPriceData(String p_startday, String p_endday, String p_itemcategorycode,
 			String p_itemcode, String p_kindcode, String p_productrankcode, String p_countrycode, String p_returntype) {
 		try {
 			// API URL 구성
 			String apiUrl = "http://www.kamis.or.kr/service/price/xml.do";
 
 			UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(apiUrl)
-					.queryParam("action", "periodRetailProductList").queryParam("p_startday", p_startday)
-					.queryParam("p_endday", p_endday).queryParam("p_itemcategorycode", p_itemcategorycode)
-					.queryParam("p_itemcode", p_itemcode).queryParam("p_kindcode", p_kindcode)
-					.queryParam("p_productrankcode", p_productrankcode).queryParam("p_countrycode", p_countrycode)
-					.queryParam("p_cert_key", certKey).queryParam("p_cert_id", certId)
+					.queryParam("action", "periodRetailProductList")
+					.queryParam("p_startday", p_startday)
+					.queryParam("p_endday", p_endday)
+					.queryParam("p_itemcategorycode", p_itemcategorycode)
+					.queryParam("p_itemcode", p_itemcode)
+					.queryParam("p_kindcode", p_kindcode)
+					.queryParam("p_productrankcode", p_productrankcode)
+					.queryParam("p_countrycode", p_countrycode)
+					.queryParam("p_cert_key", certKey)
+					.queryParam("p_cert_id", certId)
 					.queryParam("p_returntype", p_returntype);
 
 			// API 호출
 			ResponseEntity<String> response = restTemplate.getForEntity(uriBuilder.toUriString(), String.class);
 
 			// 응답 JSON 파싱
-			return parsePriceData(response.getBody());
+			return parseRetailPriceData(response.getBody());
 		} catch (Exception e) {
 			throw new RuntimeException("Error fetching price data", e);
 		}
 	}
 
-	private List<PriceDataDTO> parsePriceData(String responseBody) {
+	private List<PriceDataDTO> parseRetailPriceData(String responseBody) {
 		List<PriceDataDTO> priceDataList = new ArrayList<>();
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -104,9 +109,10 @@ public class ApiService {
 		}
 		return priceDataList;
 	}
+	
 
-	// 평균 값만 필터링하고 필요한 필드만 반환하는 메서드
-	public List<PriceDataDTO> filterByCountynameAverage(List<PriceDataDTO> priceDataList) {
+	// 소매 평균 조회
+	public List<PriceDataDTO> filterByCountynameRetailAverage(List<PriceDataDTO> priceDataList) {
 		List<PriceDataDTO> filteredList = new ArrayList<>();
 		for (PriceDataDTO dto : priceDataList) {
 			if ("평균".equals(dto.getCountyname())) {
@@ -116,13 +122,14 @@ public class ApiService {
 				filteredDto.setYyyy(dto.getYyyy());
 				filteredDto.setRegday(dto.getRegday());
 				filteredDto.setPrice(dto.getPrice());
-
+				
 				filteredList.add(filteredDto);
 			}
 		}
 		return filteredList;
 	}
 	
+	//소매 지역 조회
 	public List<PriceDataDTO> filterByMarketnameNotNull(List<PriceDataDTO> priceDataList) {
 	    List<PriceDataDTO> filteredList = new ArrayList<>();
 	    for (PriceDataDTO dto : priceDataList) {
@@ -132,4 +139,7 @@ public class ApiService {
 	    }
 	    return filteredList;
 	}
+	
+	
+	
 }

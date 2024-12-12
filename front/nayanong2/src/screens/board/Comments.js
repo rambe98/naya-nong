@@ -234,10 +234,11 @@ const Comments = () => {
                                             </p>
                                             <span>작성일자: {replyTime}</span>
                                             {reply.userNick === localStorageUserNick && (
-                                                <button onClick={() => replyDelete(reply.pcomId)}>삭제</button>
+                                                <button className="deleteButton" onClick={() => replyDelete(reply.pcomId)}>삭제</button>
                                             )}
                                         </div>
                                     );
+                                    
                                 })}
                             </div>
                         </div>

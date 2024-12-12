@@ -70,6 +70,7 @@
     display: flex;
     align-items: center;
     margin-top: 10px;
+    justify-content: space-between;
 }
 
 .likeIcon {
@@ -190,6 +191,17 @@
     opacity: 0; /* 완전히 투명 */
 }
 
+.postPageInfo { 
+    font-family: 'SSFlowerRoad', sans-serif;
+    margin-top: 20px;
+    font-size: 24px;
+}
 
 
-
+@media (max-width: 768px) {
+    .postButtonLargeRow button {
+        padding: 6px 10px; /* 더 작은 여백 */
+        font-size: 0.7rem; /* 더 작은 글씨 크기 */
+        border-radius: 4px; /* 둥글기 조금 축소 */
+    }
+}

@@ -119,3 +119,89 @@
   margin-bottom: 10px;
   font-weight: bold;
 }
+
+/* 스크롤 비활성화 */
+body.no-scroll {
+  overflow: hidden;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .signupContainer {
+    padding: 20px;
+    justify-content: flex-start;
+    height: auto; /* 높이를 자동으로 설정 */
+    overflow-y: auto; /* 스크롤 활성화 */
+  }
+
+  .signupForm {
+    width: 100%; /* 부모 컨테이너의 너비에 맞춤 */
+    max-width: 300px; /* 폼의 최대 너비 제한 */
+    padding: 15px; /* 폼 내부 패딩 축소 */
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 그림자 크기 조정 */
+    margin: 0 auto; /* 폼을 가운데 정렬 */
+  }
+
+  .signupLogo {
+    margin-bottom: 15px;
+    width: 80px; /* 로고 크기 축소 */
+    height: auto;
+  }
+
+  .signupHeader {
+    font-size: 18px; /* 헤더 크기 축소 */
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    margin-top: 10px;
+    text-align: center; /* 헤더 가운데 정렬 */
+  }
+
+  .signupInput {
+    font-size: 14px; /* 입력 필드 폰트 크기 축소 */
+    padding: 8px; /* 입력 필드 패딩 축소 */
+    width: 100%; /* 입력 필드 너비 전체 */
+    border: 2px solid #d4a373; /* 테두리 유지 */
+    border-radius: 4px;
+    background-color: #ffffff; /* 흰색 배경 */
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  }
+
+  .signupInput:focus {
+    border-color: #b08968;
+    box-shadow: 0 0 5px rgba(212, 163, 115, 0.5); /* 초점 시 그림자 효과 */
+  }
+
+  .signupSelect {
+    font-size: 14px;
+    padding: 8px;
+    width: 100%;
+    border: 2px solid #d4a373;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-position: calc(100% - 10px) center; /* 화살표 위치 조정 */
+    appearance: none; /* 기본 드롭다운 스타일 제거 */
+    -webkit-appearance: none;
+  }
+
+  .signupButton {
+    font-size: 14px; /* 버튼 폰트 크기 축소 */
+    padding: 10px; /* 버튼 패딩 조정 */
+    width: 100%; /* 버튼 너비를 폼에 맞춤 */
+    border-radius: 5px;
+    background-color: #d4a373;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .signupButton:hover {
+    background-color: #b08968; /* 강조된 색상 */
+    transform: scale(1.02); /* 살짝 확대 */
+  }
+
+  .signupDivider {
+    margin: 15px 0; /* 구분선 위아래 여백 축소 */
+  }
+}
+

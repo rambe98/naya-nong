@@ -2,20 +2,48 @@ import React, { useState, useEffect } from "react";
 import "../../css/Farm.css";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { priceRequestDTOAtom, countryCodeStateAtom, farmDataAtom } from "../../recoil/FarmRecoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { priceRequestDTOAtom, countryCodeStateAtom, farmDataAtom, selectedItemAtom, priceDataAtom } from "../../recoil/FarmRecoil"
+import Graph from "./Graph";
 
 const Farm = () => {
     const [priceType, setPriceType] = useState("retail");
-    const [priceData, setPriceData] = useState([]);
+    const setPriceDataState = useSetRecoilState(priceDataAtom);
+
+    const [searchTerm, setSearchTerm] = useState(""); // 입력된 검색어 상태
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [selectedItem, setSelectedItem] = useState("");
     const itemMappings = useRecoilValue(farmDataAtom);
     const [priceRequestDTO, setPriceRequestDTO] = useRecoilState(priceRequestDTOAtom);
     const [countryCode, setCountryCode] = useRecoilState(countryCodeStateAtom);
+    const setSelectedItemState = useSetRecoilState(selectedItemAtom);
+    const priceData = useRecoilValue(priceDataAtom); // Recoil 상태에서 priceData 구독
+
+    const handleContryChange = async (e) => {
+        const selectCountry = e.target.value;
+        const newCountryCode = selectCountry === "서울" ? "1101" : selectCountry === "인천" ? "2300" : "";
+    
+        setCountryCode(newCountryCode); // 지역 상태 업데이트
+    
+        // priceRequestDTO 상태 업데이트 후 getAllPrice 실행
+        setPriceRequestDTO((prevState) => {
+            const updatedRequest = {
+                ...prevState,
+                p_countrycode: newCountryCode,
+            };
+            // 업데이트 직후 데이터를 요청
+            setTimeout(() => getAllPrice(updatedRequest), 0);
+            return updatedRequest;
+        });
+    };
 
     const getAllPrice = async () => {
+        // 지역과 품목이 설정되지 않았다면 요청하지 않음
+        if (!priceRequestDTO.p_countrycode || !priceRequestDTO.p_itemcode) {
+            console.log("지역 또는 품목이 설정되지 않아 요청을 중단합니다.");
+            return;
+        }
+
         setLoading(true);
         setError("");
 
@@ -30,49 +58,47 @@ const Farm = () => {
 
             console.log("반환 값:", response.data);
 
-            if (response.status === 200) {
-                setPriceData(response.data);
+            if (response.status === 200 && response.data.length > 0) {
+                const transformedData = response.data.map(item => ({
+                    date: `${item.yyyy}-${item.regday}`, // 날짜 변환
+                    price: parseFloat(item.price.replace(/,/g, "")) || 0, // 문자열 가격을 숫자로 변환
+                }));
+
+                setPriceDataState(transformedData); // Recoil 상태에 데이터 저장
             } else {
+                setPriceDataState([]);
                 setError("데이터를 가져오는 데 실패했습니다.");
             }
         } catch (error) {
+            console.error("Error fetching data:", error);
+            setPriceDataState([]);
             setError("서버 요청 중 오류가 발생했습니다.");
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        if (countryCode && priceRequestDTO.p_itemcode && priceRequestDTO.p_endday) {
-            getAllPrice();
+  
+
+    const handleSearch = () => {
+        if (!searchTerm.trim()) {
+            setError("검색어를 입력하세요.");
+            return;
         }
-    }, [countryCode, priceRequestDTO.p_itemcode, priceRequestDTO.p_endday]);
 
-    const handleContryChange = (e) => {
-        const selectCountry = e.target.value;
-        let newCountryCode = selectCountry === "서울" ? "2100" : selectCountry === "인천" ? "2300" : "";
-        setCountryCode(newCountryCode);
-
-        // priceRequestDTO에 지역 코드 반영
-        setPriceRequestDTO((prevState) => ({
-            ...prevState,
-            p_countrycode: newCountryCode
-        }));
-    };
-
-   
-
-    const handleSelectItem = (itemName) => {
-        setSelectedItem(itemName);
-
-        if (itemMappings[itemName] && itemMappings[itemName].length > 0) {
-            const { p_itemcategorycode, p_itemcode, p_kindcode } = itemMappings[itemName][0];
+        const matchedItem = itemMappings[searchTerm]; // 입력된 값으로 데이터 조회
+        if (matchedItem && matchedItem.length > 0) {
+            const { p_itemcategorycode, p_itemcode, p_kindcode } = matchedItem[0];
             setPriceRequestDTO(prev => ({
                 ...prev,
                 p_itemcategorycode,
                 p_itemcode,
                 p_kindcode,
             }));
+            setSelectedItemState(searchTerm); // 선택된 아이템 상태 업데이트
+            getAllPrice(); // 검색 요청 실행
+        } else {
+            setError("해당 품목을 찾을 수 없습니다.");
         }
     };
 
@@ -80,8 +106,12 @@ const Farm = () => {
         <div className="farmContainer">
             <div className="farmSearchContainer">
                 <form className="farmSearchForm">
-                    <input placeholder="Search" />
-                    <button type="button" onClick={getAllPrice}>
+                    <input
+                        placeholder="Search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)} // 입력 상태 업데이트
+                    />
+                    <button type="button" onClick={handleSearch}>
                         <FaSearch />
                     </button>
                 </form>
@@ -90,17 +120,11 @@ const Farm = () => {
                 <select
                     className="farmSelect"
                     onChange={handleContryChange}
-                    value={countryCode === "2100" ? "서울" : countryCode === "2300" ? "인천" : ""}
+                    value={countryCode === "1101" ? "서울" : countryCode === "2300" ? "인천" : ""}
                 >
                     <option value="" disabled>지역</option>
                     <option value="서울">서울</option>
                     <option value="인천">인천</option>
-                </select>
-                <select  className="farmSelect" onChange={(e) => handleSelectItem(e.target.value)}>
-                    <option value="">품목을 선택하세요</option>
-                    {Object.keys(itemMappings).map((key) => (
-                        <option key={key} value={key}>{key}</option>
-                    ))}
                 </select>
             </div>
             {error && <div style={{ color: 'red' }}>{error}</div>}
@@ -118,9 +142,10 @@ const Farm = () => {
                     )}
                 </div>
             </div>
+            <Graph />
         </div>
     );
 };
 
 export default Farm;
-  
+

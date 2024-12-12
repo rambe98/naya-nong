@@ -6,9 +6,8 @@
   padding: 50px;
   height: 100vh;
   background-color: #FFFFFF; /* 배경 흰색 */
+  box-sizing: border-box;
 }
-
-
 
 /* QnA 헤더 */
 .QnaHeader {
@@ -20,7 +19,6 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   border-bottom: 2px solid #d4a373; /* 메인 색상 */
   padding-bottom: 10px;
-  display: inline-block;
   margin-top: 0;
   font-family: 'SSFlowerRoad', sans-serif;
 }
@@ -28,19 +26,18 @@
 /* QnA 입력 폼 */
 .qnaForm {
   display: flex;
-  flex-direction: column; /* 세로 배치 */
-  width: 100%; /* 부모 컨테이너 너비에 맞춤 */
+  flex-direction: column;
+  width: 100%;
   max-width: 600px; /* 최대 너비 설정 */
-  margin: 0 auto; /* 가로 중앙 정렬 */
-  align-items: center; /* 수평 중앙 정렬 */
+  margin: 0 auto;
+  align-items: center;
   box-sizing: border-box;
 }
 
-
-/* 입력 필드 */
+/* QnA 입력 필드 */
 .qnaInput,
 .qnaInputtext {
-  width: 100%; /* 부모 컨테이너 너비에 맞춤 */
+  width: 100%;
   max-width: 600px; /* 최대 너비 제한 */
   padding: 15px;
   margin-bottom: 20px; /* 하단 여백 */
@@ -59,9 +56,9 @@
   resize: none;
 }
 
-/* 버튼 */
+/* QnA 버튼 */
 .qnaButton {
-  display: block; /* 인라인 대신 블록으로 설정 */
+  display: block;
   margin: 20px auto 0; /* 상단 여백 추가하고 가로로 중앙 정렬 */
   padding: 15px 30px;
   font-size: 18px;
@@ -83,4 +80,53 @@
 body.no-scroll {
   overflow: hidden;
   height: 100%;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  /* QnA 컨테이너 */
+  .qnaContainer {
+    padding: 20px;
+    height: auto; /* 고정 높이 제거 */
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  /* QnA 헤더 */
+  .QnaHeader {
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #d4a373; /* 테두리 두께 축소 */
+  }
+
+  /* QnA 입력 폼 */
+  .qnaForm {
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  /* QnA 입력 필드 */
+  .qnaInput,
+  .qnaInputtext {
+    max-width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+
+  /* QnA 텍스트 입력 영역 */
+  .qnaInputtext {
+    height: 150px; /* 입력 박스 높이 축소 */
+  }
+
+  /* QnA 버튼 */
+  .qnaButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: 15px;
+  }
 }

@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
-import '../../css/Notice.css';
+import { FaBars, FaSearch } from 'react-icons/fa';
+import '../../css/Board.css';
 import '../../css/SideBar.css';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
-import { formDataAtom } from '../../recoil/UserRecoil';
+import { useSetRecoilState } from "recoil";
+import { searchResultsAtom } from "../../recoil/BoardRecoil"
 
-const Notice = () => {
+
+
+const Board = () => {
     const navigate = useNavigate();
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [posts, setPosts] = useState([]);
@@ -17,10 +19,18 @@ const Notice = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState('date');
-
-    //로컬스토리지에서 유저의 닉네임 가져오기
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const setSearchResults = useSetRecoilState(searchResultsAtom);
     const adminUserNick = localStorage.getItem("userNick")
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const toggleSidebar = () => {
         setIsSidebarVisible((prevState) => !prevState);
@@ -29,7 +39,6 @@ const Notice = () => {
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
     };
-
 
     const getList = async () => {
         const token = localStorage.getItem('ACCESS_TOKEN');
@@ -97,64 +106,91 @@ const Notice = () => {
 
     // 검색 함수
     const handleSearch = async () => {
-        console.log("123:", searchCategory);
-
         if (!searchKeyword.trim()) {
             alert("검색어를 입력해주세요.");
             return;
         }
-
-        console.log("Current search category:", searchCategory);
 
         let url = "";
         let params = {};
 
         switch (searchCategory) {
             case "title":
-                url = "http://localhost:7070/notice/search/title"; // Changed to /notice
+                url = "http://localhost:7070/board/search/title";
                 params = { keyword: searchKeyword };
                 break;
             case "content":
-                url = "http://localhost:7070/notice/search/content"; // Changed to /notice
+                url = "http://localhost:7070/board/search/content";
                 params = { keyword: searchKeyword };
                 break;
             case "titleOrContent":
-                url = "http://localhost:7070/notice/search/titleAndContent"; // Changed to /notice
+                url = "http://localhost:7070/board/search/titleAndContent";
                 params = { titleKeyword: searchKeyword, contentKeyword: searchKeyword };
                 break;
             case "userNick":
-                url = "http://localhost:7070/notice/search/userNick"; // Changed to /notice
+                url = "http://localhost:7070/board/search/userNick";
                 params = { keyword: searchKeyword };
                 break;
             case "all":
-                url = "http://localhost:7070/notice/search/all"; // Changed to /notice
+                url = "http://localhost:7070/board/search/all";
                 params = { keyword: searchKeyword };
                 break;
             default:
                 alert("잘못된 검색 범주입니다.");
                 return;
         }
+
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
             const response = await axios.get(url, {
                 params,
                 headers: {
-                    Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                    Authorization: `Bearer ${token}`,
                 },
             });
+
             if (response.status === 200) {
-                setPosts(response.data.reverse());
+                const adminPosts = response.data.filter((post) => post.userNick === "관리자").reverse();
+                const otherPosts = response.data.filter((post) => post.userNick !== "관리자");
+
+                let sortedOtherPosts = [...otherPosts];
+                switch (sortBy) {
+                    case "date":
+                        sortedOtherPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                        break;
+                    case "views":
+                        sortedOtherPosts.sort((a, b) => b.views - a.views);
+                        break;
+                    case "title":
+                        sortedOtherPosts.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle));
+                        break;
+                    default:
+                        break;
+                }
+
+                const finalPosts = [...adminPosts, ...sortedOtherPosts];
+
+                if (finalPosts.length === 0) {
+                    alert("검색 결과가 없습니다.");
+                }
+
+                setSearchResults(finalPosts); // 검색 결과를 Recoil 상태로 저장
+                setPosts(finalPosts); // 검색된 게시글 리스트 업데이트
                 setCurrentPage(1);
             } else {
-                console.error("검색 실패 200아님", response.status);
-
+                console.error("검색 실패", response.status);
+                setSearchResults([]); // 검색 결과 초기화
                 setPosts([]);
             }
         } catch (error) {
             console.error("검색 중 오류가 발생했습니다.", error);
             alert("검색 실패");
+            setSearchResults([]); // 검색 결과 초기화
+            setPosts([]);
         }
     };
+
+
 
     const totalPages = Math.ceil(posts.length / itemsPerPage);
 
@@ -163,130 +199,238 @@ const Notice = () => {
         currentPage * itemsPerPage
     );
 
+    //posts배열에서 userNick값이 관리자인 게시글만 필터링한다.
+    //필터 메서드는 조건을 만족하는 요소들만 모아 새로운 배열을 반환한다.
+    //필터링된 배열의 길이를 반환한다. 즉, 관리자가 작성한 게시글의 개수를 계산함
+    const adminCount = useMemo(() => posts.filter(post => post.userNick === "관리자").length, [posts]);
+
     useEffect(() => {
         getList();
     }, [sortBy]);
 
 
     return (
-        <div className="noticeContainer">
+        <div className="boardContainer">
+               {isMobile && (
+                <h2 className="boardname">공지사항</h2>
+            )}
             {/* 사이드바 */}
-            <div className={`sidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
-                <div>
-                    <ul>
-                        <li>
-                            <Link to="/notice">공지사항</Link>
-                        </li>
-                        <li>
-                            <Link to="/board">자유게시판</Link>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            {/* 작성일 및 페이지당 항목 수 선택 섹션 */}
-            <div className="noticeOptionsContainer">
-                <div>
-                    <select
-                        className="noticeSortBySelect"
-                        value={sortBy}
-                        onChange={handleSortChange}
-                    >
-                        <option value="date">작성일</option>
-                        <option value="views">조회수</option>
-                        <option value="title">제목</option>
-                    </select>
-                    <select
-                        className="noticeItemsPerPageSelect"
-                        value={itemsPerPage}
-                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                    >
-                        <option value={10}>10개</option>
-                        <option value={20}>20개</option>
-                        <option value={30}>30개</option>
-                    </select>
-                </div>
+            <div className={`boardSidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
+                <button className="boardCloseSidebarButton" onClick={toggleSidebar}>
+                    ✖
+                </button>
+                <ul>
+                    <li>
+                        <Link to="/notice">공지사항</Link>
+                    </li>
+                    <li>
+                        <Link to="/board">자유게시판</Link>
+                    </li>
+                </ul>
             </div>
 
-            {/* 검색 및 글쓰기 섹션 */}
-            <div className="noticeInputContainer">
-                <div>
-                    <button className="sidebarToggleButton" onClick={toggleSidebar}>
-                        <FaBars />
-                    </button>
-                    <button className="noticeWriteButton" onClick={() => navigate('/write')}
-                        style={{ display: adminUserNick === '관리자' ? 'visible' : 'none' }}
-                    >
-                        글쓰기
-                    </button>
+
+            {/* 작성일 및 페이지당 항목 수 선택 */}
+            {!isMobile && (
+                <div className="boardOptionsContainer">
+                    <div>
+                        <h2 className='boardname'>공지사항</h2>
+                    </div>
+                    <div>
+                        <select
+                            className="boardSortBySelect"
+                            value={sortBy}
+                            onChange={handleSortChange}
+                        >
+                            <option value="date">작성일</option>
+                            <option value="views">조회수</option>
+                            <option value="title">제목</option>
+                        </select>
+                        <select
+                            className="boardItemsPerPageSelect"
+                            value={itemsPerPage}
+                            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        >
+                            <option value={10}>10개</option>
+                            <option value={20}>20개</option>
+                            <option value={30}>30개</option>
+                        </select>
+                    </div>
                 </div>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        console.log("검색 시작");
-                        handleSearch();
-                    }}
-                >
-                    <select
-                        className="noticeSearchCategory"
-                        value={searchCategory}
-                        onChange={(e) => setSearchCategory(e.target.value)}
-                    >
-                        <option value="all">전체</option>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
-                        <option value="titleOrContent">제목+내용</option>
-                        <option value="userNick">닉네임</option>
-                    </select>
-                    <input
-                        type="text"
-                        placeholder="검색어를 입력하세요."
-                        className="noticeSearchInput"
-                        value={searchKeyword}
-                        onChange={(e) => setSearchKeyword(e.target.value)}
-                    />
-                    <button type="submit" className="noticeSearchButton">
-                        검색
-                    </button>
-                </form>
+            )}
+
+            {/* 검색 및 글쓰기 */}
+            <div className="boardInputContainer">
+
+                {/* 버튼 및 정렬 옵션 */}
+                {!isMobile && (
+                    <div className="boardActionContainer">
+
+                        <button className="sidebarToggleButton" onClick={toggleSidebar}>
+                            <FaBars />
+                        </button>
+                        <button className="boardWriteButton" onClick={() => navigate('/write')}
+                            style={{ display: adminUserNick === '관리자' ? 'visible' : 'none' }}>
+                            글쓰기
+                        </button>
+                    </div>
+                )}
+                {isMobile && (
+                    <>
+                        <button className="boardsidebarToggleButton" onClick={toggleSidebar}>
+                            <FaBars />
+                        </button>
+                        <button className="boardWriteButton" onClick={() => navigate('/write')}
+                            style={{ display: adminUserNick === '관리자' ? 'visible' : 'none' }}>
+                            글쓰기
+                        </button>
+                        <select
+                            className="boardSortBySelect"
+                            value={sortBy}
+                            onChange={handleSortChange}
+                        >
+                            <option value="date">작성일</option>
+                            <option value="views">조회수</option>
+                            <option value="title">제목</option>
+                        </select>
+                        <select
+                            className="boardItemsPerPageSelect"
+                            value={itemsPerPage}
+                            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        >
+                            <option value={10}>10개</option>
+                            <option value={20}>20개</option>
+                            <option value={30}>30개</option>
+                        </select>
+                    </>
+                )}
+                {/* 웹화면 */}
+                {!isMobile && (
+                    <div className="boardSearchForm">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSearch();
+                            }}
+                        >
+
+                            <select
+                                className="boardSearchCategory"
+                                value={searchCategory}
+                                onChange={(e) => setSearchCategory(e.target.value)}
+                            >
+                                <option value="all">전체</option>
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="titleOrContent">제목+내용</option>
+                                <option value="userNick">닉네임</option>
+                            </select>
+
+                            <input
+                                type="text"
+                                placeholder="검색어를 입력하세요."
+                                className="boardSearchInput"
+                                value={searchKeyword}
+                                onChange={(e) => setSearchKeyword(e.target.value)}
+                            />
+                            <button type="submit" className="boardSearchButton">
+                                <FaSearch />
+                            </button>
+                        </form>
+                    </div>
+                )}
             </div>
+            {/* 모바일 화면 */}
+            {isMobile && (
+                <div className="boardInputContainer">
+                    <form
+                        className="boardSearchForm"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSearch();
+                        }}
+                    >
+                        <select
+                            className="boardSearchCategory"
+                            value={searchCategory}
+                            onChange={(e) => setSearchCategory(e.target.value)}
+                        >
+                            <option value="all">전체</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                            <option value="titleOrContent">제목+내용</option>
+                            <option value="userNick">닉네임</option>
+                        </select>
+
+                        <input
+                            type="text"
+                            placeholder="검색어를 입력하세요."
+                            className="boardSearchInput"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                        />
+
+                        <button type="submit" className="boardSearchButton">
+                            <FaSearch />
+                        </button>
+                    </form>
+                </div>
+            )}
+
 
             {/* 게시글 목록 */}
-            <div className="noticeListContainer">
-                <div className="noticeListHeader">
-                    <p className="noticeListItem noticeNumber">번호</p>
-                    <p className="noticeListItem noticeTitle">제목</p>
-                    <p className="noticeListItem noticeAuthor">작성자</p>
-                    <p className="noticeListItem noticeDate">등록일</p>
-                    <p className="noticeListItem noticeViews">조회수</p>
+            <div className="boardListContainer">
+                <div className="boardListHeader">
+                    <p className="boardListItem boardNumber">번호</p>
+                    <p className="boardListItem boardTitle">제목</p>
+                    <p className="boardListItem boardAuthor">작성자</p>
+                    <p className="boardListItem boardDate">등록일</p>
+                    <p className="boardListItem boardViews">조회수</p>
                 </div>
                 {currentPosts.length > 0 ? (
                     currentPosts.map((post, index) => (
-                        <div key={post.bodNum} className="noticeList">
-                            <p className="noticeListItem noticeNumber">{index + 1 + (currentPage - 1) * itemsPerPage}</p>
-                            <p className="noticeListItem noticeTitle">
+                        <div key={post.bodNum} className={`boardList ${post.userNick === '관리자' ? 'adminBoardList' : ''}`}>
+                            <p className={`boardListItem boardNumber ${post.userNick === '관리자' ? 'highlightAdminPost' : ''}`}>
+                                {post.userNick === "관리자"
+                                    ? '* 공지 *'
+                                    : index + 1 + (currentPage - 1) * itemsPerPage - adminCount
+                                }
+                            </p>
+                            <p className="boardListItem boardTitle">
                                 <Link to={`/board/${post.bodNum}`}>{post.bodTitle}</Link>
                             </p>
-                            <p className="noticeListItem noticeAuthor">{post.userNick}</p>
-                            <p className="noticeListItem noticeDate">
-                                {new Date(post.writeDate).toLocaleDateString("ko-KR", {
-                                    year: "numeric",
-                                    month: "2-digit",
-                                    day: "numeric",
-                                }).replace(/\.$/, "")}
-                            </p>
-                            <p className="noticeListItem noticeViews">{post.views}</p>
+                            <p className="boardListItem boardAuthor">{post.userNick}</p>
+                            {isMobile && (
+                                <p className="boardListItem boardDate">
+                                    {new Date(post.writeDate).toLocaleDateString("ko-KR", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                    }).replace(/\.$/, "")}
+                                </p>
+                            )}
+                            {!isMobile && (
+                                <p className="boardListItem boardDate">
+                                    {new Date(post.writeDate).toLocaleDateString("ko-KR", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "numeric",
+                                    }).replace(/\.$/, "")}
+                                </p>
+                            )}
+                            <p className="boardListItem boardViews">{post.views}</p>
                         </div>
                     ))
                 ) : (
-                    <p className="noticeNoPosts">게시글이 없습니다.</p>
+                    <p className="boardNoPosts">게시글이 없습니다.</p>
                 )}
             </div>
 
-            <div className="noticePagination">
+            {/* 페이지네이션 */}
+            <div className="boardPagination">
                 {Array.from({ length: totalPages }, (_, i) => (
                     <button
                         key={i}
-                        className={`noticePageButton ${i + 1 === currentPage ? "noticeActivePage" : ""}`}
+                        className={`boardPageButton ${i + 1 === currentPage ? "boardActivePage" : ""}`}
                         onClick={() => handlePageChange(i + 1)}
                     >
                         {i + 1}
@@ -295,6 +439,7 @@ const Notice = () => {
             </div>
         </div>
     );
+
 };
 
-export default Notice;
+export default Board;

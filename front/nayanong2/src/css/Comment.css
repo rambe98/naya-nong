@@ -127,25 +127,50 @@
     border-left: 2px solid #DDD; /* 연한 회색 테두리 */
 }
 
+/* 대댓글 아이템 */
 .replyItem {
     padding: 10px;
     background-color: #FFFFFF; /* 연한 베이지 */
     border: 1px solid #DDD; /* 박스 테두리 */
     border-radius: 4px;
     margin-bottom: 5px;
+    position: relative; /* 삭제 버튼 위치 기준 */
 }
 
+/* 대댓글 텍스트 */
 .replyItem p {
     font-size: 0.95rem;
     margin: 0;
     color: #6D5A50; /* 브라운 색상 */
-
 }
 
-.replyItem strong {
-    font-weight: bold;
-    color: #333333; /* 진한 회색 */
+/* 작성일자 텍스트 */
+.replyItem span {
+    font-size: 0.85rem;
+    color: #8A7F73; /* 연한 브라운 */
 }
+
+/* 대댓글 삭제 버튼 */
+.replyItem .deleteButton {
+    position: absolute; /* 오른쪽 상단에 위치 */
+    top: 5px; /* 상단 여백 */
+    right: 5px; /* 오른쪽 여백 */
+    font-size: 0.85rem;
+    padding: 5px 8px;
+    background-color: #D9BFA6; /* 연한 브라운 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* 삭제 버튼 hover 효과 */
+.replyItem .deleteButton:hover {
+    background-color: #BFA084; /* 진한 브라운 */
+    transform: scale(1.1); /* 크기 살짝 확대 */
+}
+
 
 /* 공통 인풋 스타일 */
 .commonInput {
@@ -205,3 +230,86 @@
     gap: 10px;
     margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+    /* 댓글 컨테이너 */
+    .commentsContainer {
+        padding: 10px;
+        box-shadow: none;
+        border: none;
+    }
+
+    /* 댓글 입력 영역 */
+    .commentInput {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .commentInput input {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .commentInput button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+
+    /* 댓글 아이템 */
+    .commentItem {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .commentItem p {
+        font-size: 0.9rem;
+    }
+
+    .commentItem span {
+        font-size: 0.8rem;
+    }
+
+    .commentItem .commentButtons {
+        top: 5px;
+        right: 5px;
+        gap: 3px;
+    }
+
+    .commentItem button {
+        font-size: 0.8rem;
+        padding: 5px 8px;
+    }
+
+    /* 대댓글 입력 */
+    .replyInput {
+        flex-direction: column;
+        gap: 5px;
+        padding: 8px;
+    }
+
+    /* 대댓글 리스트 */
+    .replies {
+        padding-left: 10px;
+    }
+
+    .replyItem {
+        padding: 8px;
+        margin-bottom: 5px;
+    }
+
+    .replyItem p {
+        font-size: 0.85rem;
+    }
+
+    /* 버튼 그룹 */
+    .actionButtons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .actionButtons button {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+}
+

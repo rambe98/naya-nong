@@ -17,30 +17,6 @@ export const endDateStateAtom = atom({
     default: '',
 });
 
-// 품목 카테고리
-export const itemCategoryStateAtom = atom({
-    key: 'itemCategoryState',
-    default: '',
-});
-
-// 품목 코드
-export const itemCodeStateAtom = atom({
-    key: 'itemCodeState',
-    default: ""
-});
-
-// 품종 코드
-export const kindCodeStateAtom = atom({
-    key: 'kindCodeState',
-    default: '',
-});
-
-// 제품 등급 코드
-export const productRankCodeStateAtom = atom({
-    key: 'productRankCodeState',
-    default: '',
-});
-
 // 지역 코드
 export const countryCodeStateAtom = atom({
     key: 'countryCodeState',
@@ -76,4 +52,4 @@ export const priceDataAtom = atom({
 export const farmDataAtom = atom({
     key:"farmDataAtom",
     default:itemMappings,
-})
+}) 

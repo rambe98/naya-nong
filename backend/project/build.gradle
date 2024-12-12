@@ -62,10 +62,8 @@ dependencies {
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     
-    // 이메일 인증 관련 의존성 추가
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    //Jsoup 의존성 추가
-    implementation 'org.jsoup:jsoup:1.16.1' // 최신 버전 확인
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'  // Jakarta EE 9.1 이상
+    
 }
 
 tasks.named('test') {

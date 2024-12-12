@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class NongDTO {
    

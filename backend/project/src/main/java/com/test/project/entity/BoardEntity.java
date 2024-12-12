@@ -50,7 +50,4 @@ public class BoardEntity {
 	
 	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<CommentEntity> comments;
-	
-	
-
 }

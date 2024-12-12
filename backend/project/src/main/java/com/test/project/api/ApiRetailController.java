@@ -12,31 +12,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
-public class ApiController {
+@RequestMapping("/retail")
+public class ApiRetailController {
 
 	@Autowired
-	private ApiService apiService;
+	private ApiRetailService apiService;
 	
 
-<<<<<<< HEAD:backend/project/src/main/java/com/test/project/api/ApiRetailController.java
     // 전체 소매가격 데이터 조회
-	@PostMapping("/price/item")
-	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfoByItem(@RequestBody PriceRequestDTO priceRequestDTO) {
-	    try {
-	        List<PriceDataDTO> priceDataList = apiService.getRetailPriceInfo(
-	            "감자",  // 사용자가 입력한 품목 이름
-	            priceRequestDTO.getP_startday(),
-	            priceRequestDTO.getP_endday(),
-	            priceRequestDTO.getP_countrycode(),
-	            priceRequestDTO.getP_returntype()
-=======
-    // 전체 가격 데이터 조회 메서드
     @PostMapping("/price/all")
-    public ResponseEntity<List<PriceDataDTO>> getAllPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
+    public ResponseEntity<List<PriceDataDTO>> getAllRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
         try {
             // ApiService 호출하여 전체 데이터 리스트 얻기
-            List<PriceDataDTO> allPriceDataList = apiService.getAllPriceData(
+            List<PriceDataDTO> allPriceDataList = apiService.getAllRetailPriceData(
                     priceRequestDTO.getP_startday(),
                     priceRequestDTO.getP_endday(),
                     priceRequestDTO.getP_itemcategorycode(),
@@ -53,19 +41,19 @@ public class ApiController {
         }
     }
     
-
+    //소매 평균 조회
 	@PostMapping("/price")
-	public ResponseEntity<List<PriceDataDTO>> getPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
+	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
 		try {
 			// ApiService 호출하여 원본 데이터 리스트 얻기
-			List<PriceDataDTO> priceDataList = apiService.getPriceData(priceRequestDTO.getP_startday(),
+			List<PriceDataDTO> priceDataList = apiService.getAllRetailPriceData(priceRequestDTO.getP_startday(),
 					priceRequestDTO.getP_endday(), priceRequestDTO.getP_itemcategorycode(),
 					priceRequestDTO.getP_itemcode(), priceRequestDTO.getP_kindcode(),
 					priceRequestDTO.getP_productrankcode(), priceRequestDTO.getP_countrycode(),
 					priceRequestDTO.getP_returntype());
 
 			// "평균" 데이터만 필터링
-			List<PriceDataDTO> filteredPriceDataList = apiService.filterByCountynameAverage(priceDataList);
+			List<PriceDataDTO> filteredPriceDataList = apiService.filterByCountynameRetailAverage(priceDataList);
 
 			// 필터링된 데이터 반환
 			if (filteredPriceDataList.isEmpty()) {
@@ -79,11 +67,13 @@ public class ApiController {
 		}
 	}
 	
+	
+	//소매 지역 조회
 	@PostMapping("/price/marketname")
-	public ResponseEntity<List<PriceDataDTO>> getPriceInfoByMarketname(@RequestBody PriceRequestDTO priceRequestDTO) {
+	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfoByMarketname(@RequestBody PriceRequestDTO priceRequestDTO) {
 	    try {
 	        // ApiService 호출하여 전체 데이터 리스트 얻기
-	        List<PriceDataDTO> priceDataList = apiService.getPriceData(
+	        List<PriceDataDTO> priceDataList = apiService.getRetailPriceData(
 	                priceRequestDTO.getP_startday(),
 	                priceRequestDTO.getP_endday(),
 	                priceRequestDTO.getP_itemcategorycode(),
@@ -92,21 +82,19 @@ public class ApiController {
 	                priceRequestDTO.getP_productrankcode(),
 	                priceRequestDTO.getP_countrycode(),
 	                priceRequestDTO.getP_returntype()
->>>>>>> parent of 425bfef (open API modification):backend/project/src/main/java/com/test/project/api/ApiController.java
 	        );
 
-	        if (priceDataList.isEmpty()) {
-	            return ResponseEntity.noContent().build();  // 데이터가 없으면 204 상태 코드 반환
-	        }
+	        // marketname이 null이 아닌 데이터만 필터링
+	        List<PriceDataDTO> filteredPriceDataList = apiService.filterByMarketnameNotNull(priceDataList);
 
-	        return ResponseEntity.ok(priceDataList);  // 데이터가 있으면 200 상태 코드로 반환
+	        return ResponseEntity.ok(filteredPriceDataList);
 	    } catch (Exception e) {
-	        return ResponseEntity.status(500).build();  // 예외 발생 시 500 상태 코드 반환
+	        return ResponseEntity.status(500).build();
 	    }
 	}
-    
- 
-
+	
+	
+	
 	
 	
 }

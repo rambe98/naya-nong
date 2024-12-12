@@ -199,3 +199,30 @@
     width: 100%;
     margin-top: 20px;
 }
+/*---------------------------------------------------------------*/
+
+/* FarmDetail */
+
+.FarmDetailContainer {
+    display: flex; /* 가로로 배치 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 20px; /* 항목 간 간격 */
+    width: 100%; /* 전체 컨테이너 크기 */
+  }
+  
+  .FarmDetailContainer > div {
+    flex: none; /* 크기를 고정 */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    min-width: 200px; /* 각 항목의 최소 너비 */
+  }
+  
+  
+  
+
+
+
+
+

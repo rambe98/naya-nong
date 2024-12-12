@@ -50,8 +50,6 @@ export const userNickSelector = selector({
   });
   
   
-
-
 //formData
 export const formDataAtom = atom({
     key: 'formDataAtom', // 고유한 key
@@ -112,7 +110,7 @@ export const validationMessageAtom = atom({
       userPwd: "비밀번호를 입력해주세요. (영문자,숫자,특수문자 포함 6~20자)",
       userNick: "닉네임을 입력해주세요.",
       userEmail: "이메일형식이 잘못되었습니다.",
-      userPnum: "전화번호를 입력해주세요.",
+      userPnum: "전화번호를 입력해주세요.(ex:01012345678)",
       phoneCom: "통신사를 선택해주세요.",
     },
   });
@@ -125,6 +123,7 @@ export const validationMessageAtom = atom({
       userIdRegex: /^[a-zA-Z0-9]{4,20}$/,
       userPwdRegex: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{6,20}$/,
       userEmailRegex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      userPnumRegex : /^01[0-9]\d{8}$/,
     },
   });
 

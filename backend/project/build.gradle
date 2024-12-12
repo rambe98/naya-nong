@@ -61,9 +61,6 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpcore:4.4.13'
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    
-    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'  // Jakarta EE 9.1 이상
-    
 }
 
 tasks.named('test') {

@@ -2,11 +2,14 @@ package com.test.project.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,8 @@ import com.test.project.persistence.NongRepository;
 import com.test.project.persistence.ParentCommentRepository;
 import com.test.project.security.TokenProvider;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -42,6 +47,11 @@ public class NongService {
 	
 	@Autowired
 	private TokenProvider tokenProvider;
+	
+    private final JavaMailSender mailSender;  // JavaMailSender 주입
+    
+    @Autowired
+    private EmailService emailService;  // EmailService 주입받기
 	
 	
 
@@ -171,5 +181,42 @@ public class NongService {
 			throw new IllegalArgumentException("비밀번호가 틀립니다.");
 		}
 	}// verifyPassword end
+
+	
+	// 아이디 찾기
+	public String findUserIdByEmail(String userEmail) {
+	    Optional<NongEntity> user = repository.findByUserEmail(userEmail);
+	    if (user.isPresent()) {
+	        NongEntity entity = user.get();
+	        String userId = entity.getUserId();
+	        // 이메일 발송
+	        emailService.sendEmail(userEmail, "아이디 찾기 결과", "당신의 아이디는 " + userId + " 입니다.");
+	        return "아이디가 이메일로 전송되었습니다.";
+	    } else {
+	        return "해당 이메일에 해당하는 사용자 정보가 없습니다.";
+	    }
+	}
+
+    // 비밀번호 찾기
+	public String findPasswordByUserIdAndEmail(String userId, String userEmail) {
+	    Optional<NongEntity> user = repository.findByUserIdAndUserEmail(userId, userEmail);
+	    if (user.isPresent()) {
+	        String verificationCode = generateVerificationCode();  // 임시 비밀번호 생성
+	        NongEntity entity = user.get();
+	        entity.setUserPwd(verificationCode);
+	        repository.save(entity);
+	        emailService.sendEmail(userEmail, "(나야, 농) 임시 비밀번호", "임시 비밀번호는 " + verificationCode + " 입니다. 로그인 후 보안을 위해 회원 정보 수정을 부탁드립니다.");
+	        return "임시 비밀번호가 이메일로 전송되었습니다.";
+	    } else {
+	        return "입력하신 정보가 일치하는 사용자가 없습니다.";
+	    }
+	}
+
+    // 인증번호 생성 메서드
+	private String generateVerificationCode() {
+	    Random random = new Random();
+	    int code = random.nextInt(9000) + 1000;  // 1000 ~ 9999 사이의 숫자
+	    return String.valueOf(code);
+	}
 
 }// class end

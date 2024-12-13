@@ -1,5 +1,5 @@
 /* 기본 헤더 스타일 */
-.mainHeader {
+.Header_mainHeader {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,35 +13,32 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, background-color 0.3s ease;
   box-sizing: border-box;
+  height: 80px;
 }
 
 /* 스크롤 시 숨김 */
-.mainHeader.hidden {
-  transform: translateY(-100%); /* 헤더를 위로 이동시켜 숨김 */
+.Header_mainHeader.hidden {
+  transform: translateY(-100%);
 }
 
 /* 다시 보일 때 */
-.mainHeader.visible {
-  transform: translateY(0); /* 원래 위치로 돌아옴 */
-}
-
-body {
-  margin-top: 100px; /* 헤더 높이만큼 여백 추가 */
+.Header_mainHeader.visible {
+  transform: translateY(0);
 }
 
 /* 왼쪽: 로고 */
-.mainHeaderLeft {
+.Header_mainHeaderLeft {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.mainHeaderLeft .mainLogo {
+.Header_mainHeaderLeft .Header_mainLogo {
   height: 70px;
   cursor: pointer;
 }
 
-.mainHeaderLeft .logoText {
+.Header_mainHeaderLeft .Header_logoText {
   font-size: 28px;
   font-weight: bold;
   color: black;
@@ -51,7 +48,7 @@ body {
 }
 
 /* 가운데: 네비게이션 */
-.mainHeaderNav ul {
+.Header_mainHeaderNav ul {
   display: flex;
   list-style: none;
   gap: 25px;
@@ -59,36 +56,38 @@ body {
   padding: 0;
 }
 
-.mainHeaderNav li {
+.Header_mainHeaderNav li {
   cursor: pointer;
   font-size: 16px;
 }
 
-.mainHeaderNav li a {
+.Header_mainHeaderNav li a {
   text-decoration: none;
   color: black;
+  margin-left: 170px;
   transition: color 0.3s ease;
+  font-family: 'SSFlowerRoad', sans-serif;
 }
 
-.mainHeaderNav li a:hover {
+.Header_mainHeaderNav li a:hover {
   color: #d4a373;
 }
 
-.mainHeaderNav li.active a {
+.Header_mainHeaderNav li.active a {
   font-weight: bold;
   color: black;
 }
 
 /* 오른쪽: 버튼 */
-.mainHeaderRight {
+.Header_mainHeaderRight {
   display: flex;
   gap: 10px;
 }
 
-.mainButton {
+.Header_mainButton {
   font-size: 16px;
   padding: 10px 20px;
-  background-color:  #FFFFFF;
+  background-color: #FFFFFF;
   color: black;
   border: none;
   border-radius: 5px;
@@ -97,60 +96,178 @@ body {
   font-family: 'SSFlowerRoad', sans-serif;
 }
 
-.mainButton:hover {
-  background-color:  #FFFFFF;
+.Header_mainButton:hover {
+  background-color: #FFFFFF;
   color: #d4a373;
-}
-
-/* 기본 스타일 */
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-  padding: 0;
-  margin: 0;
-}
-
-nav li {
-  cursor: pointer;
-  padding: 10px;
-  font-size: 16px;
-  color: #d4a373;
-  text-decoration: none;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 약간의 텍스트 그림자 */
-}
-
-nav li.active {
-  border-bottom: 2px solid #d4a373; /* 활성화된 메뉴에만 언더라인 추가 */
-  color: #d4a373; /* 활성화된 메뉴의 색상 변경 */
-  font-weight: bold; /* 활성화된 메뉴 글씨 두껍게 */
-}
-
-nav li a {
-  text-decoration: none;
-  color: inherit;
-  font-family: 'SSFlowerRoad', sans-serif;
-  font-size: 18px;
-}
-
-nav li:hover {
-  color: #b08968; /* 마우스를 올릴 때 색상 변경 */
 }
 
 /* 로그인 사용자 인사말 */
-.HeaderHello {
+.Header_HeaderHello {
   font-size: 18px;
   background-color: #FFFFFF;
-  color: black; /* 글자색 검정으로 변경 */
+  color: black;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
   font-family: 'SSFlowerRoad', sans-serif;
 }
 
-.HeaderHello .highlight {
+.Header_HeaderHello .Header_highlight {
   font-weight: bold;
-  color: #d4a373; /* 연한 주황색 강조 */
+  color: #d4a373;
   font-size: 18px;
 }
 
+.Header_hamburgerMenu {
+  display: none;
+}
+
+
+/* 모바일 스타일 (768px 이하) */
+@media (max-width: 768px) {
+  .Header_mainHeader {
+    justify-content: space-between;
+    padding: 10px 15px;
+  }
+
+  .Header_mainHeaderLeft {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .Header_mainHeaderNav {
+    display: none; /* 네비게이션 숨김 */
+  }
+
+  .Header_mainHeaderRight {
+    display: none; /* 버튼 숨김 */
+  }
+}
+
+  @media (max-width: 768px) {
+    .Header_hamburgerMenu {
+      display: block;
+      position: absolute;
+      top: 30px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+  
+    .Header_mobileNav {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      right: -100%; /* 초기 상태에서 숨김 */
+      height: 100%;
+      width: 40%;
+      background-color: white;
+      box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: right 0.3s ease;
+    }
+  
+    .Header_mobileNav.active {
+      right: 0; /* 활성화 상태에서 표시 */
+    }
+  
+    .Header_closeButton {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  
+    .Header_mobileNav ul {
+      list-style: none;
+      padding: 20px 20px 20px;
+      margin: 0;
+      width: 100%;
+    }
+  
+    .Header_mobileNav li {
+      width: 100%;
+      text-align: left;
+      font-size: 18px;
+      padding:20px 0px;
+      border-bottom: 1px solid #ddd;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  
+    .Header_mobileNav li a {
+      text-decoration: none;
+      color: black;
+    }
+  
+    .Header_mobileNav li a:hover {
+      color: #d4a373;
+    }
+  
+    .Header_mobileButtons {
+      margin-top: auto;
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+      background-color: #FFFFFF;
+      border-top: 1px solid #ddd;
+    }
+
+    .Header_HeaderHello {
+      font-size: 1rem;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      padding: 15px 0px 0px 15px;
+      font-family: 'SSFlowerRoad', sans-serif;
+      margin-bottom: 0px;
+
+    }
+    
+    .Header_HeaderHello .Header_highlight {
+      font-weight: bold;
+      color: #d4a373;
+      font-size: 18px;
+    }
+  }
+
+  @media(max-width:1500px){
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 160px;
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  }
+
+  @media(max-width:1299px){
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 60px;
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  }
+
+  
+  @media(max-width:900px){
+    .Header_mainHeaderNav ul {
+      display: flex;
+      list-style: none;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 30px;
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  }

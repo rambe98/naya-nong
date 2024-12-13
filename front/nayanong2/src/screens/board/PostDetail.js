@@ -15,6 +15,17 @@ const PostDetail = () => {
     const localStorageUserNick = localStorage.getItem("userNick");
     const searchResults = useRecoilValue(searchResultsAtom);
     const resetSearchResults = useSetRecoilState(searchResultsAtom);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
 
     const [board, setBoard] = useState({
         bodTitle: "",
@@ -229,7 +240,8 @@ const PostDetail = () => {
     // 게시글 삭제
     const handleDelete = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
-        if (board.project?.userNick !== localStorageUserNick) {
+        // 삭제 권한 체크: 현재 게시글 작성자와 로그인된 사용자 비교 + 관리자인 경우
+        if (board.project?.userNick !== localStorageUserNick && localStorageUserNick !== "관리자") {
             alert("삭제 권한이 없습니다.");
             return;
         }
@@ -242,13 +254,23 @@ const PostDetail = () => {
                 navigate("/board");
             } catch (error) {
                 console.error("게시글 삭제 실패:", error);
+                alert("게시글 삭제에 실패했습니다.");
             }
         }
     };
 
+    // 게시글 배열 나누기
+    const currentArray = getCurrentArray();
+    const noticeArray = boards.filter((post) => post.userNick === "관리자"); // 공지사항 게시글
+    const generalArray = currentArray.filter((post) => post.userNick !== "관리자"); // 일반 게시글
 
-
-
+    // 일반 게시글 계산
+    const reversedGeneralArray = [...generalArray];
+    const totalGeneralPages = reversedGeneralArray.length;
+    const currentGeneralPage =
+        currentIndex !== null && generalArray.some((post) => post.bodNum === bodNum)
+            ? totalGeneralPages - reversedGeneralArray.findIndex((post) => post.bodNum === bodNum)
+            : 0;
 
 
     if (loading) return <p>로딩 중입니다...</p>;
@@ -257,21 +279,41 @@ const PostDetail = () => {
         <div className="postDetailContainer">
             <div className="postDetailContent">
                 <h2 className="postTitle">{board.bodTitle}</h2>
-                <div className="postInfo">
-                    <span>작성자: {board.project?.userNick || "알 수 없음"}</span>
-                    <span>작성일: {board.writeDate ? new Date(board.writeDate).toLocaleString() : "알 수 없음"}</span>
-                    <span>조회수: {board.views}</span>
-                </div>
+
+                {isMobile && (
+                    <div className="postInfo">
+                        <span>작성자: {board.project?.userNick || "알 수 없음"}</span>
+                        <span>작성일: {board.writeDate ? new Date(board.writeDate).toLocaleString() : "알 수 없음"}</span>
+                        <span>조회수: {board.views}</span>
+                    </div>
+                )}
+
+                {!isMobile && (
+                    <div className="postInfo">
+                        <span>작성자: {board.project?.userNick || "알 수 없음"}</span>
+                        <span>작성일: {board.writeDate ? new Date(board.writeDate).toLocaleString() : "알 수 없음"}</span>
+                        <span>조회수: {board.views}</span>
+                    </div>
+                )}
                 <div className="postContent">{board.bodDtail}</div>
                 <div className="likeSection postInfoicon">
-                    <span
-                        className="likeIcon"
-                        onClick={toggleLike}
-                        style={{ cursor: "pointer", fontSize: "1.5rem" }}
-                    >
-                        <FaRegThumbsUp color="gray" />
-                    </span>
-                    좋아요: {likeCount}
+                    <div>
+                        <span
+                            className="likeIcon"
+                            onClick={toggleLike}
+                            style={{ cursor: "pointer", fontSize: "1.5rem" }}
+                        >
+                            <FaRegThumbsUp color="gray" />
+                        </span>
+                        좋아요: {likeCount}
+                    </div>
+                    <div>
+                        {board.project?.userNick === "관리자" ? (
+                            <span></span>
+                        ) : (
+                            <span>게시글: {currentGeneralPage} / {totalGeneralPages} </span>
+                        )}
+                    </div>
                 </div>
                 <div className="postButtonLargeRow">
                     {board.project?.userNick !== "관리자" && (
@@ -287,15 +329,22 @@ const PostDetail = () => {
                         수정
                     </button>
                     <button
-                        className={board.project?.userNick === localStorageUserNick ? "" : "hidden"}
+                        className={board.project?.userNick === localStorageUserNick || localStorageUserNick === "관리자" ? "" : "hidden"}
                         onClick={handleDelete}
                     >
                         삭제
                     </button>
-                    <button onClick={goToBoard}>목록으로</button>
+                    {isMobile && (
+                        <button onClick={goToBoard}>목록</button>
+                    )}
+                    {!isMobile && (
+                        <button onClick={goToBoard}>목록으로</button>
+                    )}
 
                 </div>
             </div>
+
+
             {/* 관리자가 작성한 게시글은 댓글기능x */}
             {board.project?.userNick !== '관리자' ? <Comments /> : null}
         </div>

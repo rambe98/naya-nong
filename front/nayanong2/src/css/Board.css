@@ -4,7 +4,8 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: #FFFFFF; /* 배경 흰색 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
   width: 100vw;
   padding: 20px;
   overflow: scroll;
@@ -19,11 +20,13 @@
   width: 100%;
   max-width: 900px;
   margin-top: 20px;
-  background-color: #FFFFFF; /* 배경 흰색 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #d4a373; /* 메인 색상 테두리 */
+  border: 1px solid #d4a373;
+  /* 메인 색상 테두리 */
 }
 
 /* 글쓰기 버튼 */
@@ -32,31 +35,44 @@
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background-color: #d4a373; /* 메인 색상 */
+  background-color: #d4a373;
+  /* 메인 색상 */
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .boardWriteButton:hover {
-  background-color: #b08968; /* 강조된 메인 색상 */
+  background-color: #b08968;
+  /* 강조된 메인 색상 */
 }
 
 
 .boardSearchForm {
   position: relative;
-  display: inline-block; /* 버튼과 입력창을 한 줄에 배치 */
+  display: inline-block;
+  /* 버튼과 입력창을 한 줄에 배치 */
 }
+
 /* 검색 입력창 */
 .boardSearchInput {
   padding: 10px 20px;
   font-size: 16px;
   width: 250px;
-  border: 2px solid #d4a373; /* 메인 색상 */
+  border: 2px solid #d4a373;
+  /* 메인 색상 */
   border-radius: 5px;
-  background-color: #FFFFFF; /* 배경 흰색 */
-  padding-right: 40px; /* 버튼이 입력창 안에 들어갈 공간 확보 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
+  padding-right: 40px;
+  /* 버튼이 입력창 안에 들어갈 공간 확보 */
 }
+/* 검색 입력창 포커스 상태 */
+.boardSearchInput:focus {
+  box-shadow: 0 0 5px rgba(176, 137, 104, 0.5); /* 부드러운 외곽선 효과 */
+  outline-color: #d4a373; /* 기본 포커스 아웃라인 제거 */
+}
+
 
 /* 검색 버튼 */
 .boardSearchButton {
@@ -69,14 +85,17 @@
   border-radius: 5px;
   cursor: pointer;
   position: absolute;
-  right: 5px; /* 오른쪽에 버튼 배치 */
-  top: 50%; /* 버튼을 수직으로 가운데 정렬 */
-  transform: translateY(-50%); /* 정확하게 가운데 정렬 */
+  right: 5px;
+  /* 오른쪽에 버튼 배치 */
+  top: 50%;
+  /* 버튼을 수직으로 가운데 정렬 */
+  transform: translateY(-50%);
+  /* 정확하게 가운데 정렬 */
 }
 
 /* 검색 입력창에 포커스가 생길 때 버튼 색상 변경 */
 .boardSearchForm input:focus+button {
-  background-color: #d4a373;
+  background-color: #FFFFFF;
   /* 포커스 시 버튼 배경색을 메인 색상으로 변경 */
   border-color: #b08968;
   /* 포커스 시 버튼 테두리 색상 변경 */
@@ -84,7 +103,7 @@
 
 /* 포커스 시 돋보기 아이콘 색상 변경 */
 .boardSearchForm input:focus+button svg {
-  color: #ffffff;
+  color: #b08968;
   /* 포커스 시 돋보기 아이콘 색상 변경 */
 }
 
@@ -92,24 +111,27 @@
 .boardSearchForm button svg {
   color: #b08968;
   /* 돋보기 아이콘 색을 베이지로 */
-  font-size: 18px;
+  font-size: 16px;
+  background-color: #fff;
   /* 아이콘 크기 */
 }
 
 /* 검색 범주 선택 */
 .boardSearchCategory {
-  padding: 10px 12px;  
-  font-size: 15px;     
-  border: 2px solid #d4a373; 
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 2px solid #d4a373;
   border-radius: 5px;
-  background-color: #FFFFFF; 
-  color: black; 
-  width: auto; 
+  background-color: #FFFFFF;
+  color: black;
+  width: auto;
 }
 
 .boardSearchCategory:hover {
-  background-color: #FFF8E6; /* 연한 베이지 */
-  border-color: #b08968; /* 강조된 메인 색상 */
+  background-color: #FFF8E6;
+  /* 연한 베이지 */
+  border-color: #b08968;
+  /* 강조된 메인 색상 */
 }
 
 /* 페이지 당 게시글 수 선택 */
@@ -117,23 +139,28 @@
   padding: 10px 15px;
   margin-left: 15px;
   font-size: 16px;
-  border: 2px solid #d4a373; /* 메인 색상 */
+  border: 2px solid #d4a373;
+  /* 메인 색상 */
   border-radius: 5px;
-  background-color: #FFFFFF; /* 배경 흰색 */
-  color: black; /* 검정 텍스트 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
+  color: black;
+  /* 검정 텍스트 */
   cursor: pointer;
 }
 
 /* boardListContainer: 전체 컨테이너 */
 .boardListContainer {
-  width: 80%;
+  width: 100%;
   max-width: 900px;
   margin-top: 20px;
-  background-color: #FFFFFF; /* 배경 흰색 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #d4a373; /* 메인 색상 테두리 */
+  border: 1px solid #d4a373;
+  /* 메인 색상 테두리 */
 }
 
 /* boardListHeader: 헤더 스타일 */
@@ -142,9 +169,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  border-bottom: 2px solid #d4a373; /* 메인 색상 */
-  background-color: #FFFFFF; /* 배경 흰색 */
-  color: black; /* 검정 텍스트 */
+  border-bottom: 2px solid #d4a373;
+  /* 메인 색상 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
+  color: black;
+  /* 검정 텍스트 */
   font-weight: bold;
   font-size: 16px;
   text-align: center;
@@ -155,22 +185,32 @@
   text-align: center;
   font-size: 16px;
   line-height: 1.5;
-  display: block;  /* 변경: flex에서 block으로 변경 */
-  width: 150px;    /* 최대 너비 설정 */
-  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
-  overflow: hidden;    /* 넘치는 텍스트 숨김 */
-  text-overflow: ellipsis;  /* 넘치는 텍스트 대신 '...' 표시 */
+  display: block;
+  /* 변경: flex에서 block으로 변경 */
+  width: 150px;
+  /* 최대 너비 설정 */
+  white-space: nowrap;
+  /* 텍스트를 한 줄로 유지 */
+  overflow: hidden;
+  /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis;
+  /* 넘치는 텍스트 대신 '...' 표시 */
   padding: 5px 10px;
-  box-sizing: border-box;  /* 패딩 포함하여 정확한 너비 설정 */
+  box-sizing: border-box;
+  /* 패딩 포함하여 정확한 너비 설정 */
 }
+
 /* 게시글 목록 */
 .boardList {
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
-  border-bottom: 2px solid #FFF8E6; /* 연한 베이지 */
-  background-color: #FFFFFF; /* 배경 흰색 */
-  color: black; /* 검정 텍스트 */
+  border-bottom: 2px solid #FFF8E6;
+  /* 연한 베이지 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
+  color: black;
+  /* 검정 텍스트 */
   font-size: 16px;
 }
 
@@ -179,31 +219,41 @@
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
-  border-bottom: 2px solid #FFF8E6; /* 연한 베이지 */
-  background-color: #FFF8E6; /* 연한 베이지 */
+  border-bottom: 2px solid #FFF8E6;
+  /* 연한 베이지 */
+  background-color: #FFF8E6;
+  /* 연한 베이지 */
   color: black;
   font-size: 16px;
 }
+
 /* 관리자 게시글 *필독* 표시 */
 .highlightAdminPost {
   color: red;
-  font-weight: bold; /* 선택사항: 강조를 위해 글씨 두껍게 */
+  font-weight: bold;
+  /* 선택사항: 강조를 위해 글씨 두껍게 */
 }
 
 
 
 /* boardListItem 내 링크의 밑줄 제거 */
 .boardListItem.boardTitle a {
-  text-decoration: none;  /* 기본 밑줄 제거 */
-  color: #000000; /* 링크 색상 */
-  font-weight: 600;  /* 글씨 굵게 */
+  text-decoration: none;
+  /* 기본 밑줄 제거 */
+  color: #000000;
+  /* 링크 색상 */
+  font-weight: 600;
+  /* 글씨 굵게 */
 }
 
 /* 링크 호버 스타일 */
 .boardListItem.boardTitle a:hover {
-  text-decoration: none;  /* 호버 시에도 밑줄 제거 */
-  color: #b08968; /* 강조된 색상 */
-  font-weight: 600;  /* 글씨 굵게 */
+  text-decoration: none;
+  /* 호버 시에도 밑줄 제거 */
+  color: #b08968;
+  /* 강조된 색상 */
+  font-weight: 600;
+  /* 글씨 굵게 */
 }
 
 /* 페이지네이션 */
@@ -218,19 +268,24 @@
   padding: 8px 12px;
   margin: 0 5px;
   font-size: 14px;
-  color: #d4a373; /* 메인 색상 */
-  border: 1px solid #d4a373; /* 메인 색상 */
+  color: #d4a373;
+  /* 메인 색상 */
+  border: 1px solid #d4a373;
+  /* 메인 색상 */
   border-radius: 4px;
-  background-color: #FFFFFF; /* 배경 흰색 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
   cursor: pointer;
 }
 
 .boardPageButton:hover {
-  background-color: #FFF8E6; /* 연한 베이지 */
+  background-color: #FFF8E6;
+  /* 연한 베이지 */
 }
 
 .boardActivePage {
-  background-color: #d4a373; /* 메인 색상 */
+  background-color: #d4a373;
+  /* 메인 색상 */
   color: white;
   cursor: default;
 }
@@ -240,24 +295,318 @@
   padding: 10px 15px;
   margin-left: 15px;
   font-size: 16px;
-  border: 2px solid #d4a373; /* 메인 색상 */
+  border: 2px solid #d4a373;
+  /* 메인 색상 */
   border-radius: 5px;
-  background-color: #FFFFFF; /* 배경 흰색 */
-  color: black; /* 검정 텍스트 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
+  color: black;
+  /* 검정 텍스트 */
   cursor: pointer;
 }
 
 /* 새 옵션 컨테이너 */
 .boardOptionsContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   max-width: 900px;
   margin-top: 10px;
   padding: 10px 20px;
-  background-color: #FFFFFF; /* 배경 흰색 */
+  background-color: #FFFFFF;
+  /* 배경 흰색 */
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #d4a373; /* 메인 색상 테두리 */
+  border: 1px solid #d4a373;
+  /* 메인 색상 테두리 */
+}
+
+/* 사이드바 컨테이너 */
+.boardSidebarContainer {
+  position: fixed;
+  top: 80px;
+  /* 헤더 높이만큼 아래로 내림 */
+  left: 0;
+  width: 150px;
+  height: calc(100% - 80px);
+  /* 헤더 높이를 뺀 나머지 높이 */
+  background-color: #ffffff;
+  /* 연한 베이지 배경 */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+  transform: translateX(-100%);
+  /* 초기 숨김 상태 */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 열림 상태 */
+.boardSidebarContainer.show {
+  transform: translateX(0);
+  /* 사이드바 열림 상태 */
+}
+
+/* 닫기 버튼 */
+.boardCloseSidebarButton {
+  position: absolute;
+  top: 15px;
+  /* 헤더 아래 여백 */
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 리스트 스타일 */
+.boardSidebarContainer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 40px;
+  /* 닫기 버튼 아래 여백 */
+  font-family: 'SSFlowerRoad', sans-serif;
+}
+
+.boardSidebarContainer li {
+  margin-bottom: 15px;
+  /* 항목 간 간격 */
+}
+
+.boardSidebarContainer li a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #333;
+  /* 텍스트 색상 */
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.boardSidebarContainer li a:hover {
+  color: #d4a373;
+  /* 메인 색상으로 변경 */
+  transform: translateX(5px);
+  /* 살짝 오른쪽으로 이동 */
+}
+
+/* 사이드바 하단 추가 정보 */
+.boardSidebarFooter {
+  margin-top: auto;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
+}
+
+.boardname {
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  font-family: 'SSFlowerRoad', sans-serif;
+}
+
+
+
+
+@media (max-width: 768px) {
+
+  /* 전체 컨테이너 */
+  .boardContainer {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    /* 수평 스크롤 제거 */
+  }
+
+  /* 게시판 입력 컨테이너 */
+  .boardInputContainer {
+    width: 100;
+    padding: 10px;
+    box-sizing: border-box;
+    /* 패딩 포함 크기 계산 */
+    overflow-x: hidden;
+    /* 수평 스크롤 제거 */
+  }
+
+  @media (max-width: 768px) {
+
+    /* 버튼 및 정렬 옵션 컨테이너 */
+    .boardActionContainer {
+      display: flex;
+      /* 가로 배치 */
+      flex-wrap: nowrap;
+      /* 줄바꿈 방지 */
+      align-items: center;
+      /* 수직 중앙 정렬 */
+      justify-content: space-between;
+      /* 요소 간 간격 조정 */
+      gap: 5px;
+      /* 버튼 사이 간격 */
+      width: 100%;
+      /* 부모 요소에 맞춤 */
+      box-sizing: border-box;
+      /* 패딩 포함 크기 계산 */
+    }
+
+
+    /* 글쓰기 버튼 */
+    .boardWriteButton {
+      flex: 1.5;
+      /* 동일한 너비로 배분 */
+      max-width: calc(33% - 5px);
+      /* 부모 요소 너비의 33%에 간격 고려 */
+      padding: 8px;
+      font-size: 11px;
+      border-radius: 5px;
+      background-color: #d4a373;
+      color: white;
+      cursor: pointer;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+
+
+    .boardWriteButton:hover {
+      background-color: #b08968;
+    }
+
+    /* 정렬 선택 (Sort By) */
+    .boardSortBySelect,
+    .boardItemsPerPageSelect {
+      flex: 1;
+      /* 동일한 너비로 배분 */
+      max-width: calc(33% - 5px);
+      /* 부모 요소 너비의 33%에 간격 고려 */
+      padding: 8px;
+      font-size: 12px;
+      border: 1px solid #d4a373;
+      border-radius: 5px;
+      background-color: white;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    .boardSortBySelect:hover,
+    .boardItemsPerPageSelect:hover {
+      border-color: #b08968;
+    }
+  }
+
+
+  /* boardListItem: 각 항목(p태그)에 적용할 스타일 */
+  .boardListItem {
+    text-align: center;
+    font-size: 0.5rem;
+    line-height: 1.5;
+    display: block;
+    /* 변경: flex에서 block으로 변경 */
+    width: 150px;
+    /* 최대 너비 설정 */
+    white-space: nowrap;
+    /* 텍스트를 한 줄로 유지 */
+    overflow: hidden;
+    /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis;
+    /* 넘치는 텍스트 대신 '...' 표시 */
+    padding: 5px 10px;
+    box-sizing: border-box;
+    /* 패딩 포함하여 정확한 너비 설정 */
+  }
+
+  .boardSearchCategory {
+    flex: 1;
+    /* 동일한 너비로 배분 */
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #d4a373;
+    background-color: #ffffff;
+    color: #333;
+  }
+
+
+  .boardSearchInput {
+    flex: 3;
+    /* 검색창을 더 넓게 배분 */
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #d4a373;
+    background-color: #ffffff;
+    box-sizing: border-box;
+  }
+
+  .boardSearchForm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* 요소를 가로로 배치 */
+    gap: 10px;
+    /* 요소 간 간격 */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .boardSearchButton {
+    flex: none;
+    padding: 0.34rem;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .boardSearchButton:hover {
+    background-color: #FFFFFF;
+  }
+
+  .boardListContainer {
+    width: 90%;
+    margin-top: 20px;
+    background-color: #FFFFFF;
+    /* 배경 흰색 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #d4a373;
+    /* 메인 색상 테두리 */
+  }
+
+  .boardsidebarToggleButton {
+    padding: 12px 20px;
+    background: none;
+    font-weight: bold;
+    border: 1px none;
+    /* 메인 색상 테두리 */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    /* 버튼 배경 흰색 */
+    color: black;
+    /* 버튼 텍스트 검정 */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .boardname {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    margin: 10px 0 0 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    font-family: 'SSFlowerRoad', sans-serif;
+    border-bottom: 1.5px solid #d4a373;
+  }
+  
 }

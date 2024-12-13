@@ -21,3 +21,8 @@ code {
 body {
   margin-top: 80px; /* 헤더 높이만큼 여백 추가 */
 }
+
+body, html {
+  box-sizing: border-box;
+  overflow-x: hidden; /* 수평 스크롤 제거 */
+}

@@ -98,10 +98,44 @@ body.no-scroll {
   height: 100%;
 }
 
+@media (max-width: 768px) {
+  .findUserContainer {
+    padding: 20px;
+    justify-content: flex-start;
+    height: auto; /* 높이를 자동으로 설정 */
+    overflow-y: auto; /* 스크롤 활성화 */
+  }
 
-/* 미디어 쿼리 */
-@media (max-width: 600px) {
   .findUserForm {
-    padding: 15px;
+    width: 100%; /* 부모 컨테이너 너비에 맞춤 */
+    max-width: 300px; /* 최대 너비 제한 */
+    padding: 15px; /* 폼 내부 패딩 축소 */
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 그림자 크기 조정 */
+    margin: 0 auto; /* 폼을 가운데 정렬 */
+  }
+
+  .findUserHeader {
+    font-size: 18px; /* 헤더 크기 축소 */
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    margin-top: 10px;
+    text-align: center; /* 헤더 가운데 정렬 */
+  }
+
+  .findUserInput {
+    font-size: 14px; /* 입력 필드 폰트 크기 조정 */
+    padding: 8px; /* 입력 필드 패딩 축소 */
+    width: 100%; /* 입력 필드 너비 전체 */
+    border-radius: 4px;
+  }
+
+  .findUserButton {
+    font-size: 14px; /* 버튼 폰트 크기 축소 */
+    padding: 10px; /* 버튼 패딩 축소 */
+    width: 100%; /* 버튼 너비를 폼에 맞춤 */
+    border-radius: 5px;
   }
 }
+
+

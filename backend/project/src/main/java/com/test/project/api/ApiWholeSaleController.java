@@ -17,7 +17,7 @@ public class ApiWholeSaleController {
 	@Autowired
 	private ApiWholeSaleService wholeSaleService;
 	
-	  // 전체 소매가격 데이터 조회
+	  // 전체 도매가격 데이터 조회
     @PostMapping("/price/all")
     public ResponseEntity<List<PriceDataDTO>> getAllRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
         try {
@@ -39,7 +39,7 @@ public class ApiWholeSaleController {
         }
     }
     
-    //소매 평균 조회
+    //도매 평균 조회
 	@PostMapping("/price")
 	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
 		try {
@@ -66,7 +66,7 @@ public class ApiWholeSaleController {
 	}
 	
 	
-	//소매 지역 조회
+	//도매 지역 조회
 	@PostMapping("/price/marketname")
 	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfoByMarketname(@RequestBody PriceRequestDTO priceRequestDTO) {
 	    try {

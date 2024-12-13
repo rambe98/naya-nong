@@ -220,7 +220,16 @@
   }
   
   
+  .priceDataContainer {
+    display: flex;
+    gap: 20px; /* 항목 간의 간격 */
+  }
   
+  .priceItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
 
 

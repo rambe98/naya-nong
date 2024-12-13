@@ -15,6 +15,17 @@ import {
 const Graph = () => {
     const priceData = useRecoilValue(priceDataAtom); // Recoil에서 가격 데이터 가져오기
 
+    // 오늘 날짜와 일주일 전 날짜 계산
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    // 데이터를 필터링하여 일주일 전부터 오늘까지의 데이터만 남기기
+    const filteredData = priceData.filter((item) => {
+        const itemDate = new Date(item.date);
+        return itemDate >= sevenDaysAgo && itemDate <= today;
+    });
+
     // 데이터가 없으면 샘플 데이터로 표시
     const sampleData = [
         { date: "2024-12-01", price: 1200 },
@@ -25,11 +36,11 @@ const Graph = () => {
     return (
         <div
             style={{
-                width: "90%", // 화면 너비의 90%로 제한
+                width: "70%", // 화면 너비의 90%로 제한
                 maxWidth: "900px",
-                height: "400px", // 고정 높이
+                height: "300px", // 고정 높이
                 margin: "20px auto", // 상단 여백 추가 및 중앙 정렬
-                border: "1px solid #d4a373", // 메인 색상 테두리
+                border: "1px solid #FFFFFF", // 메인 색상 테두리
                 borderRadius: "10px", // 모서리 둥글게
                 boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // 그림자
                 backgroundColor: "#FFF8E6", // 연한 베이지 배경
@@ -51,7 +62,7 @@ const Graph = () => {
             </h2>
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart
-                    data={priceData.length > 0 ? priceData : sampleData} // priceData가 있으면 사용, 없으면 샘플 데이터 사용
+                    data={filteredData.length > 0 ? filteredData : sampleData} // 필터링된 데이터 사용
                     margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" /> {/* 격자선 */}
@@ -67,14 +78,13 @@ const Graph = () => {
                             backgroundColor: "#FFFFFF", // 툴팁 배경색
                             border: "1px solid #d4a373", // 테두리 색상
                             borderRadius: "5px",
-                            fontFamily: "'SSFlowerRoad', sans-serif",
+
                         }}
                     />
                     <Legend
                         verticalAlign="top"
                         height={36}
                         wrapperStyle={{
-                            fontFamily: "'SSFlowerRoad', sans-serif",
                             fontSize: "14px",
                             color: "#333",
                         }}

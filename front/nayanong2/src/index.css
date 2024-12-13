@@ -26,3 +26,7 @@ body, html {
   box-sizing: border-box;
   overflow-x: hidden; /* 수평 스크롤 제거 */
 }
+
+body.no-margin-top {
+  margin-top: 0; /* 로그인 컴포넌트에서는 제거 */
+}

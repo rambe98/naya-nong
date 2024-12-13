@@ -505,7 +505,7 @@
   /* boardListItem: 각 항목(p태그)에 적용할 스타일 */
   .boardListItem {
     text-align: center;
-    font-size: 0.5rem;
+    font-size: 0.6rem;
     line-height: 1.5;
     display: block;
     /* 변경: flex에서 block으로 변경 */

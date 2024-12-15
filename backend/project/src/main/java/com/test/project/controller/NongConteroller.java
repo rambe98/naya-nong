@@ -130,14 +130,17 @@ public class NongConteroller {
 		}
 	}
 	// 아이디 찾기
-	@PostMapping("/find-id/{userEmail}")
-	public String findUserId(@PathVariable("userEmail") String userEmail) {
+	@PostMapping("/find-id")
+	public String findUserId(@RequestBody NongDTO dto) {
 	    // 이메일을 기반으로 유저의 아이디를 찾고, 이메일로 발송
+		String userEmail = dto.getUserEmail();
 	    return service.findUserIdByEmail(userEmail);
 	}
     // 비밀번호 찾기
     @PostMapping("/find-password")
-    public String findPassword(@RequestParam String userId, @RequestParam String userEmail) {
+    public String findPassword(@RequestBody NongDTO dto) {
+    	String userId = dto.getUserId();
+    	String userEmail = dto.getUserEmail();
         // userId와 email을 기반으로 인증번호를 생성하여 이메일로 전송
         return service.findPasswordByUserIdAndEmail(userId, userEmail);
     }

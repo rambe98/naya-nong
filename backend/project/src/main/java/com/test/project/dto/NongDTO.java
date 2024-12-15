@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class NongDTO {
    
    private int clientNum;

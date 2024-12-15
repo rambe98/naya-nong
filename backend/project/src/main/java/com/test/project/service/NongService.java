@@ -200,14 +200,20 @@ public class NongService {
     // 비밀번호 찾기
 	public String findPasswordByUserIdAndEmail(String userId, String userEmail) {
 	    Optional<NongEntity> user = repository.findByUserIdAndUserEmail(userId, userEmail);
-	    if (user.isPresent()) {
-	        String verificationCode = generateVerificationCode();  // 인증번호 생성
-	        emailService.sendEmail(userEmail, "비밀번호 찾기 인증번호", "인증번호는 " + verificationCode + " 입니다.");
-	        return "인증번호가 이메일로 전송되었습니다.";
-	    } else {
-	        return "입력하신 정보가 일치하는 사용자가 없습니다.";
-	    }
+	    try {
+	    	 if (user.isPresent()) {
+	 	        String verificationCode = generateVerificationCode();  // 인증번호 생성
+	 	        emailService.sendEmail(userEmail, "비밀번호 찾기 인증번호", "인증번호는 " + verificationCode + " 입니다.");
+	 	        return "인증번호가 이메일로 전송되었습니다.";
+	 	    } else {
+	 	        return "입력하신 정보가 일치하는 사용자가 없습니다.";
+	 	    }
+	 	
+		} catch (Exception e) {
+			return "오류";
+		}
 	}
+	   
 
     // 인증번호 생성 메서드
 	private String generateVerificationCode() {

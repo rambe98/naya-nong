@@ -34,10 +34,12 @@ public class NongEntity {
 	private String phoneCom;
 	private String userNick;
 	
-	@OneToMany(mappedBy = "nong", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy = "nong", 
+			cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<CommentEntity> comments;
 	
-	@OneToMany(mappedBy = "nong", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy = "nong", 
+			cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<QnAEntity> qnas;  // QnAEntity와의 관계 추가
 }//NongEntity end
 

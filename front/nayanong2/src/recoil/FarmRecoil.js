@@ -75,3 +75,9 @@ export const priceTypeCodeStateAtom = atom({
     key: 'priceTypeCodeStateAtom',
     default: '',
 });
+
+//그래프의 하루가격 관리 상태
+export const graphPriceDataAtom = atom({
+    key: "graphPriceDataAtom", // 고유한 키
+    default: [], // 초기값: 빈 배열
+  });

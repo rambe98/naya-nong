@@ -1,6 +1,5 @@
 import React from 'react'
 import FarmList from './FarmList'
-import Graph from './Graph'
 import FarmInfo from './FarmInfo'
 
 const Farm = () => {
@@ -8,7 +7,6 @@ const Farm = () => {
     <div>
       <FarmList />
       <FarmInfo />
-      <Graph />
     </div>
   )
 }

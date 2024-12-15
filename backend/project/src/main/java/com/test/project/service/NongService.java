@@ -200,39 +200,23 @@ public class NongService {
     // 비밀번호 찾기
 	public String findPasswordByUserIdAndEmail(String userId, String userEmail) {
 	    Optional<NongEntity> user = repository.findByUserIdAndUserEmail(userId, userEmail);
-	    try {
-	    	 if (user.isPresent()) {
-	 	        String verificationCode = generateVerificationCode();  // 인증번호 생성
-	 	        emailService.sendEmail(userEmail, "비밀번호 찾기 인증번호", "인증번호는 " + verificationCode + " 입니다.");
-	 	        return "인증번호가 이메일로 전송되었습니다.";
-	 	    } else {
-	 	        return "입력하신 정보가 일치하는 사용자가 없습니다.";
-	 	    }
-	 	
-		} catch (Exception e) {
-			return "오류";
-		}
+	    if (user.isPresent()) {
+	        String verificationCode = generateVerificationCode();  // 임시 비밀번호 생성
+	        NongEntity entity = user.get();
+	        entity.setUserPwd(verificationCode);
+	        repository.save(entity);
+	        emailService.sendEmail(userEmail, "(나야, 농) 임시 비밀번호", "임시 비밀번호는 " + verificationCode + " 입니다. 로그인 후 보안을 위해 회원 정보 수정을 부탁드립니다.");
+	        return "임시 비밀번호가 이메일로 전송되었습니다.";
+	    } else {
+	        return "입력하신 정보가 일치하는 사용자가 없습니다.";
+	    }
 	}
-	   
 
     // 인증번호 생성 메서드
 	private String generateVerificationCode() {
 	    Random random = new Random();
 	    int code = random.nextInt(9000) + 1000;  // 1000 ~ 9999 사이의 숫자
 	    return String.valueOf(code);
-	}
-
-    // 비밀번호 업데이트
-	public String updatePassword(String userId, String newPassword) {
-	    Optional<NongEntity> user = repository.findByUserId(userId);
-	    if (user.isPresent()) {
-	        NongEntity entity = user.get();
-	        entity.setUserPwd(newPassword);  // 새로운 비밀번호로 업데이트
-	        repository.save(entity);  // DB에 저장
-	        return "비밀번호가 성공적으로 변경되었습니다.";
-	    } else {
-	        return "사용자를 찾을 수 없습니다.";
-	    }
 	}
 
 }// class end

@@ -3,12 +3,12 @@ import itemMappings from "../assets/FarmData.json"
 
 // p_startday 코드
 const startDateState = new Date();
-startDateState.setDate(startDateState.getDate() - 1);
+startDateState.setDate(startDateState.getDate() - 3);
 
 const startDateStateString = startDateState.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
 export const startDateStateAtom = atom({
     key: 'startDateState',  // 고유한 키
-    default: startDateStateString,  // 기본값을 오늘 날짜로 설정
+    default: startDateStateString,  // 기본값을 어제 날짜로 설정
 });
 
 
@@ -22,9 +22,9 @@ export const endDateStateAtom = atom({
 
 
 // 지역 코드
-export const countryCodeStateAtom = atom({
-    key: 'countryCodeState',
-    default: '',
+export const countyCodeStateAtom = atom({
+    key: 'countyCodeState',
+    default: "",
 });
 
 // 반환 타입
@@ -62,4 +62,10 @@ export const farmDataAtom = atom({
 export const selectedItemAtom = atom({
     key: "selectedItemAtom", // 고유 키
     default: null, // 기본값은 null
+});
+
+//도매와 소매를 관리해주는 상태
+export const priceTypeCodeStateAtom = atom({
+    key: 'priceTypeCodeStateAtom',
+    default: '',
 });

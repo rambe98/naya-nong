@@ -64,6 +64,8 @@ dependencies {
     
     // 이메일 인증 관련 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //Jsoup 의존성 추가
+    implementation 'org.jsoup:jsoup:1.16.1' // 최신 버전 확인
 }
 
 tasks.named('test') {

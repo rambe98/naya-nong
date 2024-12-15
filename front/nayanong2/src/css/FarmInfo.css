@@ -1,0 +1,149 @@
+/* 전체 컨테이너 스타일 */
+.farmInfo-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 제목 스타일 */
+  .farmInfo-container h2 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* 날짜 선택 */
+  .farmInfo-datePicker-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .farmInfo-datePicker-container label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  /* 드롭다운 섹션 */
+  .farmInfo-dropdown-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .farmInfo-dropdown-container label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .farmInfo-dropdown-container select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+  }
+  
+  .farmInfo-dropdown-container select:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* 버튼 스타일 */
+  .farmInfo-button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .farmInfo-button-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s;
+  }
+  
+  .farmInfo-button-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .farmInfo-button-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* 검색 결과 */
+  .farmInfo-result-container {
+    margin-top: 20px;
+  }
+  
+  .farmInfo-result-container h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .farmInfo-result-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .farmInfo-result-container li {
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .farmInfo-result-container li:nth-child(odd) {
+    background-color: #f7f7f7;
+  }
+  
+  .farmInfo-result-container li span {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  /* 로딩 및 에러 메시지 */
+  .farmInfo-loading-message,
+  .farmInfo-error-message {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .farmInfo-loading-message {
+    color: #007bff;
+  }
+  
+  .farmInfo-error-message {
+    color: red;
+  }
+  
+  /* 반응형 스타일 */
+  @media (max-width: 600px) {
+    .farmInfo-container {
+      padding: 15px;
+    }
+  
+    .farmInfo-button-container button {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+  }
+  

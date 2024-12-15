@@ -3,12 +3,12 @@ import itemMappings from "../assets/FarmData.json"
 
 // p_startday 코드
 const startDateState = new Date();
-startDateState.setDate(startDateState.getDate() - 3);
+startDateState.setDate(startDateState.getDate() - 1);
 
 const startDateStateString = startDateState.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
 export const startDateStateAtom = atom({
     key: 'startDateState',  // 고유한 키
-    default: startDateStateString,  // 기본값을 어제 날짜로 설정
+    default: startDateStateString,  // 기본값을 오늘 날짜로 설정
 });
 
 
@@ -22,9 +22,9 @@ export const endDateStateAtom = atom({
 
 
 // 지역 코드
-export const countyCodeStateAtom = atom({
-    key: 'countyCodeState',
-    default: "",
+export const countryCodeStateAtom = atom({
+    key: 'countryCodeState',
+    default: '',
 });
 
 // 반환 타입
@@ -47,10 +47,16 @@ export const priceRequestDTOAtom = atom({
         p_returntype: "json",             // 반환 타입
     }
 });
-// 가격 데이터 상태 (priceDataAtom)
+// 하루 가격 데이터 상태 (priceDataAtom)
 export const priceDataAtom = atom({
     key: "priceDataAtom", // 상태의 고유 키
     default: [],          // 기본값은 빈 배열
+});
+
+// 일주일 가격 데이터 상태
+export const recentSevenDaysDataAtom = atom({
+    key: "recentSevenDaysDataAtom",
+    default: [],
 });
 
 export const farmDataAtom = atom({
@@ -69,3 +75,9 @@ export const priceTypeCodeStateAtom = atom({
     key: 'priceTypeCodeStateAtom',
     default: '',
 });
+
+//그래프의 하루가격 관리 상태
+export const graphPriceDataAtom = atom({
+    key: "graphPriceDataAtom", // 고유한 키
+    default: [], // 초기값: 빈 배열
+  });

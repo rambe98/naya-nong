@@ -12,14 +12,14 @@ const FindUserPwd = () => {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.body.classList.add('no-scroll');
-    return () => {
-      document.body.classList.remove('no-scroll');
-      // 컴포넌트 언마운트 시 메시지 초기화
-      setMessage('');
-    };
-  }, []);
+    useEffect(() => {
+      document.body.classList.add('no-scroll');
+      return () => {
+        document.body.classList.remove('no-scroll');
+        // 컴포넌트 언마운트 시 메시지 초기화
+        setMessage('');
+      };
+    }, []);
 
   // 비밀번호 찾기 요청
   const findPassword = async () => {
@@ -36,12 +36,18 @@ const FindUserPwd = () => {
       });
 
       setMessage(response.data); // 서버에서 반환된 메시지
-
+      
     } catch (error) {
       console.error('Error:', error);
       setMessage('오류가 발생했습니다. 다시 시도해 주세요.');
     } finally {
       setIsLoading(false); // 로딩 상태 종료
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      findPassword(); 
     }
   };
 
@@ -67,6 +73,7 @@ const FindUserPwd = () => {
           placeholder="이메일 입력"
           className="findUserInput"
           disabled={isLoading} // 요청 중 입력 비활성화
+          onKeyDown={handleKeyDown} 
         />
 
         <button onClick={findPassword} className="findUserButton" disabled={isLoading}>

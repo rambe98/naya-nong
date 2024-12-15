@@ -2,17 +2,15 @@ package com.test.project.api;
 
 import java.util.List;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 @RestController
 @RequestMapping("/retail")
@@ -26,7 +24,7 @@ public class ApiRetailController {
     @PostMapping("/price/all")
     public ResponseEntity<List<PriceDataDTO>> getAllRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
         try {
-           // p_countrycode 필드에서만 <br> 태그 처리
+        	// p_countrycode 필드에서만 <br> 태그 처리
             String processedCountryCode = Jsoup.clean(
                     HtmlUtils.htmlUnescape(priceRequestDTO.getP_countrycode()),
                     Safelist.none().addTags("br") // <br> 태그만 허용

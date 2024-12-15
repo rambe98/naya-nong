@@ -1,11 +1,14 @@
-import React from "react";
-import FarmList from "./FarmList";
-const Farm = () => {
-    return (
-        <div>
-            <FarmList />
-        </div>
-    )
-};
+import React from 'react'
+import FarmList from './FarmList'
+import FarmInfo from './FarmInfo'
 
-export default Farm;
+const Farm = () => {
+  return (
+    <div>
+      <FarmList />
+      <FarmInfo />
+    </div>
+  )
+}
+
+export default Farm

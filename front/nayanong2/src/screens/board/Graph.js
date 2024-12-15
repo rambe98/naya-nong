@@ -1,106 +1,89 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
-import { priceDataAtom } from "../../recoil/FarmRecoil";
 import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 
-const Graph = () => {
-    const priceData = useRecoilValue(priceDataAtom); // Recoil에서 가격 데이터 가져오기
+const Graph = ({ searchResults }) => {
+  console.log("Graph Data:", searchResults); // 디버깅용 로그
 
-    // 오늘 날짜와 일주일 전 날짜 계산
-    const today = new Date();
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(today.getDate() - 7);
+  // 데이터를 변환하여 X축: 날짜, Y축: 가격
+  const formattedData = searchResults
+    .filter((item) => item.countyname === "평균") // '평균' 데이터만 필터링
+    .map((item) => ({
+      date: item.regday, // 날짜
+      price: parseFloat(item.price) * 1000, // 가격을 원 단위로 변환 (x 1000)
+    }));
 
-    // 데이터를 필터링하여 일주일 전부터 오늘까지의 데이터만 남기기
-    const filteredData = priceData.filter((item) => {
-        const itemDate = new Date(item.date);
-        return itemDate >= sevenDaysAgo && itemDate <= today;
-    });
-
-    // 데이터가 없으면 샘플 데이터로 표시
-    const sampleData = [
-        { date: "2024-12-01", price: 1200 },
-        { date: "2024-12-02", price: 1500 },
-        { date: "2024-12-03", price: 1800 },
-    ];
-
-    return (
-        <div
-            style={{
-                width: "70%", // 화면 너비의 90%로 제한
-                maxWidth: "900px",
-                height: "300px", // 고정 높이
-                margin: "20px auto", // 상단 여백 추가 및 중앙 정렬
-                border: "1px solid #FFFFFF", // 메인 색상 테두리
-                borderRadius: "10px", // 모서리 둥글게
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // 그림자
-                backgroundColor: "#FFF8E6", // 연한 베이지 배경
-                padding: "16px", // 내부 여백
-            }}
-        >
-            <h2
-                style={{
-                    textAlign: "center",
-                    fontFamily: "'SSFlowerRoad', sans-serif",
-                    fontSize: "20px",
-                    color: "#d4a373", // 메인 색상
-                    borderBottom: "1.5px solid #d4a373", // 제목 아래 테두리
-                    paddingBottom: "8px",
-                    marginBottom: "16px",
-                }}
-            >
-                평균 가격 선 그래프
-            </h2>
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                    data={filteredData.length > 0 ? filteredData : sampleData} // 필터링된 데이터 사용
-                    margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" /> {/* 격자선 */}
-                    <XAxis dataKey="date" tick={{ fontSize: 12 }} tickLine={false} /> {/* X축 */}
-                    <YAxis
-                        tickFormatter={(value) => `₩${value.toLocaleString()}`} // Y축: 가격 단위 표시
-                        tick={{ fontSize: 12 }}
-                        tickLine={false}
-                    />
-                    <Tooltip
-                        formatter={(value) => `₩${value.toLocaleString()}`} // 툴팁: 가격 단위 표시
-                        contentStyle={{
-                            backgroundColor: "#FFFFFF", // 툴팁 배경색
-                            border: "1px solid #d4a373", // 테두리 색상
-                            borderRadius: "5px",
-
-                        }}
-                    />
-                    <Legend
-                        verticalAlign="top"
-                        height={36}
-                        wrapperStyle={{
-                            fontSize: "14px",
-                            color: "#333",
-                        }}
-                    />
-                    <Line
-                        type="monotone" // 선의 곡률을 부드럽게
-                        dataKey="price" // 데이터의 키를 price로 설정
-                        stroke="#d4a373" // 선 색상
-                        strokeWidth={2} // 선 두께
-                        dot={{ stroke: "#d4a373", strokeWidth: 2, r: 4 }} // 점 스타일
-                        activeDot={{ r: 6, strokeWidth: 2 }} // 활성화된 점 스타일
-                    />
-                </LineChart>
-            </ResponsiveContainer>
-        </div>
-    );
+  return (
+    <div className="graph-container">
+      <h3>평균 가격 선 그래프</h3>
+      {formattedData.length > 0 ? (
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart
+            data={formattedData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 40 }} // X축 레이블을 위한 여백 추가
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 12 }}
+              tickLine={false}
+              stroke="#5a5a5a"
+              label={{
+                value: "날짜", // 레이블 텍스트
+                position: "insideBottom", // X축 아래 표시
+                dy: 20, // 아래로 20px 추가 이동
+                fontSize: 14, // 레이블 글씨 크기
+                fill: "#5a5a5a", // 레이블 색상
+              }}
+            />
+            <YAxis
+              tickFormatter={(value) => `${value.toLocaleString()}원`}
+              tick={{ fontSize: 12 }}
+              tickLine={false}
+              stroke="#5a5a5a"
+              label={{
+                value: "가격 (원)",
+                angle: -90,
+                position: "insideLeft",
+                dx: -10,
+                fontSize: 14,
+                fill: "#5a5a5a",
+              }}
+            />
+            <Tooltip
+              formatter={(value) => `${value.toLocaleString()}원`} // '₩' 제거하고 '원'으로 표시
+              labelFormatter={(label) => `날짜: ${label}`}
+              itemStyle={{ color: "#333" }} // 텍스트 색상
+              formatter={(value) => [`${value.toLocaleString()}원`, "가격"]} // 'price'를 '가격'으로 변경
+              contentStyle={{
+                backgroundColor: "#ffffff",
+                border: "1px solid #d4a373",
+                borderRadius: "5px",
+                fontSize: "14px",
+              }}
+            />
+            <Line
+              type="monotone"
+              dataKey="price"
+              stroke="#d4a373"
+              strokeWidth={2}
+              dot={{ stroke: "#d4a373", strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, strokeWidth: 2 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      ) : (
+        <p>그래프에 표시할 데이터가 없습니다.</p>
+      )}
+    </div>
+  );
 };
 
 export default Graph;

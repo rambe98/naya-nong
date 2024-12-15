@@ -47,10 +47,16 @@ export const priceRequestDTOAtom = atom({
         p_returntype: "json",             // 반환 타입
     }
 });
-// 가격 데이터 상태 (priceDataAtom)
+// 하루 가격 데이터 상태 (priceDataAtom)
 export const priceDataAtom = atom({
     key: "priceDataAtom", // 상태의 고유 키
     default: [],          // 기본값은 빈 배열
+});
+
+// 일주일 가격 데이터 상태
+export const recentSevenDaysDataAtom = atom({
+    key: "recentSevenDaysDataAtom",
+    default: [],
 });
 
 export const farmDataAtom = atom({
@@ -63,3 +69,15 @@ export const selectedItemAtom = atom({
     key: "selectedItemAtom", // 고유 키
     default: null, // 기본값은 null
 });
+
+//도매와 소매를 관리해주는 상태
+export const priceTypeCodeStateAtom = atom({
+    key: 'priceTypeCodeStateAtom',
+    default: '',
+});
+
+//그래프의 하루가격 관리 상태
+export const graphPriceDataAtom = atom({
+    key: "graphPriceDataAtom", // 고유한 키
+    default: [], // 초기값: 빈 배열
+  });

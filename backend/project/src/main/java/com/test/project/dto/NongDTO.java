@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NongDTO {
+   
    private int clientNum;
    private String userId;
    private String userPwd;
@@ -20,6 +21,8 @@ public class NongDTO {
    private String userName;
    private String userNick;
    private String phoneCom;
+
+   
    //Entity - > dto
    public NongDTO(NongEntity entity) {
       this.clientNum = entity.getClientNum();
@@ -32,6 +35,8 @@ public class NongDTO {
       this.phoneCom = entity.getPhoneCom();
   
    }//NongDTO end
+   
+   
    //dto -> Entity
    public static NongEntity toEntity(NongDTO dto) {
       return NongEntity.builder()

@@ -67,12 +67,6 @@
   padding-right: 40px;
   /* 버튼이 입력창 안에 들어갈 공간 확보 */
 }
-/* 검색 입력창 포커스 상태 */
-.boardSearchInput:focus {
-  box-shadow: 0 0 5px rgba(176, 137, 104, 0.5); /* 부드러운 외곽선 효과 */
-  outline-color: #d4a373; /* 기본 포커스 아웃라인 제거 */
-}
-
 
 /* 검색 버튼 */
 .boardSearchButton {
@@ -95,7 +89,7 @@
 
 /* 검색 입력창에 포커스가 생길 때 버튼 색상 변경 */
 .boardSearchForm input:focus+button {
-  background-color: #FFFFFF;
+  background-color: #d4a373;
   /* 포커스 시 버튼 배경색을 메인 색상으로 변경 */
   border-color: #b08968;
   /* 포커스 시 버튼 테두리 색상 변경 */
@@ -103,7 +97,7 @@
 
 /* 포커스 시 돋보기 아이콘 색상 변경 */
 .boardSearchForm input:focus+button svg {
-  color: #b08968;
+  color: #ffffff;
   /* 포커스 시 돋보기 아이콘 색상 변경 */
 }
 
@@ -111,8 +105,7 @@
 .boardSearchForm button svg {
   color: #b08968;
   /* 돋보기 아이콘 색을 베이지로 */
-  font-size: 16px;
-  background-color: #fff;
+  font-size: 18px;
   /* 아이콘 크기 */
 }
 
@@ -577,7 +570,7 @@
   /* boardListItem: 각 항목(p태그)에 적용할 스타일 */
   .boardListItem {
     text-align: center;
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     line-height: 1.5;
     display: block;
     /* 변경: flex에서 block으로 변경 */
@@ -640,7 +633,7 @@
   }
 
   .boardSearchButton:hover {
-    background-color: #FFFFFF;
+    background-color: #b08968;
   }
 
   .boardListContainer {

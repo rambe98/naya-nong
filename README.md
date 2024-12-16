@@ -38,8 +38,9 @@
   - MongoDB 데이터베이스 설계 및 CRUD API 작성
   - 사용자 인증 및 권한 관리
 
-- **윤승범 (백엔드 개발)**  
-  - SpringBoot로 API 기능 구현
+- **윤승범 (백엔드 개발)**
+  - SpringBoot로 데이터 가공 및 로직 구현
+  - CRUD API 기능 구현
   - Open API 연결 및 가공
   - DB 설계 및 관리
 

@@ -8,7 +8,7 @@
     min-height: 100vh;
     padding: 50px;
     width: 100%;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 /* 선택지 필터 컨테이너 */

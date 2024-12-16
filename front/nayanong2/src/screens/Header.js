@@ -128,12 +128,10 @@ const Header = () => {
       {/* 모바일 네비게이션 */}
       {isMobile && (
         <nav className={`Header_mobileNav ${isMobileMenuOpen ? 'active' : ''}`}>
-          {loginsuccess && (
-            <span className="Header_HeaderHello">
-              환영합니다<br />
-              <span className="Header_highlight">{userNick}</span>님
-            </span>
-          )}
+          <span className="Header_HeaderHello">
+            환영합니다<br />
+            <span className="Header_highlight">{userNick}</span>님
+          </span>
           <div
             className="Header_closeButton"
             onClick={() => setMobileMenuOpen(false)}

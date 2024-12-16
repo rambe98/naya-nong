@@ -5,8 +5,7 @@
   align-items: center;
   height: 100vh;
   background-color: #ffffff;
-  margin: 0 auto;
-  position: relative
+  margin: 0;
 }
 
 .loginContent {
@@ -16,7 +15,6 @@
   width: 100%;
   max-width: 400px;
   padding-top: 10px;
-  
 }
 
 .mainLogo {

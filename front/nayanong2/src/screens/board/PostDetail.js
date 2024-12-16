@@ -279,33 +279,22 @@ const PostDetail = () => {
         <div className="postDetailContainer">
             <div className="postDetailContent">
                 <h2 className="postTitle">{board.bodTitle}</h2>
-
-                {isMobile && (
-                    <div className="postInfo">
-                        <span>작성자: {board.project?.userNick || "알 수 없음"}</span>
-                        <span>작성일: {board.writeDate ? new Date(board.writeDate).toLocaleString() : "알 수 없음"}</span>
-                        <span>조회수: {board.views}</span>
-                    </div>
-                )}
-
-                {!isMobile && (
-                    <div className="postInfo">
-                        <span>작성자: {board.project?.userNick || "알 수 없음"}</span>
-                        <span>작성일: {board.writeDate ? new Date(board.writeDate).toLocaleString() : "알 수 없음"}</span>
-                        <span>조회수: {board.views}</span>
-                    </div>
-                )}
+                <div className="postInfo">
+                    <span>작성자: {board.project?.userNick || "알 수 없음"}</span>
+                    <span>작성일: {board.writeDate ? new Date(board.writeDate).toLocaleString() : "알 수 없음"}</span>
+                    <span>조회수: {board.views}</span>
+                </div>
                 <div className="postContent">{board.bodDtail}</div>
                 <div className="likeSection postInfoicon">
                     <div>
-                        <span
-                            className="likeIcon"
-                            onClick={toggleLike}
-                            style={{ cursor: "pointer", fontSize: "1.5rem" }}
-                        >
-                            <FaRegThumbsUp color="gray" />
-                        </span>
-                        좋아요: {likeCount}
+                    <span
+                        className="likeIcon"
+                        onClick={toggleLike}
+                        style={{ cursor: "pointer", fontSize: "1.5rem" }}
+                    >
+                        <FaRegThumbsUp color="gray" />
+                    </span>
+                    좋아요: {likeCount}
                     </div>
                     <div>
                         {board.project?.userNick === "관리자" ? (
@@ -334,11 +323,11 @@ const PostDetail = () => {
                     >
                         삭제
                     </button>
-                    {isMobile && (
+                    {isMobile &&(
                         <button onClick={goToBoard}>목록</button>
                     )}
-                    {!isMobile && (
-                        <button onClick={goToBoard}>목록으로</button>
+                    {!isMobile &&(
+                    <button onClick={goToBoard}>목록으로</button>
                     )}
 
                 </div>

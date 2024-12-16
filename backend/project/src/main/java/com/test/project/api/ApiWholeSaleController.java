@@ -24,7 +24,7 @@ public class ApiWholeSaleController {
     @PostMapping("/price/all")
     public ResponseEntity<List<PriceDataDTO>> getAllRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
         try {
-           // p_countrycode 필드에서만 <br> 태그 처리
+        	// p_countrycode 필드에서만 <br> 태그 처리
             String processedCountryCode = Jsoup.clean(
                     HtmlUtils.htmlUnescape(priceRequestDTO.getP_countrycode()),
                     Safelist.none().addTags("br") // <br> 태그만 허용

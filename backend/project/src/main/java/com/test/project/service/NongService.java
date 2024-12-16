@@ -1,17 +1,14 @@
 package com.test.project.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +21,6 @@ import com.test.project.persistence.NongRepository;
 import com.test.project.persistence.ParentCommentRepository;
 import com.test.project.security.TokenProvider;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -215,40 +210,41 @@ public class NongService {
 	}
 
     // 인증번호 생성 메서드
-	   private String generateVerificationCode() {
-	       String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	       String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
-	       String digits = "0123456789";
-	       String specialCharacters = "!@#$%^&*()_+";
-	       String allCharacters = upperCaseLetters + lowerCaseLetters + digits + specialCharacters;
+	private String generateVerificationCode() {
+	    String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	    String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+	    String digits = "0123456789";
+	    String specialCharacters = "!@#$%^&*()_+";
+	    String allCharacters = upperCaseLetters + lowerCaseLetters + digits + specialCharacters;
 
-	       StringBuilder code = new StringBuilder();
-	       Random random = new Random();
+	    StringBuilder code = new StringBuilder();
+	    Random random = new Random();
 
-	       // 각각 하나씩 포함
-	       code.append(upperCaseLetters.charAt(random.nextInt(upperCaseLetters.length())));
-	       code.append(lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length())));
-	       code.append(digits.charAt(random.nextInt(digits.length())));
-	       code.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
+	    // 각각 하나씩 포함
+	    code.append(upperCaseLetters.charAt(random.nextInt(upperCaseLetters.length())));
+	    code.append(lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length())));
+	    code.append(digits.charAt(random.nextInt(digits.length())));
+	    code.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
 
-	       // 나머지 두 자리를 랜덤하게 추가
-	       for (int i = 0; i < 2; i++) {
-	           code.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
-	       }
+	    // 나머지 두 자리를 랜덤하게 추가
+	    for (int i = 0; i < 2; i++) {
+	        code.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
+	    }
 
-	       // 결과를 무작위로 섞기
-	       List<Character> codeList = new ArrayList<>();
-	       for (char c : code.toString().toCharArray()) {
-	           codeList.add(c);
-	       }
-	       Collections.shuffle(codeList);
+	    // 결과를 무작위로 섞기
+	    List<Character> codeList = new ArrayList<>();
+	    for (char c : code.toString().toCharArray()) {
+	        codeList.add(c);
+	    }
+	    Collections.shuffle(codeList);
 
-	       // 다시 문자열로 변환
-	       StringBuilder shuffledCode = new StringBuilder();
-	       for (char c : codeList) {
-	           shuffledCode.append(c);
-	       }
+	    // 다시 문자열로 변환
+	    StringBuilder shuffledCode = new StringBuilder();
+	    for (char c : codeList) {
+	        shuffledCode.append(c);
+	    }
 
-	       return shuffledCode.toString();
-	   }
+	    return shuffledCode.toString();
+	}
+
 }// class end

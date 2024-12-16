@@ -44,6 +44,16 @@ public class BoardService {
       return boardRepository.findAll().stream().map(BoardDTO::new).collect(Collectors.toList());
    }// showAllBoard end
    
+   
+   // 사용자별게시판 조회
+   public List<BoardDTO> getBoardsByUserNick(String userNick) {
+      // BoardEntity에서 userNick에 해당하는 게시판 리스트를 조회
+      List<BoardEntity> boardEntities = boardRepository.findByProjectUserNick(userNick);
+      // 조회된 BoardEntity 리스트를 BoardDTO 리스트로 변환하여 반환
+      return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
+   }// getBoardsByUserNick end
+   
+   
    // boarderDetail
    public BoardDTO getBoardsByBoardNum(int bodNum) {
        // 게시글 조회
@@ -58,13 +68,7 @@ public class BoardService {
        return new BoardDTO(boardEntity);
    }
 
-   // 사용자별게시판 조회
-   public List<BoardDTO> getBoardsByUserNick(String userNick) {
-      // BoardEntity에서 userNick에 해당하는 게시판 리스트를 조회
-      List<BoardEntity> boardEntities = boardRepository.findByProjectUserNick(userNick);
-      // 조회된 BoardEntity 리스트를 BoardDTO 리스트로 변환하여 반환
-      return boardEntities.stream().map(BoardDTO::new).collect(Collectors.toList());
-   }// getBoardsByUserNick end
+
    
    // 제목으로 게시글 검색
     public List<BoardDTO> searchByTitle(String titleKeyword) {

@@ -2,12 +2,15 @@ package com.test.project.api;
 
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
 
 @RestController
@@ -17,10 +20,15 @@ public class ApiWholeSaleController {
 	@Autowired
 	private ApiWholeSaleService wholeSaleService;
 	
-	  // 전체 소매가격 데이터 조회
+	  // 전체 도매가격 데이터 조회
     @PostMapping("/price/all")
     public ResponseEntity<List<PriceDataDTO>> getAllRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
         try {
+        	// p_countrycode 필드에서만 <br> 태그 처리
+            String processedCountryCode = Jsoup.clean(
+                    HtmlUtils.htmlUnescape(priceRequestDTO.getP_countrycode()),
+                    Safelist.none().addTags("br") // <br> 태그만 허용
+            );
             // ApiService 호출하여 전체 데이터 리스트 얻기
             List<PriceDataDTO> allPriceDataList = wholeSaleService.getAllWholesalePriceData(
                     priceRequestDTO.getP_startday(),
@@ -29,7 +37,7 @@ public class ApiWholeSaleController {
                     priceRequestDTO.getP_itemcode(),
                     priceRequestDTO.getP_kindcode(),
                     priceRequestDTO.getP_productrankcode(),
-                    priceRequestDTO.getP_countrycode(),
+                    processedCountryCode,
                     priceRequestDTO.getP_returntype()
             );
 
@@ -39,7 +47,7 @@ public class ApiWholeSaleController {
         }
     }
     
-    //소매 평균 조회
+    //도매 평균 조회
 	@PostMapping("/price")
 	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
 		try {
@@ -66,7 +74,7 @@ public class ApiWholeSaleController {
 	}
 	
 	
-	//소매 지역 조회
+	//도매 지역 조회
 	@PostMapping("/price/marketname")
 	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfoByMarketname(@RequestBody PriceRequestDTO priceRequestDTO) {
 	    try {

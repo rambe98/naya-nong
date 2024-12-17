@@ -29,18 +29,18 @@ public class CommentService {
 	
 	//댓글 조회
 	public List<CommentDTO> showAllComment(int bodNum) {
-		
 		List<CommentEntity> commentsList =commentRepository.findByBoardBodNum(bodNum);
-		
 		return commentsList.stream().map(CommentDTO :: new).collect(Collectors.toList());
-		
 	}
+	
 
 	// 댓글 추가
 	public CommentDTO addComment(CommentDTO dto) {
+		//프론트엔드에서 받은 dto를 명시
 		int bodNum = dto.getBodNum();
     	String userNick = dto.getUserNick();
     	String content = dto.getContent();
+    	
 		BoardEntity board = boardRepository.findByBodNum(bodNum);
 		if (board == null) {
 			throw new RuntimeException("게시글을 찾을 수 없습니다.");

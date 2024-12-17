@@ -18,6 +18,4 @@ public class PriceRequestDTO  {
 	    private String p_productrankcode;
 	    private String p_countrycode;
 	    private String p_returntype;
-	    private int offset; // 데이터의 시작 위치
-	    private int limit;  // 가져올 데이터 개수
 }

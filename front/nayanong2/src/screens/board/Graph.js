@@ -29,9 +29,6 @@ const Graph = () => {
     const maxY = prices.length ? Math.ceil(Math.max(...prices) / 1000) * 1000 : 10000; // 최대값을 1000 단위로 올림
     const middleY = Math.round((minY + maxY) / 2 / 1000) * 1000; // 가운데 값 계산 (1000 단위 반올림)
 
-    console.log("Formatted Data:", formattedData);
-    console.log("Ticks:", [minY, middleY, maxY]);
-
     return (
         <div className="graph-container">
             <h3>평균 가격 선 그래프</h3>

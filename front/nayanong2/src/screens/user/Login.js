@@ -61,9 +61,7 @@ function Login() {
         // 로컬 스토리지에 로그인 정보 저장
         setUserPwd('');
         alert('로그인 성공');
-        console.log("정보",response);
         
-
         // 이전 경로로 리다이렉트
         const redirectPath = location.state?.from || '/';
         navigate(redirectPath);

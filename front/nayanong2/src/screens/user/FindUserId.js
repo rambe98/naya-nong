@@ -34,7 +34,6 @@ const FindUserId = () => {
           },
         }
       );
-      console.log('전송할 userEmail:', userEmail);
       setMessage(response.data);
     } catch (error) {
       console.error('Error:', error);

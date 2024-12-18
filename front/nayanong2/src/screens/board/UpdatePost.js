@@ -36,7 +36,6 @@ const UpdatePost = () => {
             try {
                 const response = await axios.get(`http://localhost:7070/board/${bodNum}`);
                 setBoard(response.data); // 게시글 데이터 설정
-                console.log("update불러온 데이터 : ", response.data);
             } catch (err) {
                 console.error('게시글을 불러오는 중 오류 발생:', err);
                 setError('게시글을 불러오는 데 실패했습니다.');
@@ -61,10 +60,6 @@ const UpdatePost = () => {
         try {
             // PUT 요청을 보내 게시글 수정
             const response = await axios.put(`http://localhost:7070/board/${bodNum}`, board);
-
-            console.log("boardNum", bodNum);
-            console.log("setBoard", setBoard);
-            console.log("Board", board);
             if (response.status === 200) {
                 if (window.confirm('게시글을 수정하시겠습니까?')) {
                     alert("수정이 완료되었습니다.")

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,7 @@ public class QnAEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int qnaNum;
 	private String qnaTitle;
+	@Column(length = 5000)  // 최대 5000자까지 입력 가능
 	private String qnaDtail;
 	
 	@ManyToOne

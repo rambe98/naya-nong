@@ -1,0 +1,27 @@
+.footer-container {
+    background-color: #e9ecef;
+    padding: 1.5rem 0;
+    text-align: center;
+    border-top: 1px solid #ced4da;
+    font-family: "Arial", sans-serif;
+  }
+  
+  .footer-content {
+    font-size: 0.85rem;
+    color: #495057;
+  }
+  
+  .footer-logo {
+    max-width: 100px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer-content a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .footer-content a:hover {
+    text-decoration: underline;
+  }
+  

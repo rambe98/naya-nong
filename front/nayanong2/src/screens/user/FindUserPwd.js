@@ -23,11 +23,6 @@ const FindUserPwd = () => {
 
   // 비밀번호 찾기 요청
   const findPassword = async () => {
-    console.log('React에서 전송하는 데이터:', {
-      userId,
-      userEmail,
-    });
-
     setIsLoading(true); // 로딩 상태 시작
     try {
       const response = await axios.post('http://localhost:7070/users/find-password', {

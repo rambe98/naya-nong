@@ -39,8 +39,6 @@ const Comments = () => {
                     return { ...comment, replies: repliesResponse.data.reverse() || [] };
                 })
             );
-    
-            console.log("Fetched Comments with Replies:", commentsWithReplies); // 댓글 및 대댓글 확인
             setComments(commentsWithReplies);
         } catch (error) {
             console.error("댓글 및 대댓글 데이터 로드 실패:", error);

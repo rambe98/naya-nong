@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import "../../css/FarmList.css";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
@@ -15,23 +15,38 @@ const getPreviousDay = (startDateState) => {
 const FarmList = () => {
     const [priceType, setPriceType] = useState(""); // 분류 상태
     const [searchTerm, setSearchTerm] = useState(""); // 입력된 검색어 상태
+    const [searchCompleted, setSearchCompleted] = useState(false); // 검색 완료 상태
+
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState(null);
     const [countryCode, setCountryCode] = useState("");
     const itemMappings = useRecoilValue(farmDataAtom);
     const [priceRequestDTO, setPriceRequestDTO] = useRecoilState(priceRequestDTOAtom);
-    const [startDateState, setStartDateState] = useRecoilState(startDateStateAtom);
-    const [endDateState, setEndDateState] = useRecoilState(endDateStateAtom);
+
     const setSelectedItemState = useSetRecoilState(selectedItemAtom);
     const setPriceDataState = useSetRecoilState(priceDataAtom);
     const priceData = useRecoilValue(priceDataAtom); // Recoil 상태에서 priceData 구독
 
-    const [searchCompleted, setSearchCompleted] = useState(false); // 검색 완료 상태
+    // 조회 시작 날짜
+    const [startDateState, setStartDateState] = useState(() => {
+        const date = new Date();
+        date.setDate(date.getDate() - 1); // 어제 날짜
+        return date.toISOString().split('T')[0];  // 'YYYY-MM-DD' 형식으로 반환
+    });
+
+    // 조회 종료 날짜
+    const [endDateState, setEndDateState] = useState(() => {
+        const date = new Date();
+        return date.toISOString().split('T')[0];  // 오늘 날짜
+    });
+
+    // 검색창을 위한 ref
+    const searchInputRef = useRef(null);
 
     const handlePriceType = (e) => {
         const selectedType = e.target.value;
-        const selectPriceType = selectedType === "도매" ? "retail" : selectedType === "소매" ? "wholeSale" : "";
+        const selectPriceType = selectedType === "소매" ? "retail" : selectedType === "도매" ? "wholeSale" : "";
 
         setPriceType(selectPriceType);
     };
@@ -41,6 +56,11 @@ const FarmList = () => {
         if (!searchTerm.trim()) {
             setError("검색어를 입력하세요.");
             return;
+        }
+
+        // 검색 후 포커스를 해제
+        if (searchInputRef.current) {
+            searchInputRef.current.blur(); // 검색 후 포커스 해제
         }
 
         const matchedItems = itemMappings[searchTerm];
@@ -130,6 +150,11 @@ const FarmList = () => {
         }
     };
 
+    // 검색창에 포커스가 생기면 통합검색 결과 숨기기
+    const handleFocus = () => {
+        setSearchCompleted(false);
+    };
+
     return (
         <div className="farmListPage">  {/* 클래스 추가 */}
             <div className="farmContainer">
@@ -137,7 +162,7 @@ const FarmList = () => {
                     <select
                         className="farmListSelect"
                         onChange={handlePriceType}
-                        value={priceType === "retail" ? "도매" : priceType === "wholeSale" ? "소매" : ""}
+                        value={priceType === "wholeSale" ? "도매" : priceType === "retail" ? "소매" : ""}
                     >
                         <option value="" disabled>
                             분류
@@ -147,9 +172,11 @@ const FarmList = () => {
                     </select>
                     <form className="farmListSearchForm" onSubmit={handleSearch}>
                         <input
+                            ref={searchInputRef} // ref 추가
                             placeholder="Search"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            onFocus={handleFocus} // 포커스 시 handleFocus 호출
                         />
                         <button type="submit">
                             <FaSearch />
@@ -162,8 +189,7 @@ const FarmList = () => {
                         <div className="marketGroupedPrices">
                             <div className="farmListSearchResult">
                                 {searchCompleted && searchTerm && (
-
-                                    <h3>"{searchTerm}"으로 검색한 결과입니다.</h3>
+                                    <h3>"{searchTerm}"에 대한 통합검색 결과 입니다.</h3>
                                 )}
                             </div>
                             {/* priceData가 없을 때 */}

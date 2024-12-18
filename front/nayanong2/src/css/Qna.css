@@ -77,10 +77,125 @@
   transform: scale(1.05); /* 약간 확대 효과 */
 }
 
+/* QnA 테이블 스타일 */
+.qnaBoard {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto; /* 가로 스크롤 방지 */
+  box-sizing: border-box;
+}
+
+.qnaBoard table {
+  width: 100%;
+  border-collapse: collapse; /* 셀 테두리 겹침 */
+  table-layout: fixed; /* 테이블 너비 고정 */
+}
+
+.qnaBoard th,
+.qnaBoard td {
+  padding: 8px 5px; /* 셀 안쪽 여백 축소 */
+  font-size: 1rem;
+  border: 1px solid #d4a373; /* 테두리 추가 */
+  text-align: center;
+  word-wrap: break-word; /* 내용 줄바꿈 */
+  box-sizing: border-box;
+}
+
+.qnaBoard th {
+  background-color: #f4e3d7; /* 테이블 헤더 배경색 */
+  font-weight: bold;
+  text-transform: uppercase; /* 대문자 변환 */
+}
+
+.qnaBoard tr:nth-child(even) {
+  background-color: #fdf9f4; /* 짝수 행 배경색 */
+}
+
+.qnaBoard tr:hover {
+  background-color: #f1e5dc; /* 행에 마우스 호버 시 강조 */
+  transition: background-color 0.3s ease;
+}
+
+.qnaBoard td {
+  white-space: nowrap; /* 텍스트 한 줄로 유지 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 길어질 경우 말줄임표 */
+}
+
+.qnaModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* 반투명 검정 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 내용 */
+.qnaModalContent {
+  background: #FFFFFF;
+  width: 70%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: center;
+}
+
+/* 닫기 버튼 */
+.qnaCloseButton {
+  margin-top: 15px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #d4a373; /* 메인 색상 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.qnaCloseButton:hover {
+  background-color: #b08968; /* 강조된 색상 */
+}
+
+.qnaEmailNotification {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
 body.no-scroll {
   overflow: hidden;
   height: 100%;
 }
+
+@media (max-width: 375px) {
+  .qnaBoard table {
+    width: 100%;
+    table-layout: fixed; /* 너비 고정 */
+    overflow-x: hidden; /* 가로 스크롤 제거 */
+  }
+
+  .qnaBoard th,
+  .qnaBoard td {
+    padding: 6px 4px; /* 패딩 축소 */
+    font-size: 11px; /* 글자 크기 축소 */
+  }
+}
+
+/* 테이블 행의 호버 효과 */
+.qnaBoard tr:hover {
+  background-color: #fdf3e7; /* 호버 시 배경색 */
+}
+
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
@@ -128,5 +243,59 @@ body.no-scroll {
     font-size: 16px;
     border-radius: 5px;
     margin-top: 15px;
+  }
+
+  .qnaBoard {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  .qnaBoard table {
+    border: 0;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .qnaBoard thead {
+    display: none; /* 테이블 헤더 숨김 */
+  }
+
+  .qnaBoard tr {
+    display: block;
+    margin-bottom: 15px; /* 각 행 간격 */
+    border: 1px solid #d4a373;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  .qnaBoard td {
+    display: block;
+    text-align: left;
+    padding: 10px 15px;
+
+    border-bottom: 1px solid #ddd;
+    position: relative;
+  }
+
+  .qnaBoard td:last-child {
+    border-bottom: none; /* 마지막 셀 구분선 제거 */
+  }
+
+  .qnaBoard td::before {
+    content: attr(data-label); /* 각 셀 레이블 표시 */
+    font-weight: bold;
+    display: block;
+    color: #d4a373; /* 메인 색상 강조 */
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .qnaBoard .qnaContentLink {
+    color: blue;
+    text-decoration: underline;
+    font-size: 14px;
   }
 }

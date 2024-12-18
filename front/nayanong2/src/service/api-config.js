@@ -14,7 +14,4 @@ if(hostname == "localhost"){
     backendHost = "http://localhost:7070";
 }
 
-console.log(backendHost);
-
-
 export const API_BASE_URL = `${backendHost}`

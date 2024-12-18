@@ -5,7 +5,7 @@ import '../../css/Board.css';
 import '../../css/SideBar.css';
 import axios from 'axios';
 import { useSetRecoilState } from "recoil";
-import { searchResultsAtom } from "../../recoil/BoardRecoil"
+import { searchboardResultsAtom } from "../../recoil/BoardRecoil"
 
 
 
@@ -20,7 +20,7 @@ const Board = () => {
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState('date');
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    const setSearchResults = useSetRecoilState(searchResultsAtom);
+    const setSearchResults = useSetRecoilState(searchboardResultsAtom);
     const adminUserNick = localStorage.getItem("userNick")
 
     useEffect(() => {
@@ -63,8 +63,6 @@ const Board = () => {
                 setPosts(filterPost.reverse());
 
                 let sortedPost = filterPost
-                console.log('User Nick:', adminUserNick);
-                console.log("게시글 데이터:", sortedPost);
 
                 switch (sortBy) {
                     case 'date':

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import '../../css/PostDetail.css';
 import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { bodNumAtom, searchResultsAtom } from "../../recoil/BoardRecoil"; // Recoil 상태 가져오기
+import { bodNumAtom, searchboardResultsAtom } from "../../recoil/BoardRecoil"; // Recoil 상태 가져오기
 import Comments from "./Comments"; // Comments 컴포넌트 추가
 
 const PostDetail = () => {
@@ -13,8 +13,8 @@ const PostDetail = () => {
     bodNum = parseInt(bodNum, 10); // 덮어쓰기 (정수형으로 변환)
     const setBodNum = useSetRecoilState(bodNumAtom); // Recoil 상태 업데이트 함수
     const localStorageUserNick = localStorage.getItem("userNick");
-    const searchResults = useRecoilValue(searchResultsAtom);
-    const resetSearchResults = useSetRecoilState(searchResultsAtom);
+    const searchResults = useRecoilValue(searchboardResultsAtom);
+    const resetSearchResults = useSetRecoilState(searchboardResultsAtom);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     useEffect(() => {
@@ -91,16 +91,11 @@ const PostDetail = () => {
 
     useEffect(() => {
         const currentArray = getCurrentArray();
-        console.log("useEffect: 현재 배열:", currentArray);
-        console.log("useEffect: 현재 bodNum:", bodNum);
-
         // currentIndex 설정
         const index = currentArray.findIndex((post) => post.bodNum === bodNum);
         if (index === -1) {
-            console.error("현재 bodNum이 배열에 없습니다:", bodNum, currentArray);
             setCurrentIndex(null);
         } else {
-            console.log("현재 게시글 인덱스:", index);
             setCurrentIndex(index); // 현재 게시글 인덱스 설정
         }
     }, [bodNum, searchResults, boards]);
@@ -114,8 +109,6 @@ const PostDetail = () => {
         const previousPost = currentArray[currentIndex - 1];
         if (previousPost) {
             navigate(`/board/${previousPost.bodNum}`);
-        } else {
-            console.error("이전 게시글을 찾을 수 없습니다.");
         }
     };
 
@@ -128,35 +121,8 @@ const PostDetail = () => {
         const nextPost = currentArray[currentIndex + 1];
         if (nextPost) {
             navigate(`/board/${nextPost.bodNum}`);
-        } else {
-            console.error("다음 게시글을 찾을 수 없습니다.");
-        }
+        } 
     };
-
-
-    useEffect(() => {
-        console.log("searchResults 상태:", searchResults);
-        console.log("boards 상태:", boards);
-        console.log("currentIndex 상태:", currentIndex);
-    }, [searchResults, boards, currentIndex]);
-
-    useEffect(() => {
-        const currentArray = getCurrentArray();
-        console.log("useEffect: 현재 배열:", currentArray);
-        console.log("useEffect: 현재 bodNum:", bodNum);
-
-        const index = currentArray.findIndex((post) => post.bodNum === bodNum);
-        if (index === -1) {
-            console.error("현재 bodNum이 배열에 없습니다:", bodNum, currentArray);
-            setCurrentIndex(null);
-        } else {
-            console.log("현재 게시글 인덱스:", index);
-            setCurrentIndex(index);
-        }
-    }, [bodNum, searchResults, boards]);
-
-
-
 
     // 페이지 이동 시 reset 호출
     const goToBoard = () => {
@@ -183,18 +149,12 @@ const PostDetail = () => {
     // 좋아요 토글
     const toggleLike = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
-        console.log("현재 bodNum", bodNum);
-
-
         if (!token) {
             alert("로그인이 필요합니다.");
             return;
         }
 
         try {
-            // 요청 데이터 로깅
-            console.log("요청 데이터:", { userNick: localStorageUserNick, bodNum: parseInt(bodNum) });
-
             // 서버로 요청 전송
             const response = await axios.post(
                 "http://localhost:7070/heart",
@@ -208,9 +168,6 @@ const PostDetail = () => {
                     },
                 }
             );
-
-            console.log("서버 응답:", response.data); // 서버 응답 로깅
-
             // 서버 응답 처리
             if (response.data === "좋아요가 추가되었습니다.") {
                 // 좋아요 추가

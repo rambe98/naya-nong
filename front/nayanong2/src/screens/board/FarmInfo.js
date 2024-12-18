@@ -62,15 +62,18 @@ const FarmInfo = () => {
     { code: "3818", name: "김해" },
   ];
 
+  // priceType 상태가 변경될 때마다 handleSearch 실행
   useEffect(() => {
-    setPriceRequestDTO({
-      ...priceRequestDTO,
-      p_itemcategorycode: "100", // 분류: 식량작물
-      p_countrycode: "1101", // 지역: 서울
-    });
-    setSelectedProduct("쌀"); // 품목: 쌀
-    setSelectedKind("20kg"); // 품종: 20kg
-  }, []);
+    // priceType 변경 시 검색 실행 대신 로그만 출력
+    console.log("priceType이 변경되었습니다:", priceType);
+  }, [priceType]);
+
+
+  useEffect(() => {
+    return () => {
+      setSearchResults([]); // 검색 결과 초기화
+    };
+  }, [setSearchResults]);
 
   const products = Object.keys(FarmData).filter((key) => {
     return FarmData[key]?.some(
@@ -86,8 +89,24 @@ const FarmInfo = () => {
     : [];
 
   const handleSearch = async () => {
+    if (!selectedProduct || !selectedKind) {
+      alert("품목이나 품종이 선택되지 않았습니다.");
+      return; // 빈 값일 경우 서버 요청을 하지 않음
+    }
+
     setLoading(true);
     setError(null);
+    setSearchResults([]);
+  
+    const selectedItemCode =
+      FarmData[selectedProduct]?.[0]?.p_itemcode || "";
+
+      const selectedKindCode = selectedKind || "";
+    
+    console.log("selectedKindCode:", selectedKindCode);
+    console.log("selectedKind:", selectedKind);
+    console.log("Available kinds:", FarmData[selectedProduct]);
+    
 
     const apiUrl =
       priceType === "retail"
@@ -98,12 +117,25 @@ const FarmInfo = () => {
       ...priceRequestDTO,
       p_startday: startDate,
       p_endday: endDate,
+      p_itemcode: selectedItemCode,
+      p_kindcode: selectedKindCode, // FarmData에서 가져온 값
     };
+
+      
+    console.log("내가보낸데이터",requestData);
+
 
     try {
       const response = await axios.post(apiUrl, requestData);
       const filteredResults = response.data.filter((item) => item.countyname === "평균");
       setSearchResults(filteredResults);
+
+      if (!filteredResults || filteredResults.length === 0) {
+        setError("해당 품목을 찾을 수 없습니다.");
+        return;
+      }
+
+      console.log("filteredResults", filteredResults);
 
       // 평균 가격 계산
       const total = filteredResults.reduce((sum, item) => sum + parseFloat(item.price || 0), 0);
@@ -111,11 +143,18 @@ const FarmInfo = () => {
 
       // Recoil Atom에 평균 가격 저장
       setAveragePrice(average);
+      console.log("요청데이터", response);
+      console.log("평균데이터", filteredResults);
+
+      console.log("합계", total);
+
+      console.log("평균", average);
+
 
       // 제목 업데이트
       const regionName =
-        regions.find((region) => region.code === priceRequestDTO.p_countrycode)?.name || "지역 없음";
-      const productName = FarmData[selectedProduct]?.[0]?.itemname || selectedProduct || "품목 없음";
+        regions.find((region) => region.code === priceRequestDTO.p_countrycode)?.name || "전국";
+      const productName = FarmData[selectedProduct]?.[0]?.itemname || selectedProduct || "전체";
       const kindName =
         FarmData[selectedProduct]?.find((item) => item.p_kindcode === selectedKind)?.kindname ||
         selectedKind ||
@@ -203,36 +242,51 @@ const FarmInfo = () => {
               </option>
             ))}
           </select>
+          {!loading && error && <p className="FarmInfo-warning-message">{error}</p>}
         </div>
       </div>
 
       <div className="farmInfo-button-container">
-        <button onClick={() => setPriceType("retail") || handleSearch()}>소매가로 검색</button>
-        <button onClick={() => setPriceType("wholeSale") || handleSearch()}>도매가로 검색</button>
+        <button
+          onClick={() => {
+            setPriceType("retail");
+            handleSearch(); // 소매가로 검색 시 즉시 실행
+          }}
+        >
+          소매가로 검색
+        </button>
+        <button
+          onClick={() => {
+            setPriceType("wholeSale");
+            handleSearch(); // 도매가로 검색 시 즉시 실행
+          }}
+        >
+          도매가로 검색
+        </button>
       </div>
 
-      {searchResults.length > 0 && 
-      <div className="farmInfo-result-wrapper">
-        <div className="farmInfo-result-container">
-          {loading ? (
-            <p>로딩 중...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            <>
-              <h3>{title}</h3>
-              <ul>
-                {searchResults.map((item, index) => (
-                  <li key={index}>
-                    날짜: {item.regday}, 평균 가격: {item.price}원
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
+      {searchResults.length > 0 &&
+        <div className="farmInfo-result-wrapper">
+          <div className="farmInfo-result-container">
+            {loading ? (
+              <p>로딩 중...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              <>
+                <h3>{title}</h3>
+                <ul>
+                  {searchResults.map((item, index) => (
+                    <li key={index}>
+                      날짜: {item.regday}, 평균 가격: {item.price}원
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-  }
+      }
       {/* Graph 컴포넌트 */}
       {searchResults.length > 0 && <Graph />}
     </div>

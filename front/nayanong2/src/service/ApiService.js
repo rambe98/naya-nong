@@ -32,7 +32,6 @@ export function call(api, method, request) {
     // axios 요청
     return axios(options)
         .then((response) => {
-            console.log("응답 데이터:", response.data);
             return response.data;
         })
         .catch((error) => {
@@ -49,8 +48,6 @@ export function signin(userDTO) {
     return call("/users/signin", "POST", userDTO)
         .then((response) => {
             if (response && response.token) {
-                console.log("넘겨받은데이터 : ",response);
-                
                 localStorage.setItem("ACCESS_TOKEN", response.token);
                 localStorage.setItem('userId', response.user.userId);
                 localStorage.setItem('clientNum', response.user.clientNum);

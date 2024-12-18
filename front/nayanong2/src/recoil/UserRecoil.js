@@ -14,7 +14,7 @@ export const clientNumAtom = atom({
 });
 
 export const userNicksuccessAtom = atom({
-    key: 'userNick',
+    key: 'userNicksuccess',
     default: null,
 });
 

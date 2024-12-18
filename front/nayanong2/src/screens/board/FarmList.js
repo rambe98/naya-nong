@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../../css/FarmList.css";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
@@ -16,7 +16,6 @@ const FarmList = () => {
     const [priceType, setPriceType] = useState(""); // 분류 상태
     const [searchTerm, setSearchTerm] = useState(""); // 입력된 검색어 상태
     const [searchCompleted, setSearchCompleted] = useState(false); // 검색 완료 상태
-
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState(null);
@@ -43,6 +42,9 @@ const FarmList = () => {
 
     // 검색창을 위한 ref
     const searchInputRef = useRef(null);
+
+    // useRef로 리랜더링 되어 카운트 횟수가 초기화되는 것을 방지
+    const retryCount = useRef(0);
 
     const handlePriceType = (e) => {
         const selectedType = e.target.value;
@@ -81,35 +83,28 @@ const FarmList = () => {
             setSelectedItemState(searchTerm);
             setError(""); // 오류 메시지 초기화
             setSearchCompleted(true); // 검색 완료 상태 업데이트
-
-            // 검색 후 getAllPrice 호출
-            await getAllPrice(updatedRequests);
         } else {
             setError("해당 품목을 찾을 수 없습니다.");
             setSearchCompleted(false); // 검색 완료 상태 초기화
         }
     };
 
-    // 조회
-    const getAllPrice = async (updatedRequests) => {
+    const getAllPrice = async () => {
         setLoading(true);
         setError(null);
 
         const apiUrl =
             priceType === "retail" ? "http://localhost:7070/retail/price/all"
-                :
-                priceType === "wholeSale" ? "http://localhost:7070/wholeSale/price/all"
-                    : "http://localhost:7070/retail/price/all"
+                : priceType === "wholeSale" ? "http://localhost:7070/wholeSale/price/all"
+                    : "http://localhost:7070/retail/price/all";
 
         try {
-            console.log("데이터를 요청하는 중...", updatedRequests);  // 요청할 데이터가 제대로 전달되는지 확인
+            console.log("requests", priceRequestDTO.requests);  // 요청할 데이터가 제대로 전달되는지 확인
 
-            // updatedRequests 배열을 바로 사용
-            const promises = updatedRequests.map((request) =>
+            const promises = priceRequestDTO.requests.map((request) =>
                 axios.post(apiUrl, request)
             );
-            // Promise.all()로 모든 요청이 끝날 때까지 기다림
-            // responses는 모든 axios.post 요청의 응답들을 배열로 가지고 있음
+
             const responses = await Promise.all(promises);
             console.log("반환 데이터 :", responses);
 
@@ -126,29 +121,47 @@ const FarmList = () => {
                         marketname: item.marketname,
                         kindname: item.kindname,
                         p_startday: currentStartDay,
+                        p_endday: endDateState,
                     };
                 }).filter(item => item !== null);
             });
 
             console.log("요청 데이터 :", priceRequestDTO);
             console.log("최종 변환된 데이터:", transformedData);
+
             // 데이터가 없으면 시작일을 1일 빼서 다시 시도
             if (transformedData.length === 0) {
-                const newStartDateState = getPreviousDay(startDateState);  // 1일 빼는 함수 사용
-                setStartDateState(newStartDateState);  // 새로운 시작일로 설정
-                return;  // 데이터를 받지 못하면 함수 종료
+                if (retryCount.current < 7) { // 7일 전 까지 시도 제한
+                    const newStartDateState = getPreviousDay(startDateState);  // 1일 빼는 함수 사용
+                    setStartDateState(newStartDateState);  // 새로운 시작일로 설정
+                    retryCount.current += 1;  // 재시도 횟수 증가
+                    return getAllPrice();  // 데이터를 다시 요청
+                } else {
+                    setError("해당 품목을 찾을 수 없습니다.");
+                    return;  // 더 이상 재시도하지 않음
+                }
             }
-            setPriceDataState(transformedData);
-            setMessage("");
+
+            setPriceDataState(transformedData);  // 데이터를 상태에 설정
+            setMessage("");  // 오류 메시지 초기화
 
         } catch (error) {
             console.error("Error fetching data:", error);
-            setPriceDataState([]);
+            setPriceDataState([]);  // 실패 시 데이터 상태 초기화
             setError("서버 요청 중 오류가 발생했습니다.");
         } finally {
-            setLoading(false);
+            setLoading(false);  // 로딩 상태 종료
         }
     };
+
+    // priceRequestDTO 상태가 업데이트되면 getAllPrice 호출
+    useEffect(() => {
+        // priceRequestDTO.requests가 undefined가 아닌지 확인하고, 배열이어야 .length 사용 가능
+        if (priceRequestDTO.requests && priceRequestDTO.requests.length > 0) {
+            getAllPrice();
+        }
+    }, [priceRequestDTO]); // priceRequestDTO가 변경될 때마다 실행
+
 
     // 검색창에 포커스가 생기면 통합검색 결과 숨기기
     const handleFocus = () => {
@@ -199,7 +212,7 @@ const FarmList = () => {
                                 <>
                                     {/* priceData가 있을 때 */}
                                     {Object.entries(priceData
-                                        .filter(item => item.marketname !== "null")
+                                        .filter(item => item.marketname !== "null" && !isNaN(item.price))
                                         .reduce((acc, item) => {
                                             // marketname을 기준으로 그룹화
                                             if (!acc[item.marketname]) {

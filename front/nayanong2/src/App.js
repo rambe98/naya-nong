@@ -16,6 +16,7 @@ import PostDetail from './screens/board/PostDetail';
 import UpdatePost from './screens/board/UpdatePost';
 import Notice from './screens/board/Notice';
 import Farm from './screens/board/Farm';
+import Footer from './screens/Footer';
 
 function App() {
   
@@ -81,6 +82,7 @@ const isLoginPage = location.pathname === '/login';
         <Route path="/notice" element={<Notice />} />
         <Route path="/" element={<Farm />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

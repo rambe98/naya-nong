@@ -1,27 +1,60 @@
 .footer-container {
+  background-color: #e9ecef;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #ced4da;
+  font-family: "Arial", sans-serif;
+  display: flex; /* 수평 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: space-between; /* 로고와 텍스트 양 끝 배치 */
+}
+
+.footer-logo-container {
+  flex: 0 0 auto; /* 로고 크기 고정 */
+  margin-right: 1.5rem; /* 로고와 텍스트 간격 추가 */
+}
+
+.footer-logo {
+  max-width: 100px;
+}
+
+.footer-content {
+  flex: 1; /* 텍스트 영역 확장 */
+  text-align: right; /* 텍스트 오른쪽 정렬 */
+  font-size: 0.85rem;
+  color: #495057;
+}
+
+.footer-content a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.footer-content a:hover {
+  text-decoration: underline;
+}
+
+
+/* 웹 환경(화면이 넓을 때)에서는 로고와 텍스트를 중앙에 배치 */
+@media (min-width: 768px) {
+  .footer-container {
     background-color: #e9ecef;
-    padding: 1.5rem 0;
-    text-align: center;
     border-top: 1px solid #ced4da;
     font-family: "Arial", sans-serif;
+    display: flex; /* 수평 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    flex-direction: column;
   }
-  
+
+  .footer-logo-container {
+    margin-right: 0; /* 간격 초기화 */
+    margin-bottom: 1rem; /* 로고 아래에 간격 추가 */
+  }
+
   .footer-content {
-    font-size: 0.85rem;
-    color: #495057;
+    text-align: center; /* 텍스트 중앙 정렬 */
   }
-  
+
   .footer-logo {
-    max-width: 100px;
-    margin-bottom: 0.5rem;
+    max-width: 70px;
   }
-  
-  .footer-content a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .footer-content a:hover {
-    text-decoration: underline;
-  }
-  
+}

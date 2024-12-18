@@ -1,0 +1,18 @@
+/* 이미지 갤러리 컨테이너 스타일 */
+.farmItemContainer {
+    display: flex;  /* Flexbox로 이미지를 가로로 나열 */
+    flex-wrap: wrap; /* 이미지가 넘칠 경우 줄바꿈 */
+    gap: 20px;  /* 이미지 간의 간격 */
+    justify-content: center; /* 이미지들을 중앙 정렬 */
+    padding: 20px;
+  }
+  
+  /* 각 이미지 스타일 */
+  .farmItem {
+    width: 150px; /* 이미지 가로 크기 */
+    height: 150px; /* 이미지 세로 크기 */
+    object-fit: cover; /* 이미지 비율에 맞게 크기를 자르거나 채움 */
+    border-radius: 8px; /* 이미지 모서리 둥글게 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 이미지에 그림자 추가 */
+  }
+  

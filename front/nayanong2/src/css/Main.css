@@ -19,6 +19,7 @@
 /* 스크롤 시 숨김 */
 .Header_mainHeader.hidden {
   transform: translateY(-100%);
+  opacity: 0;
 }
 
 /* 다시 보일 때 */
@@ -122,6 +123,8 @@
 .Header_hamburgerMenu {
   display: none;
 }
+
+
 
 
 /* 모바일 스타일 (768px 이하) */

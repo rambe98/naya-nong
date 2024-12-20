@@ -4,6 +4,7 @@ import '../../css/FindUser.css';
 import { useNavigate } from 'react-router-dom';
 import { smessageAtom } from '../../recoil/UserRecoil';
 import { useRecoilState } from 'recoil';
+import { API_BASE_URL } from '../../service/api-config';
 
 const FindUserPwd = () => {
   const [message, setMessage] = useRecoilState(smessageAtom);
@@ -25,7 +26,7 @@ const FindUserPwd = () => {
   const findPassword = async () => {
     setIsLoading(true); // 로딩 상태 시작
     try {
-      const response = await axios.post('http://localhost:7070/users/find-password', {
+      const response = await axios.post(`${API_BASE_URL}/users/find-password`, {
         userId: userId,
         userEmail: userEmail,
       });

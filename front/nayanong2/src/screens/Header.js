@@ -12,21 +12,37 @@ const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // 모바일 메뉴 상태 관리
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // 모바일 여부 확인
 
+
   // 로컬스토리지에서 로그인 상태 및 사용자 정보 가져오기
   const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
   const userNick = localStorage.getItem("userNick");
   const resetUserId = useResetRecoilState(userIdAtom);
   const resetUserPwd = useResetRecoilState(userPwdAtom);
 
-  // 창 크기 변화 감지
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      setMobileMenuOpen(false); // 화면 크기 변경 시 모바일 메뉴 닫기
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+
+ // 스크롤 이벤트 처리
+ useEffect(() => {
+  const handleScroll = () => {
+    const scrollTop = window.pageYOffset;
+    console.log('스크롤 위치:', scrollTop);
+    if (scrollTop > 80) {
+      setIsVisible(false); // 스크롤 내리면 숨김
+    } else {
+      setIsVisible(true); // 스크롤 올리면 보임
+    }
+  };
+
+  window.addEventListener('scroll', handleScroll);
+
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
+
+
+// 추가: isVisible 상태 변경 로그
+useEffect(() => {
+  console.log(`isVisible 상태: ${isVisible}`);
+}, [isVisible]);
 
   // 로그아웃 함수
   const handleLogout = () => {
@@ -50,23 +66,6 @@ const Header = () => {
       alert('로그인 정보가 없습니다. 다시 로그인 해주세요.');
     }
   };
-
-  // 스크롤 이벤트 처리
-  useEffect(() => {
-    let lastScrollTop = 0;
-    const handleScroll = () => {
-      const currentScroll = window.pageYOffset;
-      if (currentScroll > lastScrollTop && currentScroll > 50) {
-        setIsVisible(false); // 스크롤 내리면 숨김
-      } else {
-        setIsVisible(true); // 스크롤 올리면 보임
-      }
-      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <header className={`Header_mainHeader ${isVisible ? 'Header_visible' : 'Header_hidden'}`}>

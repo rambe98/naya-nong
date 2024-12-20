@@ -6,6 +6,7 @@ import '../../css/SideBar.css';
 import axios from 'axios';
 import { useSetRecoilState } from "recoil";
 import { searchboardResultsAtom } from "../../recoil/BoardRecoil"
+import { API_BASE_URL } from '../../service/api-config';
 
 
 
@@ -42,7 +43,7 @@ const Board = () => {
     const getList = async () => {
         const token = localStorage.getItem('ACCESS_TOKEN')
         try {
-            const response = await axios.get('http://localhost:7070/board',
+            const response = await axios.get(`${API_BASE_URL}/board`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -115,23 +116,23 @@ const Board = () => {
 
         switch (searchCategory) {
             case "title":
-                url = "http://localhost:7070/board/search/title";
+                url = `${API_BASE_URL}/board/search/title`;
                 params = { keyword: searchKeyword };
                 break;
             case "content":
-                url = "http://localhost:7070/board/search/content";
+                url = `${API_BASE_URL}/board/search/content`;
                 params = { keyword: searchKeyword };
                 break;
             case "titleOrContent":
-                url = "http://localhost:7070/board/search/titleAndContent";
+                url = `${API_BASE_URL}/board/search/titleAndContent`;
                 params = { titleKeyword: searchKeyword, contentKeyword: searchKeyword };
                 break;
             case "userNick":
-                url = "http://localhost:7070/board/search/userNick";
+                url = `${API_BASE_URL}/board/search/userNick`;
                 params = { keyword: searchKeyword };
                 break;
             case "all":
-                url = "http://localhost:7070/board/search/all";
+                url = `${API_BASE_URL}/board/search/all`;
                 params = { keyword: searchKeyword };
                 break;
             default:

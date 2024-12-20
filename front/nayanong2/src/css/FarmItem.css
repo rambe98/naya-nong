@@ -1,18 +1,130 @@
-/* 이미지 갤러리 컨테이너 스타일 */
 .farmItemContainer {
-    display: flex;  /* Flexbox로 이미지를 가로로 나열 */
-    flex-wrap: wrap; /* 이미지가 넘칠 경우 줄바꿈 */
-    gap: 20px;  /* 이미지 간의 간격 */
-    justify-content: center; /* 이미지들을 중앙 정렬 */
-    padding: 20px;
-  }
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  position: relative;
+  background-color: #ffffff;
+  flex-direction: column;
+  max-width: 1000px;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
+}
+
+
+.farmItemImageContainer {
+  display: flex;
+  flex-direction: row; /* 가로로 배치 */
+  justify-content: flex-start; /* 요소들을 왼쪽 정렬 */
+  align-items: center; /* 요소들을 세로로 가운데 정렬 */
+
+  box-sizing: border-box;
+  position: relative;
+  text-align: center;
+  max-width: 1000px;
+  border-radius: 20px;
+  width: 100%;
+}
+
+
+.farmItemImageContainer img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
   
-  /* 각 이미지 스타일 */
-  .farmItem {
-    width: 150px; /* 이미지 가로 크기 */
-    height: 150px; /* 이미지 세로 크기 */
-    object-fit: cover; /* 이미지 비율에 맞게 크기를 자르거나 채움 */
-    border-radius: 8px; /* 이미지 모서리 둥글게 */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 이미지에 그림자 추가 */
-  }
+}
+
+.farmItemImageContainer h2 {
+  margin-bottom: 10px; /* 제목과 다른 요소들 간 간격 */
+  background-color: #ffffff;
   
+}
+
+.farmItemImageContainer p {
+  margin-bottom: 10px; 
+  
+}
+
+/* 버튼 컨테이너 */
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.previousButton,
+.nextButton {
+  font-size: 20px;
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.previousButton:hover,
+.nextButton:hover {
+  background-color: #dceef1;
+}
+
+/* 이미지 css */
+.farmImageContainer{
+  padding: 20px;
+}
+
+
+
+
+/* 아이템 그래프 css */
+.itemChartContainer {
+  width: 70%; /* 그래프의 너비 */
+  margin: 0 auto; /* 가운데 정렬 */
+  justify-content: center;
+}
+
+/* 날짜 기준 가격 CSS */
+.farmDateContainer {
+  display: flex; /* flexbox로 정렬 */
+  justify-content: center;
+  gap: 20px; /* 항목들 간 간격 */
+  width: 300px;
+}
+
+.farmDate > div {
+  display: flex;
+  flex-direction: column; /* 세로로 배치 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+  gap: 10px; /* 항목들 간 간격 */
+  
+}
+
+.farmDate p {
+  margin: 0; /* 기본 마진 없애기 */
+  font-size: 14px; /* 글자 크기 설정 */
+  flex-grow: 1; /* 여유 공간을 차지하도록 */
+  
+  
+}
+
+/* 어제 날짜 */
+.itemDate0 {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  width: 120px;
+  background-color: #f9f9f9;
+ 
+}
+
+/* 오늘 날짜 */
+.itemDate1 {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  width: 120px;
+  background-color: #f9f9f9;
+}

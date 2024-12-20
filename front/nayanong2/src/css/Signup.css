@@ -120,11 +120,7 @@
   font-weight: bold;
 }
 
-/* 스크롤 비활성화 */
-body.no-scroll {
-  overflow: hidden;
-  height: 100%;
-}
+
 
 @media (max-width: 768px) {
   .signupContainer {

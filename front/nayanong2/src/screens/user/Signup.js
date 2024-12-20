@@ -74,8 +74,12 @@ function Signup() {
   // 회원가입 폼 요청
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("회원가입 정보:", formData);
 
     if (formData.userPwd !== formData.confirmPwd) {
+      console.log(formData.userPwd);
+      console.log(formData.confirmPwd);
+      
       setMessage('비밀번호가 일치하지 않습니다.')
       return
     }
@@ -99,11 +103,12 @@ function Signup() {
   const addUser = async (formData) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
-      const response = await axios.post("http://localhost:7070/users/signup", formData, {
+      const response = await axios.post("http://www.nayanong.site:7070/users/signup", formData, {
         headers: {
           Authorization: `Bearer ${token}`, // 인증 토큰 추가
         },
       });
+      console.log("회원추가 성공", response.data);
       alert("회원이 추가되었습니다.");
       navigate("/login");
     } catch (error) {

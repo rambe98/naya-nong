@@ -8,10 +8,12 @@ let backendHost;
 //호스트 이름은 도메인의 이름 부분으로 프로토콜,경로,쿼리 문자열을 제외한 부분이다.
 
 //왼쪽부터 차례대로 진행되며 false,null,undefined가 나오면 평가를 중단하고 값을 반환한다.
-const hostname = window && window.location &&window.location.hostname;
+const hostname = window && window.location && window.location.hostname;
 
-if(hostname == "localhost"){
+if (hostname === "localhost") {
     backendHost = "http://localhost:7070";
+} else if (hostname === "www.nayanong.site") {
+    backendHost = "http://www.nayanong.site:7070"; // 예시: 실제 백엔드 API URL
 }
 
 export const API_BASE_URL = `${backendHost}`

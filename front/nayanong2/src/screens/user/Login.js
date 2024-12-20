@@ -4,6 +4,7 @@ import logo from '../../assets/logo.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { signin } from '../../service/ApiService';
 
+
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -11,6 +12,7 @@ function Login() {
   const [userId, setUserId] = useState('');
   const [userPwd, setUserPwd] = useState('');
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // 로그인 페이지에 HTML(최상위) CSS 적용
   useEffect(() => {
@@ -61,7 +63,9 @@ function Login() {
         // 로컬 스토리지에 로그인 정보 저장
         setUserPwd('');
         alert('로그인 성공');
+        console.log("정보",response);
         
+
         // 이전 경로로 리다이렉트
         const redirectPath = location.state?.from || '/';
         navigate(redirectPath);
@@ -98,6 +102,7 @@ function Login() {
               }
             }}
             className="loginInput"
+            disabled={isLoading}
           />
           <input
             type="password"
@@ -106,10 +111,11 @@ function Login() {
             value={userPwd}
             onChange={(e) => setUserPwd(e.target.value)}
             className="loginInput"
+            disabled={isLoading}
           />
           {message && <p className="loginerrorText">{message}</p>}
-          <button type="submit" className="loginButton">
-            로그인
+          <button type="submit" className="loginButton" disabled={isLoading}>
+            {isLoading ? '로그인 중...' : '로그인'}
           </button>
           <button type="button" className="loginButton" onClick={handleBack}>
             이전

@@ -37,24 +37,28 @@ const UserInfo = () => {
   const [isDeleteMode, setIsDeleteMode] = useState(false)// 회원탈퇴 모드 여부
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);//모바일모드
   
-  useEffect(() => {
-    const updateScrollBehavior = () => {
-      if (window.innerWidth <= 768) {
-        document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
-      } else {
-        document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
-      }
-    };
+  // useEffect(() => {
+  //   const updateScrollBehavior = () => {
+  //     if (window.innerWidth <= 768) {
+  //       document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
+  //     } else {
+  //       document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
+  //     }
+  //   };
   
-    // 초기 실행
-    updateScrollBehavior();
+  //   // 초기 실행
+  //   updateScrollBehavior();
   
-    // 리사이즈 이벤트 리스너 등록
-    window.addEventListener('resize', updateScrollBehavior);
+  //   // 리사이즈 이벤트 리스너 등록
+  //   window.addEventListener('resize', updateScrollBehavior);
   
-    // 정리: 리스너 제거
-    return () => window.removeEventListener('resize', updateScrollBehavior);
-  }, []);
+  //   // 페이지가 언마운트될 때 no-scroll 클래스 제거
+  //   return () => {
+  //     document.body.classList.remove('no-scroll'); // 클래스 제거
+  //     window.removeEventListener('resize', updateScrollBehavior); // 리스너 제거
+  //   };
+  // }, []);
+  
   
 
   // 사용자 정보 로드
@@ -137,7 +141,7 @@ const UserInfo = () => {
           },
         }
       );
-
+      console.log("전송 데이터:", updatedUserInfo); // 전송 데이터 로그 확인
 
       if (response.status === 200) {
         const updatedUser = response.data;
@@ -221,10 +225,15 @@ const UserInfo = () => {
                 Authorization: `Bearer ${token}`,
               },
             });
+            if (deleteBoardResponse.status === 200) {
+              console.log(`게시글 번호 ${bodNum} 삭제 완료`);
+            }
           } catch (error) {
             console.error(`게시글 번호 ${bodNum} 삭제 실패`, error);
           }
-        } 
+        } else {
+          console.log(`게시글 번호 ${bodNum}는 삭제 대상이 아님 (작성자: ${boardUserNick}, 현재 사용자: ${currentUserNick})`);
+        }
       }
       // 회원 탈퇴 요청 (회원 정보를 먼저 삭제)
       const deleteUserResponse = await axios.delete(`http://localhost:7070/users/${clientNum}`, {
@@ -234,6 +243,7 @@ const UserInfo = () => {
         },
       });
       if (deleteUserResponse.status === 200) {
+        console.log("회원 탈퇴가 완료되었습니다.");
         // 탈퇴 후, 토큰 및 사용자 정보 삭제
         localStorage.removeItem("ACCESS_TOKEN");
         localStorage.removeItem("userNick");

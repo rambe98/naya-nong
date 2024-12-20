@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userNickAtom } from '../../recoil/UserRecoil';
-import '../../css/UpdatePost.css'; // 외부 CSS 파일을 import 합니다.
+import '../../css/UpdatePost.css';
+import { API_BASE_URL } from '../../service/api-config';
 
 const UpdatePost = () => {
     const navigate = useNavigate();
@@ -34,7 +35,7 @@ const UpdatePost = () => {
     useEffect(() => {
         const getBoardData = async () => {
             try {
-                const response = await axios.get(`http://localhost:7070/board/${bodNum}`);
+                const response = await axios.get(`${API_BASE_URL}/board/${bodNum}`);
                 setBoard(response.data); // 게시글 데이터 설정
             } catch (err) {
                 console.error('게시글을 불러오는 중 오류 발생:', err);
@@ -59,7 +60,7 @@ const UpdatePost = () => {
 
         try {
             // PUT 요청을 보내 게시글 수정
-            const response = await axios.put(`http://localhost:7070/board/${bodNum}`, board);
+            const response = await axios.put(`${API_BASE_URL}/board/${bodNum}`, board);
             if (response.status === 200) {
                 if (window.confirm('게시글을 수정하시겠습니까?')) {
                     alert("수정이 완료되었습니다.")

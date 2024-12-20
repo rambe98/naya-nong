@@ -10,6 +10,7 @@
   padding: 20px;
   overflow: scroll;
   position: relative;
+  overflow: hidden;
 }
 
 /* 입력폼 및 글쓰기, 검색 버튼 감싸는 컨테이너 */
@@ -276,11 +277,6 @@
   background-color: #FFFFFF;
   /* 배경 흰색 */
   cursor: pointer;
-}
-
-.boardPageButton:hover {
-  background-color: #FFF8E6;
-  /* 연한 베이지 */
 }
 
 .boardActivePage {

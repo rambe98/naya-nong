@@ -15,8 +15,10 @@ import WritePost from './screens/board/WritePost'
 import PostDetail from './screens/board/PostDetail';
 import UpdatePost from './screens/board/UpdatePost';
 import Notice from './screens/board/Notice';
-import Farm from './screens/board/Farm';
+import Farm from './screens/farm/Farm';
 import Footer from './screens/Footer';
+import ScrollToTop from './screens/ScrollToTop'
+
 
 function App() {
   
@@ -54,6 +56,7 @@ function App() {
 
   return(
     <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+      <ScrollToTop />
       <InnerApp />
     </Router>
   )
@@ -63,6 +66,7 @@ function App() {
 function InnerApp() {
   const location = useLocation();
 const isLoginPage = location.pathname === '/login';
+const showFooterPages = ['/qna', '/board', '/', '/write', '/notice'];
   
   return (
     <div className="App">
@@ -82,7 +86,7 @@ const isLoginPage = location.pathname === '/login';
         <Route path="/notice" element={<Notice />} />
         <Route path="/" element={<Farm />} />
       </Routes>
-      <Footer />
+      {showFooterPages.includes(location.pathname) && <Footer />}
     </div>
   );
 }

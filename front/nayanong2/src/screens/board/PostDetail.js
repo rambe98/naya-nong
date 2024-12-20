@@ -6,6 +6,7 @@ import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { bodNumAtom, searchboardResultsAtom } from "../../recoil/BoardRecoil"; // Recoil 상태 가져오기
 import Comments from "./Comments"; // Comments 컴포넌트 추가
+import { API_BASE_URL } from '../../service/api-config';
 
 const PostDetail = () => {
     const navigate = useNavigate();
@@ -63,14 +64,14 @@ const PostDetail = () => {
         const getBoardData = async () => {
             const token = localStorage.getItem("ACCESS_TOKEN");
             try {
-                const boardsResponse = await axios.get("http://localhost:7070/board", {
+                const boardsResponse = await axios.get(`${API_BASE_URL}/board`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
                 setBoards(boardsResponse.data);
 
-                const postResponse = await axios.get(`http://localhost:7070/board/${bodNum}`, {
+                const postResponse = await axios.get(`${API_BASE_URL}/board/${bodNum}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -135,7 +136,7 @@ const PostDetail = () => {
     const fetchLikeCount = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
-            const response = await axios.get(`http://localhost:7070/heart/${bodNum}/likeCount`, {
+            const response = await axios.get(`${API_BASE_URL}/heart/${bodNum}/likeCount`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰
                 },
@@ -157,7 +158,7 @@ const PostDetail = () => {
         try {
             // 서버로 요청 전송
             const response = await axios.post(
-                "http://localhost:7070/heart",
+                `${API_BASE_URL}/heart`,
                 {
                     userNick: localStorageUserNick, // 사용자 닉네임
                     bodNum: parseInt(bodNum),      // 게시물 번호
@@ -204,7 +205,7 @@ const PostDetail = () => {
         }
         if (window.confirm("게시글을 삭제하시겠습니까?")) {
             try {
-                await axios.delete(`http://localhost:7070/board/${bodNum}`, {
+                await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("게시글이 삭제되었습니다.");

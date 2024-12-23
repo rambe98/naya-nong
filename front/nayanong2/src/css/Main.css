@@ -45,6 +45,8 @@
   font-family: 'SSFlowerRoad', sans-serif;
   margin: 0;
   cursor: pointer;
+  white-space: nowrap;
+
 }
 
 /* 가운데: 네비게이션 */
@@ -59,14 +61,19 @@
 .Header_mainHeaderNav li {
   cursor: pointer;
   font-size: 16px;
+  display: block;
+  padding: 10px 0;
 }
 
 .Header_mainHeaderNav li a {
   text-decoration: none;
   color: black;
-  margin-left: 170px;
+  margin: 0px 30px 0px 130px; /* 기존 스타일 유지 */
+  padding: 30px 30px; /* 클릭 범위를 늘리기 위한 padding 추가 */
+  display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
   transition: color 0.3s ease;
   font-family: 'SSFlowerRoad', sans-serif;
+
 }
 
 .Header_mainHeaderNav li a:hover {
@@ -82,6 +89,7 @@
 .Header_mainHeaderRight {
   display: flex;
   gap: 10px;
+  white-space: nowrap;
 }
 
 .Header_mainButton {
@@ -99,6 +107,7 @@
 .Header_mainButton:hover {
   background-color: #FFFFFF;
   color: #d4a373;
+
 }
 
 /* 로그인 사용자 인사말 */
@@ -123,8 +132,170 @@
 }
 
 
-/* 모바일 스타일 (768px 이하) */
-@media (max-width: 768px) {
+
+ 
+/* 1500px 이하-------------------------------------------------------------------------- */
+@media(max-width:1500px){
+  .Header_mainHeaderNav li a {
+    text-decoration: none;
+    color: black;
+    margin: 0px 20px 0px 80px; /* 기존 스타일 유지 */
+    padding: 30px 30px; /* 클릭 범위를 늘리기 위한 padding 추가 */
+    display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
+    transition: color 0.3s ease;
+    font-family: 'SSFlowerRoad', sans-serif;
+  
+  }
+    .Header_HeaderHello {
+      font-size: 1rem;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      padding: 0 10px 0 10px;
+      font-family: 'SSFlowerRoad', sans-serif;
+      margin-bottom: 0px;
+    }
+    
+    .Header_HeaderHello .Header_highlight {
+      font-weight: bold;
+      color: #d4a373;
+      font-size: 10px;
+    }
+    .Header_mainButton {
+      font-size: 14px;
+      margin: 5px;
+      padding: 10px 40px;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+    
+    .Header_mainButton:hover {
+      background-color: #FFFFFF;
+      color: #d4a373;
+    
+    }
+    .Header_HeaderHello .Header_highlight {
+      font-weight: bold;
+      color: #d4a373;
+      font-size: 15px;
+    }
+    .Header_mainButton {
+      font-size: 16px;
+      padding: 10px 20px;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+    
+  }
+/* ------------------------------------------------------------------------- */
+  @media(max-width:1299px){
+    
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 40px;
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+      white-space: nowrap;
+    }
+
+    .Header_mainButton {
+      font-size: 16px;
+      padding: 10px 15px;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  }
+  /* ----------------------------------------------------------------------------------------- */
+  @media(max-width:1099px){
+    
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 20px;
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+      white-space: nowrap;
+    }
+
+    .Header_mainButton {
+      font-size: 16px;
+      padding: 10px 15px;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  }
+  /* ----------------------------------------------------------------------------------------- */
+  @media(max-width:999px){
+
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 15px;
+      padding: 20px; /* 클릭 범위를 늘리기 위한 padding 추가 */
+      display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    
+    }
+    
+  }
+  /* ----------------------------------------------------------------------------------------- */
+  @media(max-width:880px){
+
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 10px;
+      padding: 10px; /* 클릭 범위를 늘리기 위한 padding 추가 */
+      display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    
+    }
+    
+  }
+  /* ----------------------------------------------------------------------------------------- */
+  @media(max-width:850px){
+
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 5px;
+      padding: 5px; /* 클릭 범위를 늘리기 위한 padding 추가 */
+      display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    
+    }
+    
+  }
+  
+
+
+ /* 모바일 스타일 (768px 이하) -------------------------------*/
+
+ @media (max-width: 768px) {
   .Header_mainHeader {
     justify-content: space-between;
     padding: 10px 15px;
@@ -142,6 +313,24 @@
   .Header_mainHeaderRight {
     display: none; /* 버튼 숨김 */
   }
+
+  .Header_mainButton {
+    font-size: 14px;
+    padding: 10px 40px;
+    background-color: #FFFFFF;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+    font-family: 'SSFlowerRoad', sans-serif;
+  }
+  
+  .Header_mainButton:hover {
+    background-color: #FFFFFF;
+    color: #d4a373;
+  }
+
 }
 
   @media (max-width: 768px) {
@@ -183,7 +372,7 @@
   
     .Header_mobileNav ul {
       list-style: none;
-      padding: 20px 20px 20px;
+      padding: 0px 20px 20px 20px;
       margin: 0;
       width: 100%;
     }
@@ -192,25 +381,30 @@
       width: 100%;
       text-align: left;
       font-size: 18px;
-      padding:20px 0px;
+      padding:20px 0px 0px 0px;
       border-bottom: 1px solid #ddd;
       font-family: 'SSFlowerRoad', sans-serif;
+      
     }
   
     .Header_mobileNav li a {
       text-decoration: none;
       color: black;
+      display: block;
+      padding: 20px 0px 0px 0px;
+      transition: color 0.3s ease, transform 0.2s ease;
     }
   
     .Header_mobileNav li a:hover {
       color: #d4a373;
+      transform: translateX(-5px);
     }
   
     .Header_mobileButtons {
       margin-top: auto;
       width: 100%;
       text-align: center;
-      padding: 20px 0;
+      padding: 10px 0;
       background-color: #FFFFFF;
       border-top: 1px solid #ddd;
     }
@@ -220,10 +414,8 @@
       background-color: #FFFFFF;
       color: black;
       border: none;
-      padding: 15px 0px 0px 15px;
       font-family: 'SSFlowerRoad', sans-serif;
-      margin-bottom: 0px;
-
+      margin : 20px 10px;
     }
     
     .Header_HeaderHello .Header_highlight {
@@ -232,42 +424,7 @@
       font-size: 18px;
     }
   }
-
-  @media(max-width:1500px){
-    .Header_mainHeaderNav li a {
-      text-decoration: none;
-      color: black;
-      margin-left: 160px;
-      transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    }
-  }
-
-  @media(max-width:1299px){
-    .Header_mainHeaderNav li a {
-      text-decoration: none;
-      color: black;
-      margin-left: 60px;
-      transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    }
-  }
-
+/* -------------------------------------------------- */
   
-  @media(max-width:900px){
-    .Header_mainHeaderNav ul {
-      display: flex;
-      list-style: none;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-    }
 
-    .Header_mainHeaderNav li a {
-      text-decoration: none;
-      color: black;
-      margin-left: 30px;
-      transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    }
-  }
+ 

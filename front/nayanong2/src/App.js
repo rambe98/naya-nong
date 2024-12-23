@@ -15,7 +15,7 @@ import WritePost from './screens/board/WritePost'
 import PostDetail from './screens/board/PostDetail';
 import UpdatePost from './screens/board/UpdatePost';
 import Notice from './screens/board/Notice';
-import Farm from './screens/board/Farm';
+import Farm from './screens/farm/Farm';
 
 function App() {
   

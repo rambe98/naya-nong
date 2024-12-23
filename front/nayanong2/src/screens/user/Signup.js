@@ -3,6 +3,7 @@ import "../../css/Signup.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState, useResetRecoilState } from "recoil";
+import { API_BASE_URL } from '../../service/api-config';
 import {
   formDataAtom,
   messageAtom,
@@ -103,7 +104,7 @@ function Signup() {
   const addUser = async (formData) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
-      const response = await axios.post("http://localhost:7070/users/signup", formData, {
+      const response = await axios.post(`${API_BASE_URL}/users/signup`, formData, {
         headers: {
           Authorization: `Bearer ${token}`, // 인증 토큰 추가
         },

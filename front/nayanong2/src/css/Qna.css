@@ -1,12 +1,14 @@
 /* 전체 컨테이너 */
 .qnaContainer {
+  flex: 1; /* 부모의 남은 공간을 채우도록 설정 */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px;
-  height: 100vh;
-  background-color: #FFFFFF; /* 배경 흰색 */
+  padding: 20px;
+  background-color: #ffffff; /* 흰색 배경 */
   box-sizing: border-box;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 /* QnA 헤더 */
@@ -76,11 +78,13 @@
   background-color: #b08968; /* 강조된 메인 색상 */
   transform: scale(1.05); /* 약간 확대 효과 */
 }
-
-body.no-scroll {
-  overflow: hidden;
-  height: 100%;
+.qnaEmailNotification {
+  display: flex; /* 플렉스 박스 활성화 */
+  align-items: center; /* 세로축 가운데 정렬 */
+  justify-content: center; /* 가로축 가운데 정렬 */
+  text-align: center; /* 텍스트가 여러 줄일 때 가운데 정렬 */
 }
+
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
@@ -90,6 +94,7 @@ body.no-scroll {
     height: auto; /* 고정 높이 제거 */
     overflow-y: auto;
     box-sizing: border-box;
+    height: 100vh;
   }
 
   /* QnA 헤더 */
@@ -129,4 +134,17 @@ body.no-scroll {
     border-radius: 5px;
     margin-top: 15px;
   }
+
+  .qnaEmailNotification {
+    display: flex; /* 플렉스 박스 활성화 */
+    align-items: center; /* 세로축 가운데 정렬 */
+    justify-content: center; /* 가로축 가운데 정렬 */
+    text-align: center; /* 텍스트가 여러 줄일 때 가운데 정렬 */
+  }
+  
+  .qnaEmailNotification p {
+    font-size: 12px;
+    margin: 0; /* 기본 마진 제거 (필요시) */
+  }
+  
 }

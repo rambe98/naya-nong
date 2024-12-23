@@ -29,9 +29,6 @@ const Graph = () => {
     const maxY = prices.length ? Math.ceil(Math.max(...prices) / 1000) * 1000 : 10000; // 최대값을 1000 단위로 올림
     const middleY = Math.round((minY + maxY) / 2 / 1000) * 1000; // 가운데 값 계산 (1000 단위 반올림)
 
-    console.log("Formatted Data:", formattedData);
-    console.log("Ticks:", [minY, middleY, maxY]);
-
     return (
         <div className="graph-container">
             <h3>평균 가격 선 그래프</h3>
@@ -75,7 +72,7 @@ const Graph = () => {
                         />
                         {/* 툴팁 */}
                         <Tooltip
-                            formatter={(value) => [`${value.toLocaleString()}원`, "가격"]} // 정확한 값 표시
+                            formatter={(value) => [`${value.toLocaleString()}원`, "가격"]} 
                             labelFormatter={(label) => `날짜: ${label}`}
                             contentStyle={{
                                 backgroundColor: "#ffffff",
@@ -87,11 +84,12 @@ const Graph = () => {
                         <Line
                             type="monotone"
                             dataKey="price"
-                            stroke="#d4a373"
+                            stroke="rgba(75, 192, 192, 1)" 
                             strokeWidth={2}
-                            dot={{ stroke: "#d4a373", strokeWidth: 2, r: 4 }}
-                            activeDot={{ r: 6, strokeWidth: 2 }}
+                            dot={{ stroke: "rgba(75, 192, 192, 1)", strokeWidth: 2, r: 4 }} 
+                            activeDot={{ r: 6, strokeWidth: 2, fill: "rgba(75, 192, 192, 1)" }} 
                         />
+
                     </LineChart>
                 </ResponsiveContainer>
             ) : (

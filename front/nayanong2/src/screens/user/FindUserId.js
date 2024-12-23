@@ -4,6 +4,7 @@ import '../../css/FindUser.css';
 import { useNavigate } from 'react-router-dom';
 import { smessageAtom } from '../../recoil/UserRecoil';
 import { useRecoilState } from 'recoil';
+import { API_BASE_URL } from '../../service/api-config';
 
 const FindUserId = () => {
   const [message, setMessage] = useRecoilState(smessageAtom);
@@ -26,7 +27,7 @@ const FindUserId = () => {
     setIsLoading(true); // 로딩 상태 시작
     try {
       const response = await axios.post(
-        `http://localhost:7070/users/find-id`,
+        `${API_BASE_URL}/users/find-id`,
         { userEmail },
         {
           headers: {
@@ -34,7 +35,6 @@ const FindUserId = () => {
           },
         }
       );
-      console.log('전송할 userEmail:', userEmail);
       setMessage(response.data);
     } catch (error) {
       console.error('Error:', error);

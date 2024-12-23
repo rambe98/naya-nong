@@ -38,6 +38,7 @@ const Board = () => {
     const toggleSidebar = () => {
         setIsSidebarVisible((prevState) => !prevState);
     };
+    
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value);

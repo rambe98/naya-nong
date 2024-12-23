@@ -5,59 +5,61 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
+import { API_BASE_URL } from '../../service/api-config';
 
 const Qna = () => {
-    const navigate = useNavigate('');
-   
+    // 모달 상태
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // 클릭된 내용 저장
+    const [selectedContent, setSelectedContent] = useState('');
+
     //로컬스토리지에서 유저닉을 가져옴
     const userNick = localStorage.getItem("userNick");
+
     //로컬스토리지에서 클라이언트넘을 가져옴
     const clientNum = localStorage.getItem("clientNum");
-    
-    const [formData, setFormData] = useState({ //폼데이터를 보내기위한 초기값,
-        userNick : userNick,
-        qnaTitle : '',
-        qnaDtail:'',
+
+    // QnA 리스트 상태 추가
+    const [qnaList, setQnaList] = useState([]);
+
+    //폼데이터를 보내기위한 초기값,
+    const [formData, setFormData] = useState({
+        userNick: userNick,
+        qnaTitle: '',
+        qnaDtail: '',
     })
-    const [date, setDate] = useState(''); //작성일자
-    
-    useEffect(() => {
-        // body에 클래스 추가
-        document.body.classList.add('no-scroll');
-    
-        // 언마운트 시 클래스 제거
-        return () => {
-          document.body.classList.remove('no-scroll');
-        };
-      }, []);
+    //작성일자
+    const [date, setDate] = useState('');
+    const navigate = useNavigate('');
 
     //날짜 함수
     useEffect(() => {
         const updateDate = () => {
             const currentDate = new Date();
             setDate(currentDate.toLocaleString());
-    };
+        };
         updateDate(); // 초기 실행
         const interval = setInterval(updateDate, 1000); // 1초마다 실행
 
-        return () => clearInterval(interval); 
+        return () => clearInterval(interval);
         // qna페이지에서 나갈때 1초마다 재실행되면 메모리사용을 하니 방지하기 위해
         // clearInterval 사용 즉, 타이머가 멈춘다
-    },[clientNum, navigate])
+    }, [clientNum, navigate])
     // []를 사용하는이유는 페이지가 최초 렌더링 될때 한번만실행해야하고
     // []가 없을경우에는 상태가 변할때마다 업데이트되기때문에 원하는 값이 안나올수있다.(중복된 타이머가 발생)
-    
+
     //클라이언트넘에 아무런 값이없을때 로그인 이동페이지로 이동하게함 if/else는 확인,취소
     useEffect(() => {
         if (!clientNum) {
             const userConfirmed = window.confirm(
                 '로그인을 해야 이용 가능한 서비스입니다. \n로그인 페이지로 이동하시겠습니까?'
             );
-        if(userConfirmed){
-            navigate('/login', { state: { from: '/qna' } });
-        }else {
-            navigate('/');
-        }
+            if (userConfirmed) {
+                navigate('/login', { state: { from: '/qna' } });
+            } else {
+                navigate('/');
+            }
         }
     }, []);
 
@@ -66,24 +68,7 @@ const Qna = () => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-    // //clientNum이 변경될때마다 서버에서 닉네임을 받아온다.
-    useEffect(() => {
-        const fetchNickName = async () => {
-            try {
-                if (clientNum) { // clientNum이 존재하는 경우에만 실행
-                    const response = await axios.get(`http://localhost:7070/users/${clientNum}`);
-                    if (response.status === 200) {
-                        localStorage.setItem(response.data.userNick); // 서버에서 받은 닉네임
-                    }
-                }
-            } catch (error) {
-                console.error('닉네임 조회 실패:', error);
-            }
-        };
-    
-        fetchNickName(); // useEffect 실행 시 닉네임 조회
-    }, [clientNum]);
-    
+
     // userNick이 변경될 때 formData.userNick 동기화
     useEffect(() => {
         setFormData((prevFormData) => ({
@@ -91,76 +76,172 @@ const Qna = () => {
             userNick: userNick || "", // userNick을 업데이트
         }));
     }, [userNick]);
-    
 
-    const handleSubmit = async(e) => {
+    // 모달 열기
+    const openModal = (content) => {
+        setSelectedContent(content);
+        setIsModalOpen(true);
+    };
+
+    // 모달 닫기
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedContent('');
+    };
+
+    //qnaList userNick이 관리자일때만 가져오기
+    useEffect(() => {
+        const adminQnaList = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/qna`);
+                setQnaList(response.data); // 받아온 데이터를 qnaList에 저장
+            } catch (error) {
+                console.log(error.response?.data || '데이터 가져오기 실패');
+            }
+        };
+
+        if (userNick === "관리자") {
+            adminQnaList();
+        }
+
+    }, [userNick])
+
+    //문의하기 요청 
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('ACCESS_TOKEN');
         try {
-            const response = await axios.post(`http://localhost:7070/qna`,formData,{
+            const response = await axios.post(`${API_BASE_URL}/qna`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰 추가
                 },
             });
-           alert('문의하기가 완료되었습니다.');
-           setFormData({
-            userNick : userNick,
-            qnaTitle : '',
-            qnaDtail : '',
-           })
-           navigate('/');
+            alert('문의하기가 완료되었습니다.');
+            setFormData({
+                userNick: userNick,
+                qnaTitle: '',
+                qnaDtail: '',
+            })
+            navigate('/');
         } catch (error) {
             alert('문의하기 실패');
         }
-        console.log(formData);
-        
     }
 
+
+
     return (
-
         <div className="qnaContainer">
-        <span className="QnaHeader">QnA</span>
-        {/* 입력 폼 */}
-        <form onSubmit={handleSubmit} className='qnaForm'>
+            <span className="QnaHeader">QnA</span>
+            {/* 관리자일 경우 입력 폼을 숨김 */}
+            {userNick !== "관리자" && (
+                <form onSubmit={handleSubmit} className="qnaForm">
+                    {/* 닉네임 */}
+                    <input
+                        type="text"
+                        name="userNick"
+                        className="qnaInput"
+                        value={userNick || ""}
+                        readOnly
+                    />
 
-            {/* 닉네임 */}
-            <input
-              type="text"
-              name="userNick"
-              placeholder="이름을 입력해주세요"
-              className="qnaInput"
-              value={userNick}
-              readOnly // 읽기 전용
-            />
-      
-            {/* 제목 */}
-            <input
-              type="text"
-              name="qnaTitle"
-              placeholder="제목을 입력해주세요"
-              className="qnaInput"
-              value={formData.qnaTitle}
-              onChange={handleChange}
-              required // 필수 입력
-            />
-      
-            {/* 내용 */}
-            <textarea
-              name="qnaDtail"
-              placeholder="내용을 입력해주세요"
-              className="qnaInputtext"
-              value={formData.qnaDtail}
-              onChange={handleChange}
-              required // 필수 입력
-            />
+                    {/* 제목 */}
+                    <input
+                        type="text"
+                        name="qnaTitle"
+                        placeholder="제목을 입력해주세요."
+                        className="qnaInput"
+                        value={formData.qnaTitle}
+                        onChange={handleChange}
+                        required
+                    />
 
-          {/* 제출 버튼 */}
-          <button type="submit" className="qnaButton">보내기</button>
-        </form>
-      </div>
-      
+                    {/* 내용 */}
+                    <textarea
+                        name="qnaDtail"
+                        placeholder="내용을 입력해주세요."
+                        className="qnaInputtext"
+                        value={formData.qnaDtail}
+                        onChange={handleChange}
+                        required
+                    />
+                    <div className="qnaEmailNotification">
+                        <p>답변은 회원가입 당시 <br/>이메일로 순차적 발송됩니다.</p>
+                    </div>
+                    {/* 제출 버튼 */}
+                    <button type="submit" className="qnaButton">
+                        보내기
+                    </button>
+                </form>
+            )}
 
+            {/* QnA 게시판: 관리자만 볼 수 있음 */}
+            {userNick === "관리자" && (
+                <div className="qnaBoard">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>내용</th>
+                                <th>작성일자</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {qnaList.map((qna, index) => (
+                                <tr key={index}>
+                                    <td data-label="번호">{qna.qnaNum || index + 1}</td>
+                                    <td data-label="제목">{qna.qnaTitle}</td>
+                                    <td data-label="작성자">{qna.userNick}</td>
+                                    <td data-label="내용">
+                                        <span
+                                            onClick={() => openModal(qna.qnaDtail)} // 클릭 시 모달 열기
+                                            style={{
+                                                color: 'blue',
+                                                textDecoration: 'underline',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            {qna.qnaDtail.length > 20
+                                                ? `${qna.qnaDtail.substring(0, 20)}...`
+                                                : qna.qnaDtail}
+                                        </span>
+                                    </td>
+                                    <td data-label="작성일자">
+                                        {qna.writeDate
+                                            ? new Date(qna.writeDate).toLocaleString("ko-KR", {
+                                                year: "numeric",
+                                                month: "2-digit",
+                                                day: "2-digit",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                hour12: false,
+                                            })
+                                            : "N/A"}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+            {/* 모달 창 */}
+            {isModalOpen && (
+                <div className="qnaModalOverlay" onClick={closeModal}>
+                    <div className="qnaModalContent" onClick={(e) => e.stopPropagation()}>
+                        <h2>내용 상세</h2>
+                        <p>{selectedContent}</p>
+                        <button onClick={closeModal} className="qnaCloseButton">
+                            닫기
+                        </button>
+                    </div>
+                </div>
+            )}
+
+        </div>
     );
+
 };
 
 export default Qna;

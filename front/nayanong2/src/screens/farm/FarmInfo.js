@@ -15,6 +15,7 @@ import axios from "axios";
 import "../../css/FarmInfo.css";
 import Graph from "./Graph";
 import { ko } from "date-fns/locale";
+import { API_BASE_URL } from '../../service/api-config';
 
 const FarmInfo = () => {
   const [startDate, setStartDate] = useRecoilState(startDateStateAtom);
@@ -97,6 +98,14 @@ const FarmInfo = () => {
     setLoading(true);
     setError(null);
     setSearchResults([]);
+
+    let adjustedStartDate = startDate;
+    if (startDate === endDate) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() - 1); // 하루 빼기
+      adjustedStartDate = date.toISOString().split("T")[0]; // ISO 문자열로 변환
+    }
+  
   
     const selectedItemCode =
       FarmData[selectedProduct]?.[0]?.p_itemcode || "";
@@ -110,12 +119,12 @@ const FarmInfo = () => {
 
     const apiUrl =
       priceType === "retail"
-        ? "http://localhost:7070/retail/price/all"
-        : "http://localhost:7070/wholeSale/price/all";
+        ? `${API_BASE_URL}/retail/price/all`
+        : `${API_BASE_URL}/wholeSale/price/all`;
 
     const requestData = {
       ...priceRequestDTO,
-      p_startday: startDate,
+      p_startday: adjustedStartDate,
       p_endday: endDate,
       p_itemcode: selectedItemCode,
       p_kindcode: selectedKindCode, // FarmData에서 가져온 값
@@ -177,7 +186,7 @@ const FarmInfo = () => {
         <p className="FarmInfo-warning-message">※주말과 공휴일은 조회가 불가합니다.</p>
       )}
       <div className="farmInfo-datePicker-container">
-        <label>기간:</label>
+        <label className="farmInfo-datePicker-label">기간:</label>
         <DatePicker
           selected={new Date(startDate)}
           onChange={(date) => setStartDate(date.toISOString().split("T")[0])}
@@ -234,7 +243,10 @@ const FarmInfo = () => {
 
         <div>
           <label>지역:</label>
-          <select onChange={(e) => setPriceRequestDTO({ ...priceRequestDTO, p_countrycode: e.target.value })}>
+          <select   onChange={(e) => {
+      const value = e.target.value === "" ? "" : e.target.value; // 전체 선택 시 빈 문자열
+      setPriceRequestDTO({ ...priceRequestDTO, p_countrycode: value });
+    }}>
             <option value="">전체</option>
             {regions.map((region) => (
               <option key={region.code} value={region.code}>
@@ -250,7 +262,7 @@ const FarmInfo = () => {
         <button
           onClick={() => {
             setPriceType("retail");
-            handleSearch(); // 소매가로 검색 시 즉시 실행
+            handleSearch("retail"); // 소매가로 검색 시 즉시 실행
           }}
         >
           소매가로 검색
@@ -258,7 +270,7 @@ const FarmInfo = () => {
         <button
           onClick={() => {
             setPriceType("wholeSale");
-            handleSearch(); // 도매가로 검색 시 즉시 실행
+            handleSearch("wholeSale"); // 도매가로 검색 시 즉시 실행
           }}
         >
           도매가로 검색

@@ -1,11 +1,8 @@
 import React, { useEffect, useState, } from 'react';
-import logo from '../../assets/logo.png'
-import '../../css/Qna.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { clientNumAtom, userNickAtom } from '../../recoil/UserRecoil';
 import { API_BASE_URL } from '../../service/api-config';
+import '../../css/Qna.css'
 
 const Qna = () => {
     // 모달 상태
@@ -131,53 +128,53 @@ const Qna = () => {
 
 
     return (
-        <div className="qnaContainer">
-            <span className="QnaHeader">QnA</span>
+        <div className="qnaMainContainer">
+            <span className="qnaHeaderTitle">QnA</span>
             {/* 관리자일 경우 입력 폼을 숨김 */}
             {userNick !== "관리자" && (
-                <form onSubmit={handleSubmit} className="qnaForm">
+                <form onSubmit={handleSubmit} className="qnaInputForm">
                     {/* 닉네임 */}
                     <input
                         type="text"
                         name="userNick"
-                        className="qnaInput"
+                        className="qnaTextInput"
                         value={userNick || ""}
                         readOnly
                     />
-
+    
                     {/* 제목 */}
                     <input
                         type="text"
                         name="qnaTitle"
                         placeholder="제목을 입력해주세요."
-                        className="qnaInput"
+                        className="qnaTextInput"
                         value={formData.qnaTitle}
                         onChange={handleChange}
                         required
                     />
-
+    
                     {/* 내용 */}
                     <textarea
                         name="qnaDtail"
                         placeholder="내용을 입력해주세요."
-                        className="qnaInputtext"
+                        className="qnaTextarea"
                         value={formData.qnaDtail}
                         onChange={handleChange}
                         required
                     />
-                    <div className="qnaEmailNotification">
-                        <p>답변은 회원가입 당시 <br/>이메일로 순차적 발송됩니다.</p>
+                    <div className="qnaEmailInfo">
+                        <p>답변은 회원가입 당시 <br />이메일로 순차적 발송됩니다.</p>
                     </div>
                     {/* 제출 버튼 */}
-                    <button type="submit" className="qnaButton">
+                    <button type="submit" className="qnaSubmitButton">
                         보내기
                     </button>
                 </form>
             )}
-
+    
             {/* QnA 게시판: 관리자만 볼 수 있음 */}
             {userNick === "관리자" && (
-                <div className="qnaBoard">
+                <div className="qnaAdminBoard">
                     <table>
                         <thead>
                             <tr>
@@ -228,20 +225,19 @@ const Qna = () => {
             )}
             {/* 모달 창 */}
             {isModalOpen && (
-                <div className="qnaModalOverlay" onClick={closeModal}>
-                    <div className="qnaModalContent" onClick={(e) => e.stopPropagation()}>
+                <div className="qnaModalBackground" onClick={closeModal}>
+                    <div className="qnaModalBox" onClick={(e) => e.stopPropagation()}>
                         <h2>내용 상세</h2>
                         <p>{selectedContent}</p>
-                        <button onClick={closeModal} className="qnaCloseButton">
+                        <button onClick={closeModal} className="qnaModalCloseButton">
                             닫기
                         </button>
                     </div>
                 </div>
             )}
-
         </div>
     );
-
+    
 };
 
 export default Qna;

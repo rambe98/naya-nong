@@ -8,7 +8,7 @@
   /* 배경 흰색 */
   width: 100vw;
   padding: 20px;
-  overflow: scroll;
+  overflow: hidden;
   position: relative;
 }
 
@@ -325,11 +325,11 @@
 /* 사이드바 컨테이너 */
 .boardSidebarContainer {
   position: fixed;
-  top: 80px;
+  top: 200px;
   /* 헤더 높이만큼 아래로 내림 */
   left: 0;
   width: 150px;
-  height: calc(100% - 80px);
+  height: calc(15% - 80px);
   /* 헤더 높이를 뺀 나머지 높이 */
   background-color: #ffffff;
   /* 연한 베이지 배경 */

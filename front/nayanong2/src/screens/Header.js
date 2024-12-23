@@ -102,10 +102,10 @@ const Header = () => {
         <div className="Header_mainHeaderRight">
           {loginsuccess ? (
             <>
-              <span className="Header_HeaderHello">
+              <div className="Header_HeaderHello">
                 환영합니다<br />
                 <span className="Header_highlight">{userNick}</span>님
-              </span>
+              </div>
               <button className="Header_mainButton" onClick={handleLogInfo}>회원수정</button>
               <button className="Header_mainButton" onClick={handleLogout}>로그아웃</button>
             </>

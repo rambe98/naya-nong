@@ -186,7 +186,7 @@ const FarmInfo = () => {
         <p className="FarmInfo-warning-message">※주말과 공휴일은 조회가 불가합니다.</p>
       )}
       <div className="farmInfo-datePicker-container">
-        <label>기간:</label>
+        <label className="farmInfo-datePicker-label">기간:</label>
         <DatePicker
           selected={new Date(startDate)}
           onChange={(date) => setStartDate(date.toISOString().split("T")[0])}

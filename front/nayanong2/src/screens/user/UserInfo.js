@@ -14,6 +14,7 @@ import {
   messageAtom,
   smessageAtom,
 } from "../../recoil/UserRecoil";
+import { API_BASE_URL } from "../../service/api-config";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ const UserInfo = () => {
       const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
       try {
         // 요청 보내기
-        const response = await axios.get(`http://localhost:7070/users/${clientNum}`,
+        const response = await axios.get(`${API_BASE_URL}/users/${clientNum}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // 인증 토큰 추가
@@ -94,7 +95,7 @@ const UserInfo = () => {
   const handlePasswordClick = async () => {
     try {
       const token = localStorage.getItem("ACCESS_TOKEN");
-      const response = await axios.post("http://localhost:7070/users/verifypassword",
+      const response = await axios.post(`${API_BASE_URL}/users/verifypassword`,
         {
           clientNum: clientNum,
           userPwd: password,

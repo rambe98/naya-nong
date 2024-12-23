@@ -4,8 +4,9 @@ import { FaBars, FaSearch } from 'react-icons/fa';
 import '../../css/Board.css';
 import '../../css/SideBar.css';
 import axios from 'axios';
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { searchboardResultsAtom } from "../../recoil/BoardRecoil"
+import { scrollAtom } from '../../recoil/ScrollRecoil'
 import { API_BASE_URL } from '../../service/api-config';
 
 
@@ -22,7 +23,9 @@ const Board = () => {
     const [sortBy, setSortBy] = useState('date');
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const setSearchResults = useSetRecoilState(searchboardResultsAtom);
- 
+    const scrollPosition = useRecoilValue(scrollAtom); // Scroll 상태
+    const isVisible = scrollPosition < 80; // 헤더 보임 여부
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth <= 768);
@@ -35,6 +38,7 @@ const Board = () => {
     const toggleSidebar = () => {
         setIsSidebarVisible((prevState) => !prevState);
     };
+    
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
@@ -52,47 +56,48 @@ const Board = () => {
             );
             if (response.status === 200) {
                 // 원본 데이터를 sortedPost로 복사
-                let sortedPost = response.data
-
+                let sortedPost = response.data;
+    
                 // 작성자의 게시글과 다른 유저의 게시글 분리
-                const adminPost = sortedPost.filter(post => post.userNick === "관리자").reverse();
-                const otherPost = sortedPost.filter(post => post.userNick !== "관리자")
-
+                const adminPost = sortedPost.filter(post => post.userNick === "관리자").reverse().slice(0, 3); // 공지사항 3개로 제한
+                const otherPost = sortedPost.filter(post => post.userNick !== "관리자");
+    
                 // 다른 유저의 게시글을 정렬
-                let sortedOtherPost = [...otherPost]
-
+                let sortedOtherPost = [...otherPost];
+    
                 switch (sortBy) {
                     case 'date':
                         sortedOtherPost = sortedOtherPost.sort((a, b) => {
-                            const dateA = new Date(a.created_at)
-                            const dateB = new Date(b.created_at)
-                            return dateB - dateA
-                        }).reverse()// 최신순
-                        break
+                            const dateA = new Date(a.created_at);
+                            const dateB = new Date(b.created_at);
+                            return dateB - dateA;
+                        }).reverse(); // 최신순
+                        break;
                     case 'views':
-                        sortedOtherPost = sortedOtherPost.sort((a, b) => b.views - a.views);// 조회수 순
-                        break
+                        sortedOtherPost = sortedOtherPost.sort((a, b) => b.views - a.views); // 조회수 순
+                        break;
                     case 'title':
-                        sortedOtherPost = sortedOtherPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)) // 제목순
-                        break
+                        sortedOtherPost = sortedOtherPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)); // 제목순
+                        break;
                     default:
-                        break
+                        break;
                 }
-
+    
                 // 관리자 게시글을 최상단에 두고 나머지 게시글들을 정렬 후 합침
-                sortedPost = [...adminPost, ...sortedOtherPost]
-
+                sortedPost = [...adminPost, ...sortedOtherPost];
+    
                 // 최종 업데이트
-                setPosts(sortedPost)
+                setPosts(sortedPost);
             }
         } catch (error) {
-            console.error('목록을 가져올 수 없습니다.')
-            alert('게시글 목록을 불러오는 데 실패했습니다.')
+            console.error('목록을 가져올 수 없습니다.');
+            alert('게시글 목록을 불러오는 데 실패했습니다.');
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
     
+
 
     // 한 페이지에 렌더링되는 게시글의 수 설정
     // 페이지 변경
@@ -102,6 +107,7 @@ const Board = () => {
         //페이지 업데이트시 스크롤을 상단을 위치
         window.scrollTo(0, 0)
     };
+
 
 
     // 검색 함수
@@ -190,7 +196,7 @@ const Board = () => {
         }
     };
 
-    
+
 
 
     const totalPages = Math.ceil(posts.length / itemsPerPage);
@@ -209,6 +215,7 @@ const Board = () => {
         getList();
     }, [sortBy]);
 
+    const sidebarClassName = isSidebarVisible && isVisible ? 'boardSidebarContainer show' : 'boardSidebarContainer hide';
 
     return (
         <div className="boardContainer">
@@ -216,8 +223,7 @@ const Board = () => {
             {isMobile && (
                 <h2 className="boardname">자유게시판</h2>
             )}
-            <div className={`boardSidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
-
+            <div className={sidebarClassName}>
                 <button className="boardCloseSidebarButton" onClick={toggleSidebar}>
                     ✖
                 </button>
@@ -231,7 +237,6 @@ const Board = () => {
                 </ul>
             </div>
 
-
             {/* 작성일 및 페이지당 항목 수 선택 */}
             {!isMobile && (
                 <div className="boardOptionsContainer">
@@ -239,24 +244,24 @@ const Board = () => {
                         <h2 className="boardname">자유게시판</h2>
                     </div>
                     <div>
-                    <select
-                        className="boardSortBySelect"
-                        value={sortBy}
-                        onChange={handleSortChange}
-                    >
-                        <option value="date">작성일</option>
-                        <option value="views">조회수</option>
-                        <option value="title">제목</option>
-                    </select>
-                    <select
-                        className="boardItemsPerPageSelect"
-                        value={itemsPerPage}
-                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                    >
-                        <option value={10}>10개</option>
-                        <option value={20}>20개</option>
-                        <option value={30}>30개</option>
-                    </select>
+                        <select
+                            className="boardSortBySelect"
+                            value={sortBy}
+                            onChange={handleSortChange}
+                        >
+                            <option value="date">작성일</option>
+                            <option value="views">조회수</option>
+                            <option value="title">제목</option>
+                        </select>
+                        <select
+                            className="boardItemsPerPageSelect"
+                            value={itemsPerPage}
+                            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        >
+                            <option value={10}>10개</option>
+                            <option value={20}>20개</option>
+                            <option value={30}>30개</option>
+                        </select>
                     </div>
                 </div>
             )}

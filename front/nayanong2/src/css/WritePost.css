@@ -7,6 +7,7 @@
   padding: 20px;
   background-color: #ffffff; /* 흰색 배경 */
   box-sizing: border-box;
+  height: 100vh;
 }
 
 /* 글쓰기 헤더 */
@@ -89,6 +90,7 @@ body.no-scroll {
     padding: 20px;
     height: auto; /* 고정 높이 제거 */
     box-sizing: border-box;
+    height: 100vh;
   }
 
   /* 글쓰기 헤더 */

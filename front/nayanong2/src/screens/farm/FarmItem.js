@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../../css/FarmItem.css";
 import carrotImage from '../../assets/carrot.png';
 import spinachImage from '../../assets/spinach.png';
@@ -8,14 +8,14 @@ import bananaImage from '../../assets/banana.png';
 import axios from "axios";
 import farmData from '../../assets/FarmData.json';
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, plugins } from 'chart.js';
-import { Label } from "recharts";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Circles } from "react-loader-spinner";
 
 // 날짜에서 하루 전 날짜 구하기
 const getPreviousDay = (startDateState) => {
-    const date = new Date(startDateState);  // 문자열을 Date 객체로 변환
-    date.setDate(date.getDate() - 1);  // 날짜에서 1일 빼기
-    return date.toISOString().split('T')[0];  // 'YYYY-MM-DD' 형식으로 반환  
+    const date = new Date(startDateState);
+    date.setDate(date.getDate() - 1);
+    return date.toISOString().split('T')[0];
 };
 
 // Chart.js 등록
@@ -32,55 +32,66 @@ ChartJS.register(
 const FarmItem = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [priceData, setPriceData] = useState([]); // 가격 데이터
+    const [priceData, setPriceData] = useState([]);
     const [countryCode, setCountryCode] = useState("");
-    const [currentItemIndex, setCurrentItemIndex] = useState(0);  // 현재 품목을 추적
-    const items = ["시금치", "브로콜리", "당근", "바나나", "고구마"];  // 품목 목록
+    const [currentItemIndex, setCurrentItemIndex] = useState(0);
+    const [clicked, setClicked] = useState(false); //클릭상태 관리
+
+    // 화면 크기가 변경될 때 마다 key를 업데이트 하여 차트를 재렌더링
+    const [chartKey, setChartKey] = useState(Date.now())// 처음 렌더링 시 고유 key 생성
+
+    const items = ["시금치", "브로콜리", "당근", "바나나", "고구마"];
 
     const [startDateState, setStartDateState] = useState(() => {
         const date = new Date();
-        // 조회 시작 날짜를 이틀 전으로 설정(아침에 거래 내역이 없어 조회가 안 되는 것을 방지)
-        date.setDate(date.getDate() - 2);
-        return date.toISOString().split('T')[0];  // 'YYYY-MM-DD' 형식으로 반환
+        date.setDate(date.getDate() - 7);
+        return date.toISOString().split('T')[0];
     });
 
     const [endDateState, setEndDateState] = useState(() => {
         const date = new Date();
-        return date.toISOString().split('T')[0];  // 오늘 날짜
+        return date.toISOString().split('T')[0];
     });
 
-    // 품목별 이미지 매핑
     const itemImages = {
-        시금치: spinachImage,
-        브로콜리: broccoliImage,
-        당근: carrotImage,
-        바나나: bananaImage,
-        고구마: sweetpotatoImage,
+        시금치: {
+            image: spinachImage,
+            unit: "(100g 상품 기준)"
+        },
+        브로콜리: {
+            image: broccoliImage,
+            unit: "(1개 상품 기준)"
+        },
+        당근: {
+            image: carrotImage,
+            unit: "(1kg 상품 기준)"
+        },
+        바나나: {
+            image: bananaImage,
+            unit: "(100g 상품 기준)"
+        },
+        고구마: {
+            image: sweetpotatoImage,
+            unit: "(1kg 상품 기준)"
+        }
     };
 
-    // 가격 조회 함수
+    const chartRef = useRef(null); // Chart.js에 접근할 수 있는 ref 생성
+
     const getAllPrice = async (farmItemRequests) => {
         setLoading(true);
         setError(null);
-
-        const apiUrl = "http://localhost:7070/retail/price"; // 소매 가격 조회 API URL
+        const apiUrl = "http://localhost:7070/retail/price";
 
         try {
-            console.log("요청데이터:", farmItemRequests);
-
-            // 가격 요청
             const promises = farmItemRequests.map((request) =>
                 axios.post(apiUrl, request)
             );
-
             const responses = await Promise.all(promises);
 
             let farmItemData = responses.flatMap((response) => {
-                console.log("응답 데이터 : ", response.data);
-
                 if (Array.isArray(response.data)) {
                     return response.data.map((item) => {
-                        if (!item) return null;
                         let currentStartDay = item.p_startday || startDateState;
                         return {
                             date: item.yyyy && item.regday ? `${item.yyyy}-${item.regday.split('/').join('-')}` : "",
@@ -99,9 +110,6 @@ const FarmItem = () => {
                 }
             });
 
-            console.log("최종 변환된 데이터:", farmItemData);
-
-            // countyname이 "평균"인 데이터만 필터링
             farmItemData = farmItemData.filter((item) => item.countyname === "평균");
 
             if (farmItemData.length === 0) {
@@ -110,21 +118,19 @@ const FarmItem = () => {
                 return;
             }
 
-            setPriceData(farmItemData); // 가격 데이터 상태 업데이트
-            setError(null); // 에러 상태 초기화
-
+            setPriceData(farmItemData);
+            setError(null);
         } catch (error) {
             console.error("Error fetching data:", error);
-            setPriceData([]); // 가격 데이터 초기화
-            setError("서버 요청 중 오류가 발생했습니다."); // 오류 메시지 설정
+            setPriceData([]);
+            setError("서버 요청 중 오류가 발생했습니다.");
         } finally {
-            setLoading(false); // 로딩 상태 종료
+            setLoading(false);
         }
     };
 
-    // 처음 화면이 렌더링 될 때 한 번만 호출
     useEffect(() => {
-        const initialItem = items[0]; // 첫 번째 품목 (당근)
+        const initialItem = items[0];
         const matchedItems = farmData[initialItem];
 
         if (matchedItems && matchedItems.length > 0) {
@@ -137,32 +143,51 @@ const FarmItem = () => {
                 p_endday: endDateState,
             }));
 
-            getAllPrice(updatedRequests); // 첫 번째 품목에 대한 가격 데이터를 가져옵니다.
+            getAllPrice(updatedRequests);
         }
-    }, []); // 빈 배열을 넣어서 처음 렌더링 시에만 실행되도록 설정
+    }, []);
 
-    // 그래프 데이터
+    useEffect(() => {
+        const handleResize = () => {
+            if (chartRef.current) {
+                const chart = chartRef.current.chartInstance;
+                if (chart) {
+                    chart.resize(); // 차트 리사이즈
+                    chart.update(); // 차트 업데이트
+                }
+            }
+        };
+
+        // 화면 크기 변경 시마다 차트 리사이즈
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 리스너 정리
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const itemChart = {
-        labels: priceData.map((item) => item.date), // 날짜
+        labels: priceData.map((item) => item.date),
         datasets: [
             {
                 label: "소매가 그래프",
-                data: priceData.map((item) => item.price), // 가격
+                data: priceData.map((item) => item.price),
                 fill: false,
                 borderColor: "rgba(75, 192, 192, 1)",
                 tension: 0.1,
             },
         ],
-    }
-    //그래프 옵션
+    };
+
     const itemChartOption = {
         responsive: true,
         plugins: {
             legend: {
                 position: "top",
                 labels: {
-                    boxWidth: 0, // 박스 숨기기
-                    usePointStyle: true, // 점 스타일 사용
+                    boxWidth: 0,
+                    usePointStyle: true,
                 },
             },
         },
@@ -170,19 +195,35 @@ const FarmItem = () => {
             x: {
                 title: {
                     display: true,
-                    text: "가격 (원)",
+                    text: "날짜",
                 },
             },
+            y: {
+                title: {
+                    display: true,
+                    text: "가격 (원)",
+                },
+            }
         },
-    }
+    };
 
 
-    // 다음 품목으로 넘어가는 함수
+    useEffect(() => {
+        const handleResize = () => {
+            //화면 크기가 바뀌면 key를 갱신
+            setChartKey(Date.now())
+        }
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener("resize", handleResize)
+        }
+    }, [])
+
     const handleNext = async () => {
-        const nextItemIndex = (currentItemIndex + 1) % items.length; // 다음 품목 인덱스
+        const nextItemIndex = (currentItemIndex + 1) % items.length;
         setCurrentItemIndex(nextItemIndex);
-
-        const nextItem = items[nextItemIndex]; // 해당 품목
+        const nextItem = items[nextItemIndex];
         const matchedItems = farmData[nextItem];
 
         if (matchedItems && matchedItems.length > 0) {
@@ -195,18 +236,16 @@ const FarmItem = () => {
                 p_endday: endDateState,
             }));
 
-            getAllPrice(updatedRequests); // 가격 데이터를 가져옵니다.
+            getAllPrice(updatedRequests);
         } else {
             setError("해당 품목을 찾을 수 없습니다.");
         }
     };
 
-    // 이전 품목으로 넘어가는 함수
     const handlePrevious = async () => {
-        const prevItemIndex = (currentItemIndex - 1 + items.length) % items.length; // 이전 품목 인덱스
+        const prevItemIndex = (currentItemIndex - 1 + items.length) % items.length;
         setCurrentItemIndex(prevItemIndex);
-
-        const prevItem = items[prevItemIndex]; // 해당 품목
+        const prevItem = items[prevItemIndex];
         const matchedItems = farmData[prevItem];
 
         if (matchedItems && matchedItems.length > 0) {
@@ -219,7 +258,7 @@ const FarmItem = () => {
                 p_endday: endDateState,
             }));
 
-            getAllPrice(updatedRequests); // 가격 데이터를 가져옵니다.
+            getAllPrice(updatedRequests);
         } else {
             setError("해당 품목을 찾을 수 없습니다.");
         }
@@ -227,36 +266,53 @@ const FarmItem = () => {
 
     return (
         <div className="farmItemContainer">
-            <h2>현대인에게 필요한 채소와 과일 Top 5</h2>
+            <h2>현대인에게 필요한 농산물 <span class="highlight">Top 5</span></h2>
             <div className="farmItemImageContainer">
                 <div className="farmImageContainer">
                     <img
-                        src={itemImages[items[currentItemIndex]]}
+                        src={itemImages[items[currentItemIndex]].image}
                         alt={items[currentItemIndex]}
                         className="farmItem"
                     />
                     <h2>{items[currentItemIndex]}</h2>
+                    <p>{itemImages[items[currentItemIndex]].unit}</p> {/* 단위 표시 */}
                 </div>
-                <div>
-                    {priceData.length > 1 && (
-                        <div className="farmDateContainer">
-                            <div className="itemDate0">
-                                <p>기준 날짜 </p>
-                                <h4>{priceData.slice(-2)[0].date}</h4>
-                                <p>평균 소매가</p>
-                                <h4>{priceData.slice(-2)[0].price}원</h4>
-                            </div>
-                            <div className="itemDate1">
-                                <p>기준 날짜 </p>
-                                <h4>{priceData.slice(-2)[1].date}</h4>
-                                <p>평균 소매가</p>
-                                <h4>{priceData.slice(-2)[1].price}원</h4>
-                            </div>
+                <div className="loadingContainer">
+                    {loading ? (
+                        <div className="ItemLoading">
+                            <Circles
+                                height="100"
+                                width="100"
+                                color="#3498db"
+                                ariaLabel="loading-indicator"
+                            />
+                            <p>데이터 로딩 중...</p>
                         </div>
+                    ) : (
+                        priceData.length > 1 ? (
+                            <>
+                                <div className="farmDateContainer">
+                                    <div className="itemDate0">
+                                        <p>기준 날짜 </p>
+                                        <h4>{priceData.slice(-2)[0].date}</h4>
+                                        <p>평균 소매가</p>
+                                        <h4>{new Intl.NumberFormat().format(priceData.slice(-2)[0].price)}원</h4>
+                                    </div>
+                                    <div className="itemDate1">
+                                        <p>기준 날짜 </p>
+                                        <h4>{priceData.slice(-2)[1].date}</h4>
+                                        <p>평균 소매가</p>
+                                        <h4>{new Intl.NumberFormat().format(priceData.slice(-2)[1].price)}원</h4>
+                                    </div>
+                                </div>
+                                <div className="itemChartContainer">
+                                    {priceData.length > 0 && <Line key={chartKey} data={itemChart} options={itemChartOption} />}
+                                </div>
+                            </>
+                        ) : (
+                            <p>가격 데이터가 충분하지 않습니다.</p>
+                        )
                     )}
-                </div>
-                <div className="itemChartContainer">
-                    {priceData.length > 0 && <Line data={itemChart} options={itemChartOption} />}
                 </div>
             </div>
             <div className="buttonContainer">
@@ -265,7 +321,6 @@ const FarmItem = () => {
             </div>
         </div>
     );
-
 };
 
 export default FarmItem;

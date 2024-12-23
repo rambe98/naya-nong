@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../../css/Signup.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +11,7 @@ import {
   validationRegexAtom,
   validateForm,
 } from "../../recoil/UserRecoil";
+import { API_BASE_URL } from '../../service/api-config';
 
 function Signup() {
   const resetFormData = useResetRecoilState(formDataAtom);
@@ -19,43 +20,12 @@ function Signup() {
   const [message, setMessage] = useRecoilState(messageAtom);
   const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
   const [validationRegex] = useRecoilState(validationRegexAtom); // 정규식 Atom 불러오기
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);//모바일모드
-  
-  useEffect(() => {
-    const updateScrollBehavior = () => {
-      if (window.innerWidth <= 768) {
-        document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
-      } else {
-        document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
-      }
-    };
-  
-    // 초기 실행
-    updateScrollBehavior();
-  
-    // 리사이즈 이벤트 리스너 등록
-    window.addEventListener('resize', updateScrollBehavior);
-  
-    // 정리: 리스너 제거
-    return () => window.removeEventListener('resize', updateScrollBehavior);
-  }, []);
-  
- 
 
   useEffect(() => {
     resetFormData();
   }, [])
-
-  useEffect(() => {
-    // body에 클래스 추가
-    document.body.classList.add('no-scroll');
-
-    // 언마운트 시 클래스 제거
-    return () => {
-      document.body.classList.remove('no-scroll');
-    };
-  }, []);
 
   // 기존 객체의 키, 값 형태로 폼데이터 업데이트
   const handleChange = (e) => {
@@ -74,12 +44,8 @@ function Signup() {
   // 회원가입 폼 요청
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("회원가입 정보:", formData);
 
     if (formData.userPwd !== formData.confirmPwd) {
-      console.log(formData.userPwd);
-      console.log(formData.confirmPwd);
-      
       setMessage('비밀번호가 일치하지 않습니다.')
       return
     }
@@ -92,7 +58,7 @@ function Signup() {
     );
     // 유효하지 않을 경우 중단
     if (!isValid) return;
-
+    setIsLoading(true);
     addUser(formData);
     setSmessage("");
   };
@@ -103,12 +69,11 @@ function Signup() {
   const addUser = async (formData) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
-      const response = await axios.post("http://www.nayanong.site:7070/users/signup", formData, {
+      const response = await axios.post(`${API_BASE_URL}/users/signup`, formData, {
         headers: {
           Authorization: `Bearer ${token}`, // 인증 토큰 추가
         },
       });
-      console.log("회원추가 성공", response.data);
       alert("회원이 추가되었습니다.");
       navigate("/login");
     } catch (error) {
@@ -120,6 +85,8 @@ function Signup() {
         console.error("회원 추가 오류: 알 수 없는 문제 발생");
         setSmessage("회원이 추가되지 않았습니다. 다시 시도해주세요.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -144,6 +111,7 @@ function Signup() {
             value={formData.userName}
             onChange={handleChange}
             className="signupInput"
+            disabled={isLoading}
           />
           <input
             type="text"
@@ -152,6 +120,7 @@ function Signup() {
             value={formData.userId}
             onChange={handleChange}
             className="signupInput"
+            disabled={isLoading}
           />
           <input
             type="password"
@@ -160,6 +129,7 @@ function Signup() {
             value={formData.userPwd}
             onChange={handleChange}
             className="signupInput"
+            disabled={isLoading}
           />
           <input
             type="password"
@@ -168,6 +138,7 @@ function Signup() {
             value={formData.confirmPwd}
             onChange={handleChange}
             className="signupInput"
+            disabled={isLoading}
           />
           <input
             type="text"
@@ -176,6 +147,7 @@ function Signup() {
             value={formData.userNick}
             onChange={handleChange}
             className="signupInput"
+            disabled={isLoading}
           />
           <input
             type="email"
@@ -184,6 +156,7 @@ function Signup() {
             value={formData.userEmail}
             onChange={handleChange}
             className="signupInput"
+            disabled={isLoading}
           />
         </div>
 
@@ -197,12 +170,14 @@ function Signup() {
             value={formData.userPnum}
             onChange={handleChange}
             className="signupInput"
+            disabled={isLoading}
           />
           <select
             name="phoneCom"
             value={formData.phoneCom}
             onChange={handleChange}
             className="signupSelect"
+            disabled={isLoading}
           >
             <option value="">통신사를 선택하세요</option>
             <option value="SKT">SKT</option>
@@ -221,7 +196,7 @@ function Signup() {
         </>
 
         <button type="submit" className="signupButton">
-          완료
+          {isLoading ? "처리 중..." : "완료"}
         </button>
         <button type="button" onClick={cancelButton} className="signupButton">
           이전

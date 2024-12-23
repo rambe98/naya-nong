@@ -18,7 +18,7 @@ const Footer = () => {
             KAMIS 농산물유통정보
           </a>
         </p>
-        <p>제작자: Ogh, Ysb, Kjs, Cdu</p>
+        <p>제작자: OGH, YSB, KJS, CDU</p>
         <p>
           문의:{" "}
           <a href="mailto:support@farmplatform.com">

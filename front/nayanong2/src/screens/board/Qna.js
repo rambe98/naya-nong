@@ -140,7 +140,6 @@ const Qna = () => {
                     <input
                         type="text"
                         name="userNick"
-                        placeholder="이름을 입력해주세요"
                         className="qnaInput"
                         value={userNick || ""}
                         readOnly
@@ -150,7 +149,7 @@ const Qna = () => {
                     <input
                         type="text"
                         name="qnaTitle"
-                        placeholder="제목을 입력해주세요"
+                        placeholder="제목을 입력해주세요."
                         className="qnaInput"
                         value={formData.qnaTitle}
                         onChange={handleChange}
@@ -160,14 +159,14 @@ const Qna = () => {
                     {/* 내용 */}
                     <textarea
                         name="qnaDtail"
-                        placeholder="내용을 입력해주세요"
+                        placeholder="내용을 입력해주세요."
                         className="qnaInputtext"
                         value={formData.qnaDtail}
                         onChange={handleChange}
                         required
                     />
                     <div className="qnaEmailNotification">
-                        답변은 회원가입 당시 이메일로 순차적으로 발송됩니다.
+                        <p>답변은 회원가입 당시 <br/>이메일로 순차적 발송됩니다.</p>
                     </div>
                     {/* 제출 버튼 */}
                     <button type="submit" className="qnaButton">

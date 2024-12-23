@@ -2,21 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import '../css/Main.css';
-import { useResetRecoilState, useRecoilValue } from "recoil";
+import { useResetRecoilState } from "recoil";
 import { userIdAtom, userPwdAtom } from '../recoil/UserRecoil';
-import { scrollAtom } from '../recoil/ScrollRecoil';
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isVisible, setIsVisible] = useState(true); // 헤더의 visibility 상태 관리
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // 모바일 메뉴 상태 관리
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // 모바일 여부 확인
-  const scrollPosition = useRecoilValue(scrollAtom); // Recoil 상태 구독
-  const isVisible = scrollPosition < 80; // 스크롤이 80 이상이면 숨김
-  console.log("Header visibility:", isVisible); // 디버깅 로그
-  console.log("모바일메뉴오픈클로즈",isMobileMenuOpen);
-
-  
 
 
   // 로컬스토리지에서 로그인 상태 및 사용자 정보 가져오기
@@ -25,29 +19,30 @@ const Header = () => {
   const resetUserId = useResetRecoilState(userIdAtom);
   const resetUserPwd = useResetRecoilState(userPwdAtom);
 
-  // 768px 이상넘어가면 햄버거아이콘 사라짐
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      setMobileMenuOpen(false); // 화면 크기 변경 시 모바일 메뉴 닫기
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
-  // 스크롤 감지하여 모바일 메뉴 닫기
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isMobileMenuOpen && scrollPosition >= 80) {
-        setMobileMenuOpen(false);
-      }
-    };
+ // 스크롤 이벤트 처리
+ useEffect(() => {
+  const handleScroll = () => {
+    const scrollTop = window.pageYOffset;
+    console.log('스크롤 위치:', scrollTop);
+    if (scrollTop > 80) {
+      setIsVisible(false); // 스크롤 내리면 숨김
+    } else {
+      setIsVisible(true); // 스크롤 올리면 보임
+    }
+  };
 
-    handleScroll();
+  window.addEventListener('scroll', handleScroll);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobileMenuOpen, scrollPosition]);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
+
+
+// 추가: isVisible 상태 변경 로그
+useEffect(() => {
+  console.log(`isVisible 상태: ${isVisible}`);
+}, [isVisible]);
 
   // 로그아웃 함수
   const handleLogout = () => {
@@ -72,9 +67,8 @@ const Header = () => {
     }
   };
 
-
   return (
-    <header className={`Header_mainHeader ${isVisible ? 'Header_show' : 'Header_hide'}`}>
+    <header className={`Header_mainHeader ${isVisible ? 'Header_visible' : 'Header_hidden'}`}>
       <div className="Header_mainHeaderLeft">
         <img src={logo} alt="Logo" className="Header_mainLogo" onClick={() => navigate('/')} />
         <h2 className="Header_logoText" onClick={() => navigate('/')}>나야, 농</h2>
@@ -132,12 +126,12 @@ const Header = () => {
 
       {/* 모바일 네비게이션 */}
       {isMobile && (
-        <nav className={`Header_mobileNav ${isMobileMenuOpen ? 'active' : 'inactive'}`}>
+        <nav className={`Header_mobileNav ${isMobileMenuOpen ? 'active' : ''}`}>
           {loginsuccess && (
-            <div className="Header_HeaderHello">
+            <span className="Header_HeaderHello">
               환영합니다<br />
               <span className="Header_highlight">{userNick}</span>님
-            </div>
+            </span>
           )}
           <div
             className="Header_closeButton"

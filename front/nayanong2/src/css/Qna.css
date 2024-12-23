@@ -7,8 +7,11 @@
   padding: 20px;
   background-color: #ffffff; /* 흰색 배경 */
   box-sizing: border-box;
+<<<<<<< HEAD
   overflow-y: hidden;
   height: 100vh;
+=======
+>>>>>>> parent of 41e2fb0 (add)
 }
 
 /* QnA 헤더 */
@@ -79,6 +82,7 @@
   transform: scale(1.05); /* 약간 확대 효과 */
 }
 
+<<<<<<< HEAD
 /* 이메일 알림 */
 .qnaEmailInfo {
   display: flex; /* 플렉스 박스 활성화 */
@@ -87,6 +91,8 @@
   text-align: center; /* 텍스트가 여러 줄일 때 가운데 정렬 */
 }
 
+=======
+>>>>>>> parent of 41e2fb0 (add)
 /* 반응형 스타일 */
 @media (max-width: 768px) {
   /* QnA 컨테이너 */
@@ -95,7 +101,6 @@
     height: auto; /* 고정 높이 제거 */
     overflow-y: hidden;
     box-sizing: border-box;
-    height: 100vh;
   }
 
   /* QnA 헤더 */
@@ -135,6 +140,7 @@
     border-radius: 5px;
     margin-top: 15px;
   }
+<<<<<<< HEAD
 
   .qnaEmailInfo {
     display: flex; /* 플렉스 박스 활성화 */
@@ -147,4 +153,6 @@
     font-size: 12px;
     margin: 0; /* 기본 마진 제거 (필요시) */
   }
+=======
+>>>>>>> parent of 41e2fb0 (add)
 }

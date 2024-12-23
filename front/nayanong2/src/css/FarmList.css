@@ -12,14 +12,13 @@
  /* 제목 스타일 */
  .farmListSearchResult {
     top: 0;                   /* 상단에 고정 */
-    background-color: #f9f9f9;   /* 배경을 흰색으로 설정하여 다른 내용과 구분 */
+    background-color: #fff;   /* 배경을 흰색으로 설정하여 다른 내용과 구분 */
     padding: 0 10 10 10px;            /* 여백을 설정 */
     z-index: 1000;            /* 다른 요소들 위에 표시 */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과로 구분 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과로 구분 */
     width: 100%;              /* 너비를 100%로 설정 */
     text-align: center;       /* 텍스트 중앙 정렬 */
     border-radius: 8px;
-    z-index: 999;
   }
 
 .farmListPage .farmContainer {
@@ -47,22 +46,21 @@
     background-color: #ffffff;
     max-height: 100vh;
     min-height: 20vh;
-    padding: 20px 20px 0px 20px;
+    padding: 20px;
     width: 100%;
     overflow-y: hidden;
-    overflow-x: hidden;
     box-sizing: border-box;
 }
 
 /* 선택지 컨테이너 */
 .farmListContainer {
-    padding: 00px 20px;
+    padding: 20px;
     font-family: Arial, sans-serif;
     width: 100%;
     max-width: 1000px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     min-height: 10vh;
     overflow-x: hidden;
     display: none;
@@ -72,8 +70,19 @@
     display: block;
 }
 
-
-
+/* 셀렉트 박스 스타일 */
+.farmListSelect {
+    padding: 5px 8px;
+    margin: 0 5px;
+    font-size: 12px;
+    border: 2px solid #d4a373;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: black;
+    cursor: pointer;
+    width: 80px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
 /* 검색창 컨테이너 */
 .farmListSearchContainer {
@@ -95,22 +104,6 @@
     align-items: center;
     width: 100%;
     max-width: 350px;
-}
-
-/* 셀렉트 박스 스타일 */
-.farmListSelect {
-    padding: 10px 8px;
-    margin: 5px;
-    font-size: 12px;
-    border: 2px solid #d4a373;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: black;
-    cursor: pointer;
-    width: 80px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 그림자 크기와 투명도를 좀 더 강조 */
-    height: 40px; /* 높이를 명시적으로 설정 */
-    box-sizing: border-box; /* padding과 border를 포함하여 크기 계산 */
 }
 
 /* 검색 입력창 스타일 */
@@ -165,6 +158,7 @@
     color: black;
     text-align: center;
     margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     border-bottom: 2px solid #d4a373;
     padding-bottom: 10px;
     display: inline-block;
@@ -273,35 +267,11 @@
     color: #333;
 }
 
-@media (max-width: 800px) {
-    .marketGroupedPrices {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: space-between;
-        padding: 5px;
-        width: 100%;
-        max-width: 800px;
-        overflow-y: auto;
-    }
-
-    .marketGroupedItem {
-        width: calc(35% - 20px);  /* 한 줄에 2개씩 배치 */
-        padding: 20px;
-        font-family: Arial, sans-serif;
-        margin: 0 auto;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        min-height: 10vh;
-    }
-}
-
-
 
 @media (max-width: 768px) {
     .marketGroupedItem {
         width: calc(50% - 20px);
+        /* 아이템 너비를 50%로 설정하여 한 줄에 2개씩 배치 */
         padding: 20px;
         font-family: Arial, sans-serif;
         width: 100%;
@@ -350,7 +320,4 @@
         overflow-y: hidden;
         box-sizing: border-box;
     }
-    .farmListSearchResult{
-        font-size: 15px;
-    }
-}
+} 

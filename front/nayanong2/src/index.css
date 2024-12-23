@@ -4,7 +4,7 @@ html, body {
   margin: 0;
   padding: 0;
   display: flex;
-  overflow: hidden;
+  overflow: auto;
   flex-direction: column;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -23,14 +23,14 @@ html, body {
   min-height: 100vh; /* 화면 전체 높이를 차지 */
 }
 
+/* 헤더 여백 추가 */
+body {
+  margin-top: 80px; /* 헤더 높이만큼 여백 추가 */
+}
 
 /* 로그인 컴포넌트 전용 클래스 */
 body.no-margin-top {
   margin-top: 0; /* 로그인 컴포넌트에서는 여백 제거 */
-}
-
-main {
-  margin-top: 80px; /* 헤더 높이에 맞게 설정 */
 }
 
 /* 코드 폰트 설정 */

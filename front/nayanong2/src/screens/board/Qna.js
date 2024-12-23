@@ -137,7 +137,12 @@ const Qna = () => {
                     <input
                         type="text"
                         name="userNick"
+<<<<<<< HEAD
                         className="qnaTextInput"
+=======
+                        placeholder="이름을 입력해주세요"
+                        className="qnaInput"
+>>>>>>> parent of 41e2fb0 (add)
                         value={userNick || ""}
                         readOnly
                     />
@@ -146,8 +151,13 @@ const Qna = () => {
                     <input
                         type="text"
                         name="qnaTitle"
+<<<<<<< HEAD
                         placeholder="제목을 입력해주세요."
                         className="qnaTextInput"
+=======
+                        placeholder="제목을 입력해주세요"
+                        className="qnaInput"
+>>>>>>> parent of 41e2fb0 (add)
                         value={formData.qnaTitle}
                         onChange={handleChange}
                         required
@@ -156,14 +166,24 @@ const Qna = () => {
                     {/* 내용 */}
                     <textarea
                         name="qnaDtail"
+<<<<<<< HEAD
                         placeholder="내용을 입력해주세요."
                         className="qnaTextarea"
+=======
+                        placeholder="내용을 입력해주세요"
+                        className="qnaInputtext"
+>>>>>>> parent of 41e2fb0 (add)
                         value={formData.qnaDtail}
                         onChange={handleChange}
                         required
                     />
+<<<<<<< HEAD
                     <div className="qnaEmailInfo">
                         <p>답변은 회원가입 당시 <br />이메일로 순차적 발송됩니다.</p>
+=======
+                    <div className="qnaEmailNotification">
+                        답변은 회원가입 당시 이메일로 순차적으로 발송됩니다.
+>>>>>>> parent of 41e2fb0 (add)
                     </div>
                     {/* 제출 버튼 */}
                     <button type="submit" className="qnaSubmitButton">

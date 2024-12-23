@@ -120,9 +120,6 @@
   font-weight: bold;
 }
 
-input[type="password"] {
-  -webkit-text-security: disc; /* Safari에서 비밀번호 표시 */
-}
 
 
 @media (max-width: 768px) {

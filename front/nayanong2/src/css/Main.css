@@ -17,20 +17,16 @@
   width: calc(100vw - 16px); 
 }
 
-.Header_show {
-  transform: translateY(0);
-  opacity: 1;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-/* 헤더가 숨겨질 때 */
-.Header_hide {
+/* 스크롤 시 숨김 */
+.Header_mainHeader.hidden {
   transform: translateY(-100%);
   opacity: 0;
-  pointer-events: none;
-  height: 0;
 }
 
+/* 다시 보일 때 */
+.Header_mainHeader.visible {
+  transform: translateY(0);
+}
 
 /* 왼쪽: 로고 */
 .Header_mainHeaderLeft {
@@ -60,24 +56,20 @@
   gap: 25px;
   margin: 0;
   padding: 0;
+  margin-right: 150px;
 }
 
 .Header_mainHeaderNav li {
   cursor: pointer;
   font-size: 16px;
-  display: block;
-  padding: 10px 0;
 }
 
 .Header_mainHeaderNav li a {
   text-decoration: none;
   color: black;
-  margin-left: 170px; /* 기존 스타일 유지 */
-  padding: 30px 30px; /* 클릭 범위를 늘리기 위한 padding 추가 */
-  display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
+  margin-left: 170px;
   transition: color 0.3s ease;
   font-family: 'SSFlowerRoad', sans-serif;
-
 }
 
 .Header_mainHeaderNav li a:hover {
@@ -134,7 +126,8 @@
 }
 
 
-/* 모바일 스타일 (768px 이하) */
+
+
 /* 모바일 스타일 (768px 이하) */
 @media (max-width: 768px) {
   .Header_mainHeader {
@@ -155,316 +148,132 @@
   .Header_mainHeaderRight {
     display: none; /* 버튼 숨김 */
   }
-
-  .Header_hamburgerMenu {
-    display: block;
-    position: absolute;
-    top: 30px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1100;
-  }
-
-  .Header_mobileNav {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    right: -100%; /* 초기 상태에서 숨김 */
-    height: 100vh; /* 전체 화면 높이 */
-    width: 40%; /* 너비 */
-    background-color: white; /* 배경색 설정 */
-    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1); /* 그림자 */
-    z-index: 2000; /* 헤더보다 위에 위치 */
-    transition: right 0.3s ease; /* 오른쪽에서 슬라이드 */
-  }
-  
-
-  .Header_mobileNav.active {
-    right: 0; /* 활성화 상태에서 표시 */
-  }
-
-  .Header_mobileNav.inactive {
-    right: -100%; /* 비활성 상태에서 오른쪽으로 숨김 */
-    opacity: 0; /* 천천히 사라짐 */
-  }
-
-  .Header_closeButton {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 20px;
-    cursor: pointer;
-  }
-
-  .Header_mobileNav ul {
-    list-style: none;
-    padding: 20px 20px 20px;
-    margin: 0;
-    width: 100%;
-  }
-
-  .Header_mobileNav li {
-    width: 100%;
-    text-align: left;
-    font-size: 15px;
-    padding:20px 0px 0px 0px;
-    border-bottom: 1px solid #ddd;
-    font-family: 'SSFlowerRoad', sans-serif;
-  }
-
-  .Header_mobileNav li a {
-    text-decoration: none;
-    color: black;
-    display: block;
-    padding: 20px 0px 0px 0px;
-  }
-
-  .Header_mobileNav li a:hover {
-    color: #d4a373;
-  }
-
-  .Header_mobileButtons {
-    margin-top: auto;
-    width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    background-color: #FFFFFF;
-    border-top: 1px solid #ddd;
-  }
-
-  .Header_HeaderHello {
-    font-size: 1rem;
-    background-color: #FFFFFF;
-    color: black;
-    border: none;
-    font-family: 'SSFlowerRoad', sans-serif;
-    margin:20px 10px;
-  }
-
-  .Header_HeaderHello .Header_highlight {
-    font-weight: bold;
-    color: #d4a373;
-    font-size: 18px;
-  }
-
-  .Header_mainButton {
-    font-size: 15px;
-    padding: 10px 20px;
-    background-color: #FFFFFF;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-    font-family: 'SSFlowerRoad', sans-serif;
-  }
-  
-  .Header_mainButton:hover {
-    background-color: #FFFFFF;
-    color: #d4a373;
-  
-  }
 }
 
-
-/* 1500px 이하-------------------------------------------------------------------------- */
-@media(max-width:1500px){
-  .Header_mainHeaderNav li a {
-    text-decoration: none;
-    color: black;
-    margin: 0px 20px 0px 80px; /* 기존 스타일 유지 */
-    padding: 30px 30px; /* 클릭 범위를 늘리기 위한 padding 추가 */
-    display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
-    transition: color 0.3s ease;
-    font-family: 'SSFlowerRoad', sans-serif;
+  @media (max-width: 768px) {
+    .Header_hamburgerMenu {
+      display: block;
+      position: absolute;
+      top: 30px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1100;
+    }
   
-  }
+    .Header_mobileNav {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      right: -100%; /* 초기 상태에서 숨김 */
+      height: 100%;
+      width: 40%;
+      background-color: white;
+      box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: right 0.3s ease;
+    }
+  
+    .Header_mobileNav.active {
+      right: 0; /* 활성화 상태에서 표시 */
+    }
+  
+    .Header_closeButton {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  
+    .Header_mobileNav ul {
+      list-style: none;
+      padding: 20px 20px 20px;
+      margin: 0;
+      width: 100%;
+    }
+  
+    .Header_mobileNav li {
+      width: 100%;
+      text-align: left;
+      font-size: 18px;
+      padding:20px 0px;
+      border-bottom: 1px solid #ddd;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  
+    .Header_mobileNav li a {
+      text-decoration: none;
+      color: black;
+    }
+  
+    .Header_mobileNav li a:hover {
+      color: #d4a373;
+    }
+  
+    .Header_mobileButtons {
+      margin-top: auto;
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+      background-color: #FFFFFF;
+      border-top: 1px solid #ddd;
+    }
+
     .Header_HeaderHello {
       font-size: 1rem;
       background-color: #FFFFFF;
       color: black;
       border: none;
-      padding: 0 10px 0 10px;
+      padding: 15px 0px 0px 15px;
       font-family: 'SSFlowerRoad', sans-serif;
       margin-bottom: 0px;
+
     }
     
     .Header_HeaderHello .Header_highlight {
       font-weight: bold;
       color: #d4a373;
-      font-size: 10px;
+      font-size: 18px;
     }
-    .Header_mainButton {
-      font-size: 14px;
-      margin: 5px;
-      padding: 10px 40px;
-      background-color: #FFFFFF;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    }
-    
-    .Header_mainButton:hover {
-      background-color: #FFFFFF;
-      color: #d4a373;
-    
-    }
-    .Header_HeaderHello .Header_highlight {
-      font-weight: bold;
-      color: #d4a373;
-      font-size: 15px;
-    }
-    .Header_mainButton {
-      font-size: 16px;
-      padding: 10px 20px;
-      background-color: #FFFFFF;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    }
-    
   }
-/* ------------------------------------------------------------------------- */
+
+  @media(max-width:1500px){
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 160px;
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+  }
+
   @media(max-width:1299px){
-    
     .Header_mainHeaderNav li a {
       text-decoration: none;
       color: black;
-      margin-left: 40px;
+      margin-left: 60px;
       transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-      white-space: nowrap;
-    }
-
-    .Header_mainButton {
-      font-size: 16px;
-      padding: 10px 15px;
-      background-color: #FFFFFF;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
       font-family: 'SSFlowerRoad', sans-serif;
     }
   }
-  /* ----------------------------------------------------------------------------------------- */
-  @media(max-width:1099px){
-    
-    .Header_mainHeaderNav li a {
-      text-decoration: none;
-      color: black;
-      margin-left: 20px;
-      transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-      white-space: nowrap;
-    }
 
-    .Header_mainButton {
-      font-size: 16px;
-      padding: 10px 15px;
-      background-color: #FFFFFF;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    }
-  }
-  /* ----------------------------------------------------------------------------------------- */
-  @media(max-width:999px){
-
-    .Header_mainHeaderNav li a {
-      text-decoration: none;
-      color: black;
-      margin-left: 15px;
-      padding: 20px; /* 클릭 범위를 늘리기 위한 padding 추가 */
-      display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
-      transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    
-    }
-    
-  }
-  /* ----------------------------------------------------------------------------------------- */
-  @media(max-width:880px){
-
-    .Header_mainHeaderNav li a {
-      text-decoration: none;
-      color: black;
-      margin-left: 10px;
-      padding: 10px; /* 클릭 범위를 늘리기 위한 padding 추가 */
-      display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
-      transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    
-    }
-    
-  }
-  /* ----------------------------------------------------------------------------------------- */
-  @media(max-width:850px){
-
-    .Header_mainHeaderNav li a {
-      text-decoration: none;
-      color: black;
-      margin-left: 5px;
-      padding: 5px; /* 클릭 범위를 늘리기 위한 padding 추가 */
-      display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
-      transition: color 0.3s ease;
-      font-family: 'SSFlowerRoad', sans-serif;
-    
-    }
-    
-  }
   
+  @media(max-width:900px){
+    .Header_mainHeaderNav ul {
+      display: flex;
+      list-style: none;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
 
-
- /* 모바일 스타일 (768px 이하) -------------------------------*/
-
- @media (max-width: 768px) {
-  .Header_mainHeader {
-    justify-content: space-between;
-    padding: 10px 15px;
+    .Header_mainHeaderNav li a {
+      text-decoration: none;
+      color: black;
+      margin-left: 30px;
+      transition: color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
   }
-
-  .Header_mainHeaderLeft {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .Header_mainHeaderNav {
-    display: none; /* 네비게이션 숨김 */
-  }
-
-  .Header_mainHeaderRight {
-    display: none; /* 버튼 숨김 */
-  }
-
-  .Header_mainButton {
-    font-size: 14px;
-    padding: 10px 40px;
-    background-color: #FFFFFF;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-    font-family: 'SSFlowerRoad', sans-serif;
-  }
-  
-  .Header_mainButton:hover {
-    background-color: #FFFFFF;
-    color: #d4a373;
-  }
-
-}
-

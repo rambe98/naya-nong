@@ -14,8 +14,6 @@ if (hostname === "localhost") {
     backendHost = "http://localhost:7070";
 } else if (hostname === "www.nayanong.site") {
     backendHost = "http://www.nayanong.site:7070"; // 예시: 실제 백엔드 API URL
-} else if (hostname === "nayanong.site") {
-    backendHost = "http://www.nayanong.site:7070";
 }
 
 export const API_BASE_URL = `${backendHost}`

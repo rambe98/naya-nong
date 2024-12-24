@@ -1,5 +1,7 @@
 package com.test.project.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class HeartController {
 	@Autowired
 	private HeartService service;
 
+	//조회
 	@GetMapping("/{bodNum}/likeCount")
 	public ResponseEntity<?> getLikeCount(@PathVariable("bodNum") int bodNum) {
 		try {
@@ -39,20 +42,25 @@ public class HeartController {
 	}// getLikeCount end
 	
 
+	//추가
 	@PostMapping
 	public ResponseEntity<?> likePost(@RequestBody HeartDTO dto) {
-		String userNick = dto.getUserNick();
-		int bodNum = dto.getBodNum();
-		try {
-			boolean liked = service.likeBoard(userNick, bodNum);
-			if (liked) {
-				return ResponseEntity.ok("좋아요가 추가되었습니다.");
-			} else {
-				return ResponseEntity.ok("좋아요가 취소되었습니다.");
-			}
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-		}
+	    String userNick = dto.getUserNick();
+	    int bodNum = dto.getBodNum();
+	    try {
+	        boolean liked = service.likeBoard(userNick, bodNum);
+	        int likeCount = service.updateAndGetLikeCount(bodNum); // 좋아요 수 갱신
+
+	        return ResponseEntity.ok().body(Map.of(
+	            "message", liked ? "좋아요가 추가되었습니다." : "좋아요가 취소되었습니다.",
+	            "liked", liked,
+	            "likeCount", likeCount
+	        ));
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+	            "message", e.getMessage()
+	        ));
+	    }
 	}// likePost end
 
 }

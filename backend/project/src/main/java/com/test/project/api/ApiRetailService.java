@@ -57,7 +57,7 @@ public class ApiRetailService {
 		}
 	}
 
-	
+	//지역조회
 	public List<PriceDataDTO> getRetailPriceData(String p_startday, String p_endday, String p_itemcategorycode,
 			String p_itemcode, String p_kindcode, String p_productrankcode, String p_countrycode, String p_returntype) {
 		try {
@@ -86,7 +86,8 @@ public class ApiRetailService {
 			throw new RuntimeException("Error fetching price data", e);
 		}
 	}
-
+    
+	//API요청 데이터형식
 	private List<PriceDataDTO> parseRetailPriceData(String responseBody) {
 		List<PriceDataDTO> priceDataList = new ArrayList<>();
 		try {

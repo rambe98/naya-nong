@@ -30,7 +30,7 @@ public class HeartService {
 	@Autowired
 	private BoardRepository boardRepository;
 	
-	
+	//조회
 	@Transactional
     public int updateAndGetLikeCount(int bodNum) {
         // 해당 게시물에 대한 좋아요 수 조회
@@ -47,6 +47,7 @@ public class HeartService {
     }//updateAndGetLikeCount end
 	
 	
+	//추가
 	@Transactional
 	public boolean likeBoard(String userNick,int bodNum) {
 		boolean alreadyHearted = heartRepository.existsByNong_UserNickAndBoard_BodNum(userNick, bodNum);

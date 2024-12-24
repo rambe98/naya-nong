@@ -69,7 +69,7 @@ function App() {
 function InnerApp({scrollContainerRef}) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
-  const showFooterPages = ['/qna', '/board', '/', '/write', '/notice'];
+  const showFooterPages = ['/'];
   
   return (
     <div className="App">

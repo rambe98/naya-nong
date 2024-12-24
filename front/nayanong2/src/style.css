@@ -1,0 +1,80 @@
+
+/* Modified CSS */
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.Header_mobileNav {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 40%;
+    background-color: white;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+    transition: right 0.3s ease;
+    overflow-y: auto; /* Added to fix scrolling */
+}
+
+.qnaPageContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    min-height: 100vh; /* Ensure full height is used */
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+}
+
+.qnaPageButton {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #d4a373;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.qnaPageButton:hover {
+    background-color: #b08968;
+    transform: scale(1.05);
+}
+
+.qnaPageBoard th,
+.qnaPageBoard td {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #d4a373;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+    .Header_mobileNav {
+        width: 60%;
+    }
+    .qnaPageBoard td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        color: #d4a373;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 375px) {
+    .qnaPageBoard td {
+        font-size: 11px;
+    }
+}

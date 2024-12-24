@@ -538,6 +538,8 @@
     box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1); /* 그림자 */
     z-index: 2000; /* 헤더보다 위에 위치 */
     transition: right 0.3s ease; /* 오른쪽에서 슬라이드 */
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   
 

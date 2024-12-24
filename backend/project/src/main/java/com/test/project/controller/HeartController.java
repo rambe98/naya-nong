@@ -55,6 +55,9 @@ public class HeartController {
 	            "message", liked ? "좋아요가 추가되었습니다." : "좋아요가 취소되었습니다.",
 	            "liked", liked,
 	            "likeCount", likeCount
+	            
+	            
+	            
 	        ));
 	    } catch (IllegalArgumentException e) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(

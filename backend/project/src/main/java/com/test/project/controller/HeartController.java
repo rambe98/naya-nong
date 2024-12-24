@@ -5,6 +5,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.test.project.dto.HeartDTO;
 import com.test.project.service.HeartService;
@@ -21,15 +25,30 @@ import com.test.project.service.HeartService;
 public class HeartController {
 
    @Autowired
+   
    private HeartService service;
 
    //조회
    @GetMapping("/{bodNum}/likeCount")
-   public ResponseEntity<?> getLikeCount(@PathVariable("bodNum") int bodNum, @RequestParam("userNick") String userNick) {
+   public ResponseEntity<?> getLikeCount(@PathVariable("bodNum") int bodNum,  @RequestParam(value = "userNick", required = false) String userNick) {
        try {
-           // 게시물에 대한 좋아요 수와 사용자가 눌렀는지 여부 가져오기
-           HeartDTO heartDTO = service.updateAndGetLikeCountWithUser(bodNum, userNick);
+           // 현재 사용자가 인증된 사용자인지 확인
+           Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+           boolean isAuthenticated = authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
+
+           HeartDTO heartDTO;
+           
+           // 인증된 사용자라면 hIkon을 포함해서 리턴, 아니면 likeCount만 리턴
+           if (isAuthenticated) {
+               // 로그인한 사용자가 좋아요 상태를 포함하여 조회
+               heartDTO = service.updateAndGetLikeCountWithUser(bodNum, userNick);
+           } else {
+               // 비로그인 사용자는 좋아요 카운트만 조회
+               heartDTO = service.updateAndGetLikeCountWithoutUser(bodNum);
+           }
+
            return ResponseEntity.ok(heartDTO);
+           
        } catch (IllegalArgumentException e) {
            // 예외 발생 시 400 상태 코드로 처리
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -37,7 +56,8 @@ public class HeartController {
            // 예기치 못한 오류에 대한 처리
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
        }
-   }// getLikeCount end
+   }
+// getLikeCount end
    
 
    //추가

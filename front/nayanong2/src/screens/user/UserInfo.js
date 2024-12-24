@@ -135,7 +135,7 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       const response = await axios.put(
-        `${API_BASE_URL}/users/${clientNum}`, updatedUserInfo,
+        `http://localhost:7070/users/${clientNum}`, updatedUserInfo,
         {
           headers: {
             Authorization: `Bearer ${token}`, // 인증 토큰 추가
@@ -205,7 +205,7 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       //게시글 조회 (사용자가 작성한 게시글 목록 가져오기)
-      const boardResponse = await axios.get(`${API_BASE_URL}/board`, {
+      const boardResponse = await axios.get(`http://localhost:7070/board`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -221,7 +221,7 @@ const UserInfo = () => {
         if (boardUserNick === currentUserNick) {
           try {
             // 게시글 삭제 요청
-            const deleteBoardResponse = await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
+            const deleteBoardResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -237,7 +237,7 @@ const UserInfo = () => {
         }
       }
       // 회원 탈퇴 요청 (회원 정보를 먼저 삭제)
-      const deleteUserResponse = await axios.delete(`${API_BASE_URL}/users/${clientNum}`, {
+      const deleteUserResponse = await axios.delete(`http://localhost:7070/users/${clientNum}`, {
         data: { clientNum, userPwd: password },
         headers: {
           Authorization: `Bearer ${token}`,

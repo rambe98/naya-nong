@@ -4,7 +4,6 @@ import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { priceRequestDTOAtom, farmDataAtom, selectedItemAtom, priceDataAtom, startDateStateAtom, endDateStateAtom } from "../../recoil/FarmRecoil";
-import { API_BASE_URL } from '../../service/api-config'
 
 // p_startday의 날짜를 -1일 하는 함수
 const getPreviousDay = (startDateState) => {
@@ -97,9 +96,9 @@ const FarmList = () => {
     
         // URL 선택
         const apiUrl =
-            priceType === "retail" ? `${API_BASE_URL}/retail/price/all`
-                : priceType === "wholeSale" ? `${API_BASE_URL}/wholeSale/price/all`
-                    : `${API_BASE_URL}/retail/price/all`;
+            priceType === "retail" ? "http://localhost:7070/retail/price/all"
+                : priceType === "wholeSale" ? "http://localhost:7070/wholeSale/price/all"
+                    : "http://localhost:7070/retail/price/all";
     
         try {
             console.log("요청할 데이터:", priceRequestDTO.requests);

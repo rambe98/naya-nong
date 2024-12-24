@@ -10,7 +10,6 @@ import farmData from '../../assets/FarmData.json';
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Circles } from "react-loader-spinner";
-import { API_BASE_URL } from "../../service/api-config";
 
 // 날짜에서 하루 전 날짜 구하기
 const getPreviousDay = (startDateState) => {
@@ -82,7 +81,7 @@ const FarmItem = () => {
     const getAllPrice = async (farmItemRequests) => {
         setLoading(true);
         setError(null);
-        const apiUrl = `${API_BASE_URL}/retail/price`;
+        const apiUrl = "http://localhost:7070/retail/price";
 
         try {
             const promises = farmItemRequests.map((request) =>

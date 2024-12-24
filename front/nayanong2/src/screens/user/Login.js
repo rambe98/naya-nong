@@ -18,9 +18,11 @@ function Login() {
   useEffect(() => {
     // body에 클래스 추가
     document.body.classList.add('no-scroll');
+    document.body.classList.add('no-margin-top');
     // 언마운트 시 클래스 제거
     return () => {
       document.body.classList.remove('no-scroll');
+      document.body.classList.remove('no-margin-top');
     };
   }, []);
 

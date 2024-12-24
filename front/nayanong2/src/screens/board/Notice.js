@@ -206,7 +206,8 @@ const Board = () => {
     useEffect(() => {
         getList();
     }, [sortBy]);
-
+    
+    const sidebarClassName = isSidebarVisible ? 'show' : 'hide';
 
     return (
         <div className="boardContainer">
@@ -214,19 +215,34 @@ const Board = () => {
                 <h2 className="boardname">공지사항</h2>
             )}
             {/* 사이드바 */}
-            <div className={`boardSidebarContainer ${isSidebarVisible ? 'show' : 'hide'}`}>
-                <button className="boardCloseSidebarButton" onClick={toggleSidebar}>
-                    ✖
-                </button>
-                <ul>
-                    <li>
-                        <Link to="/notice">공지사항</Link>
-                    </li>
-                    <li>
-                        <Link to="/board">자유게시판</Link>
-                    </li>
-                </ul>
-            </div>
+                  <div className='boardSidebarList'>
+                      <div className={`boardSidebarContainer ${sidebarClassName}`}>
+                          <button
+                              className="boardCloseSidebarButton"
+                              onClick={toggleSidebar}
+                          >
+                              CLOSE
+                          </button>
+                      </div>
+                      <div className={`boardSidebarContainer2 ${sidebarClassName}`}>
+                          <ul>
+                              <li>
+                                  <Link to="/board" className="boardSidebarLink">
+                                      자유게시판
+                                  </Link>
+                              </li>
+                          </ul>
+                      </div>
+                      <div className={`boardSidebarContainer3 ${sidebarClassName}`}>
+                          <ul>
+                              <li>
+                                  <Link to="/notice" className="boardSidebarLink">
+                                      공지사항
+                                  </Link>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
 
 
             {/* 작성일 및 페이지당 항목 수 선택 */}

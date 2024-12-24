@@ -3,17 +3,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
   background-color: #ffffff;
-  margin: 0;
+  margin: 0 auto;
+  position: relative;
+  width: 100%; /* 너비 100% 설정 */
+  margin-top: 160px;
 }
 
 .loginContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 400px;
+  width: 100%; /* 컨텐츠가 화면 크기에 맞게 조정 */
+  max-width: 500px; /* 데스크톱에서 최대 너비 설정 */
   padding-top: 10px;
 }
 
@@ -38,7 +41,8 @@
 .loginForm {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 100%; /* 부모 너비에 맞춤 */
+  max-width: 400px; /* 데스크톱에서 최대 너비 */
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
@@ -81,7 +85,7 @@
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
 }
 
 .loginLinkButton {
@@ -107,42 +111,44 @@
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
-
-  /* 로그인 컨테이너박스*/
   .loginContent {
-    max-width: 60%; /* 작은 화면에서는 너비를 더 늘림 */
+    width: 70%; /* 모바일에서는 전체 너비 */
+    max-width: 400px; /* 적정한 최대 너비 */
     padding: 3vw;
   }
 
   .mainLogo {
-    height: 15vh; /* 화면 높이의 15% */
+    height: 100px; /* 모바일에서는 크기를 줄임 */
   }
 
   .loginH2 {
-    font-size: 3vw; /* 화면 너비 기반 크기 */
-    padding-bottom: 1vh;
+    font-size: 20px; /* 모바일에서 폰트 크기 조정 */
+    padding-bottom: 5px;
   }
 
-  /* 로그인폼의 안쪽너비 */
   .loginForm {
     padding: 15px;
+    max-width: 100%; /* 모바일에서는 제한 없이 너비 확장 */
   }
 
-  /* 아이디 비밀번호 입력창 */
   .loginInput {
     font-size: 14px;
     padding: 8px;
   }
 
-  /* 로그인 버튼 */
   .loginButton {
     font-size: 14px;
     padding: 8px;
   }
 
-  /* 아이디 비밀번호 찾기 및 회원가입 글자크기 */
   .loginLinkButton {
     font-size: 12px;
   }
-}
 
+  .loginLinkContainer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}

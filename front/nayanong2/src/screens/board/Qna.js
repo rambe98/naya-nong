@@ -33,6 +33,8 @@ const Qna = () => {
     const [date, setDate] = useState('');
     const navigate = useNavigate('');
 
+
+
     //날짜 함수
     useEffect(() => {
         const updateDate = () => {
@@ -78,10 +80,11 @@ const Qna = () => {
     }, [userNick]);
 
     // 모달 열기
-    const openModal = (content) => {
-        setSelectedContent(content);
+    const openModal = (qna) => {
+        setSelectedContent(qna); // 행 전체 데이터를 저장
         setIsModalOpen(true);
     };
+
 
     // 모달 닫기
     const closeModal = () => {
@@ -131,16 +134,16 @@ const Qna = () => {
 
 
     return (
-        <div className="qnaContainer">
-            <span className="QnaHeader">QnA</span>
+        <div className="qnaPageContainer">
+            <span className="qnaPageHeader">QnA</span>
             {/* 관리자일 경우 입력 폼을 숨김 */}
             {userNick !== "관리자" && (
-                <form onSubmit={handleSubmit} className="qnaForm">
+                <form onSubmit={handleSubmit} className="qnaPageForm">
                     {/* 닉네임 */}
                     <input
                         type="text"
                         name="userNick"
-                        className="qnaInput"
+                        className="qnaPageInput"
                         value={userNick || ""}
                         readOnly
                     />
@@ -150,7 +153,7 @@ const Qna = () => {
                         type="text"
                         name="qnaTitle"
                         placeholder="제목을 입력해주세요."
-                        className="qnaInput"
+                        className="qnaPageInput"
                         value={formData.qnaTitle}
                         onChange={handleChange}
                         required
@@ -160,16 +163,16 @@ const Qna = () => {
                     <textarea
                         name="qnaDtail"
                         placeholder="내용을 입력해주세요."
-                        className="qnaInputtext"
+                        className="qnaPageInputText"
                         value={formData.qnaDtail}
                         onChange={handleChange}
                         required
                     />
-                    <div className="qnaEmailNotification">
-                        <p>답변은 회원가입 당시 <br/>이메일로 순차적 발송됩니다.</p>
+                    <div className="qnaPageEmailNotification">
+                        <p>답변은 회원가입 당시 <br />이메일로 순차적 발송됩니다.</p>
                     </div>
                     {/* 제출 버튼 */}
-                    <button type="submit" className="qnaButton">
+                    <button type="submit" className="qnaPageButton">
                         보내기
                     </button>
                 </form>
@@ -177,7 +180,7 @@ const Qna = () => {
 
             {/* QnA 게시판: 관리자만 볼 수 있음 */}
             {userNick === "관리자" && (
-                <div className="qnaBoard">
+                <div className="qnaPageBoard">
                     <table>
                         <thead>
                             <tr>
@@ -190,23 +193,18 @@ const Qna = () => {
                         </thead>
                         <tbody>
                             {qnaList.map((qna, index) => (
-                                <tr key={index}>
+                                <tr
+                                    key={index}
+                                    onClick={() => openModal(qna)} // 행 전체를 클릭 시 모달 열기
+                                    style={{ cursor: "pointer" }}
+                                >
                                     <td data-label="번호">{qna.qnaNum || index + 1}</td>
                                     <td data-label="제목">{qna.qnaTitle}</td>
                                     <td data-label="작성자">{qna.userNick}</td>
                                     <td data-label="내용">
-                                        <span
-                                            onClick={() => openModal(qna.qnaDtail)} // 클릭 시 모달 열기
-                                            style={{
-                                                color: 'blue',
-                                                textDecoration: 'underline',
-                                                cursor: 'pointer',
-                                            }}
-                                        >
-                                            {qna.qnaDtail.length > 20
-                                                ? `${qna.qnaDtail.substring(0, 20)}...`
-                                                : qna.qnaDtail}
-                                        </span>
+                                        {qna.qnaDtail.length > 20
+                                            ? `${qna.qnaDtail.substring(0, 20)}...`
+                                            : qna.qnaDtail}
                                     </td>
                                     <td data-label="작성일자">
                                         {qna.writeDate
@@ -228,11 +226,25 @@ const Qna = () => {
             )}
             {/* 모달 창 */}
             {isModalOpen && (
-                <div className="qnaModalOverlay" onClick={closeModal}>
-                    <div className="qnaModalContent" onClick={(e) => e.stopPropagation()}>
-                        <h2>내용 상세</h2>
-                        <p>{selectedContent}</p>
-                        <button onClick={closeModal} className="qnaCloseButton">
+                <div className="qnaPageModalOverlay" onClick={closeModal}>
+                    <div className="qnaPageModalContent" onClick={(e) => e.stopPropagation()}>
+                        <h2>문의 상세</h2>
+                        <p><strong>제목:</strong> {selectedContent.qnaTitle}</p>
+                        <p><strong>작성자:</strong> {selectedContent.userNick}</p>
+                        <p><strong>내용:</strong> {selectedContent.qnaDtail}</p>
+                        <p><strong>작성일자:</strong>
+                            {selectedContent.writeDate
+                                ? new Date(selectedContent.writeDate).toLocaleString("ko-KR", {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: false,
+                                })
+                                : "N/A"}
+                        </p>
+                        <button onClick={closeModal} className="qnaPageCloseButton">
                             닫기
                         </button>
                     </div>

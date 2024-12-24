@@ -172,7 +172,7 @@ const FarmItem = () => {
         labels: priceData.map((item) => item.date),
         datasets: [
             {
-                label: "소매가 그래프",
+                label: "소매가",
                 data: priceData.map((item) => item.price),
                 fill: false,
                 borderColor: "rgba(75, 192, 192, 1)",

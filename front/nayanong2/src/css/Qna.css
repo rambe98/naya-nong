@@ -4,10 +4,19 @@
   flex-direction: column;
   align-items: center;
   padding: 50px;
-  height: 100vh;
+  min-height: calc(100vh - 50px); /* Footer 높이를 제외한 최소 높이 설정 */
   background-color: #FFFFFF;
   box-sizing: border-box;
+}
 
+footer {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 10px;
+  position: relative; /* 항상 Body 뒤로 겹치지 않도록 설정 */
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .qnaPageHeader {

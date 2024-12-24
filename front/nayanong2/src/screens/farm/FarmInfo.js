@@ -78,9 +78,9 @@ const FarmInfo = () => {
 
   const kinds = selectedProduct
     ? FarmData[selectedProduct]?.map((item) => ({
-        kindcode: item.p_kindcode,
-        kindname: item.kindname,
-      })) || []
+      kindcode: item.p_kindcode,
+      kindname: item.kindname,
+    })) || []
     : [];
 
   const handleSearch = async (type) => {
@@ -260,12 +260,12 @@ const FarmInfo = () => {
         </button>
       </div>
 
-      {!loading && searchResults.length > 0 && (
+      {!loading && (
         <div className="farmInfo-result-wrapper">
           <div className="farmInfo-result-container">
             {error ? (
               <p>{error}</p>
-            ) : (
+            ) : searchResults.length > 0 && (
               <>
                 <h3>{title}</h3>
                 <ul>
@@ -280,7 +280,6 @@ const FarmInfo = () => {
           </div>
         </div>
       )}
-
       {searchResults.length > 0 && <Graph />}
     </div>
   );

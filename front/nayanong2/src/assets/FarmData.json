@@ -3,1068 +3,913 @@
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "251",
-            "p_kindcode": "00",
-            "kindname": "가지"
+            "p_kindcode": "00"
         }
     ],
     "감귤": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "415",
-            "p_kindcode": "00",
-            "kindname": "감귤"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "415",
-            "p_kindcode": "01",
-            "kindname": "노지"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "415",
-            "p_kindcode": "02",
-            "kindname": "시설"
+            "p_kindcode": "02"
         }
     ],
     "감자": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "152",
-            "p_kindcode": "00",
-            "kindname": "감자"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "152",
-            "p_kindcode": "01",
-            "kindname": "수미(노지)"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "152",
-            "p_kindcode": "02",
-            "kindname": "대지마"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "152",
-            "p_kindcode": "03",
-            "kindname": "노지"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "152",
-            "p_kindcode": "04",
-            "kindname": "수미(시설)"
+            "p_kindcode": "04"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "152",
-            "p_kindcode": "05",
-            "kindname": "기타(시설)"
+            "p_kindcode": "05"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "152",
-            "p_kindcode": "06",
-            "kindname": "기타(노지)"
+            "p_kindcode": "06"
         }
     ],
     "갓": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "216",
-            "p_kindcode": "00",
-            "kindname": "갓"
+            "p_kindcode": "00"
         }
     ],
     "건고추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "241",
-            "p_kindcode": "00",
-            "kindname": "화건"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "241",
-            "p_kindcode": "01",
-            "kindname": "햇산화건"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "241",
-            "p_kindcode": "02",
-            "kindname": "양건(~23.5)"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "241",
-            "p_kindcode": "03",
-            "kindname": "햇산양건(~23.5)"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "241",
-            "p_kindcode": "10",
-            "kindname": "수입"
+            "p_kindcode": "10"
         }
     ],
     "건블루베리": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "427",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "건포도": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "426",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "고구마": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "151",
-            "p_kindcode": "00",
-            "kindname": "밤"
+            "p_kindcode": "00"
         }
     ],
     "고춧가루": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "248",
-            "p_kindcode": "00",
-            "kindname": "국산"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "248",
-            "p_kindcode": "01",
-            "kindname": "중국"
+            "p_kindcode": "01"
         }
     ],
     "깐마늘(국산)": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "258",
-            "p_kindcode": "01",
-            "kindname": "깐마늘(국산)"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "258",
-            "p_kindcode": "03",
-            "kindname": "깐마늘(대서)"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "258",
-            "p_kindcode": "04",
-            "kindname": "햇깐마늘(대서)"
+            "p_kindcode": "04"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "258",
-            "p_kindcode": "05",
-            "kindname": "깐마늘(남도)"
+            "p_kindcode": "05"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "258",
-            "p_kindcode": "06",
-            "kindname": "햇깐마늘(남도)"
+            "p_kindcode": "06"
         }
     ],
     "깐마늘(수입)": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "259",
-            "p_kindcode": "01",
-            "kindname": "깐마늘(수입)"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "259",
-            "p_kindcode": "03",
-            "kindname": "깐마늘(수입산)"
+            "p_kindcode": "03"
         }
     ],
     "깻잎": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "253",
-            "p_kindcode": "00",
-            "kindname": "깻잎"
+            "p_kindcode": "00"
         }
     ],
     "녹두": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "143",
-            "p_kindcode": "00",
-            "kindname": "국산"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "143",
-            "p_kindcode": "01",
-            "kindname": "수입"
+            "p_kindcode": "01"
         }
     ],
     "느타리버섯": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "315",
-            "p_kindcode": "00",
-            "kindname": "느타리버섯"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "315",
-            "p_kindcode": "01",
-            "kindname": "애느타리버섯"
+            "p_kindcode": "01"
         }
     ],
     "단감": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "416",
-            "p_kindcode": "00",
-            "kindname": "단감"
+            "p_kindcode": "00"
         }
     ],
     "당근": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "232",
-            "p_kindcode": "00",
-            "kindname": "당근"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "232",
-            "p_kindcode": "01",
-            "kindname": "무세척"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "232",
-            "p_kindcode": "02",
-            "kindname": "세척"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "232",
-            "p_kindcode": "10",
-            "kindname": "세척(수입)"
+            "p_kindcode": "10"
         }
     ],
     "들깨": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "313",
-            "p_kindcode": "01",
-            "kindname": "국산"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "313",
-            "p_kindcode": "02",
-            "kindname": "수입"
+            "p_kindcode": "02"
         }
     ],
     "딸기": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "226",
-            "p_kindcode": "00",
-            "kindname": "딸기"
+            "p_kindcode": "00"
         }
     ],
     "땅콩": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "314",
-            "p_kindcode": "01",
-            "kindname": "국산"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "314",
-            "p_kindcode": "02",
-            "kindname": "수입"
+            "p_kindcode": "02"
         }
     ],
     "레몬": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "424",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "망고": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "428",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "메밀": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "144",
-            "p_kindcode": "01",
-            "kindname": "메밀(수입)"
+            "p_kindcode": "01"
         }
     ],
     "멜론": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "257",
-            "p_kindcode": "00",
-            "kindname": "멜론"
+            "p_kindcode": "00"
         }
     ],
     "무": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "231",
-            "p_kindcode": "01",
-            "kindname": "봄"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "231",
-            "p_kindcode": "02",
-            "kindname": "고랭지"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "231",
-            "p_kindcode": "03",
-            "kindname": "가을"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "231",
-            "p_kindcode": "06",
-            "kindname": "월동"
+            "p_kindcode": "06"
         }
     ],
     "미나리": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "252",
-            "p_kindcode": "00",
-            "kindname": "미나리"
+            "p_kindcode": "00"
         }
     ],
     "바나나": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "418",
-            "p_kindcode": "02",
-            "kindname": "수입"
+            "p_kindcode": "02"
         }
     ],
     "방울토마토": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "422",
-            "p_kindcode": "01",
-            "kindname": "방울토마토"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "422",
-            "p_kindcode": "02",
-            "kindname": "대추방울토마토"
+            "p_kindcode": "02"
         }
     ],
     "배": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "412",
-            "p_kindcode": "01",
-            "kindname": "신고"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "412",
-            "p_kindcode": "02",
-            "kindname": "만삼길"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "412",
-            "p_kindcode": "03",
-            "kindname": "장십랑"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "412",
-            "p_kindcode": "04",
-            "kindname": "원황"
+            "p_kindcode": "04"
         }
     ],
     "배추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "211",
-            "p_kindcode": "01",
-            "kindname": "봄"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "211",
-            "p_kindcode": "02",
-            "kindname": "여름(고랭지)"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "211",
-            "p_kindcode": "03",
-            "kindname": "가을"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "211",
-            "p_kindcode": "06",
-            "kindname": "월동"
+            "p_kindcode": "06"
         }
     ],
     "복숭아": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "413",
-            "p_kindcode": "01",
-            "kindname": "백도"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "413",
-            "p_kindcode": "04",
-            "kindname": "창방조생"
+            "p_kindcode": "04"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "413",
-            "p_kindcode": "05",
-            "kindname": "유명"
+            "p_kindcode": "05"
         }
     ],
     "부추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "254",
-            "p_kindcode": "00",
-            "kindname": "부추"
+            "p_kindcode": "00"
         }
     ],
     "붉은고추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "243",
-            "p_kindcode": "00",
-            "kindname": "붉은고추"
+            "p_kindcode": "00"
         }
     ],
     "브로콜리": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "280",
-            "p_kindcode": "00",
-            "kindname": "브로콜리(국산)"
+            "p_kindcode": "00"
         }
     ],
     "사과": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "411",
-            "p_kindcode": "01",
-            "kindname": "홍옥"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "411",
-            "p_kindcode": "05",
-            "kindname": "후지"
+            "p_kindcode": "05"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "411",
-            "p_kindcode": "06",
-            "kindname": "쓰가루(아오리)"
+            "p_kindcode": "06"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "411",
-            "p_kindcode": "07",
-            "kindname": "홍로"
+            "p_kindcode": "07"
         }
     ],
     "상추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "214",
-            "p_kindcode": "01",
-            "kindname": "적"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "214",
-            "p_kindcode": "02",
-            "kindname": "청"
+            "p_kindcode": "02"
         }
     ],
     "새송이버섯": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "317",
-            "p_kindcode": "00",
-            "kindname": "새송이버섯"
+            "p_kindcode": "00"
         }
     ],
     "생강": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "247",
-            "p_kindcode": "00",
-            "kindname": "국산"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "247",
-            "p_kindcode": "01",
-            "kindname": "수입"
+            "p_kindcode": "01"
         }
     ],
     "수박": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "221",
-            "p_kindcode": "00",
-            "kindname": "수박"
+            "p_kindcode": "00"
         }
     ],
     "시금치": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "213",
-            "p_kindcode": "00",
-            "kindname": "시금치"
+            "p_kindcode": "00"
         }
     ],
     "쌀": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "111",
-            "p_kindcode": "01",
-            "kindname": "20kg"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "111",
-            "p_kindcode": "05",
-            "kindname": "20kg(햅쌀)"
+            "p_kindcode": "05"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "111",
-            "p_kindcode": "10",
-            "kindname": "10kg"
+            "p_kindcode": "10"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "111",
-            "p_kindcode": "11",
-            "kindname": "10kg(햅쌀)"
+            "p_kindcode": "11"
         }
     ],
     "아몬드": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "319",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "아보카도": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "430",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "알배기배추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "279",
-            "p_kindcode": "00",
-            "kindname": "알배기배추"
+            "p_kindcode": "00"
         }
     ],
     "양배추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "212",
-            "p_kindcode": "00",
-            "kindname": "양배추"
+            "p_kindcode": "00"
         }
     ],
     "양파": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "245",
-            "p_kindcode": "00",
-            "kindname": "양파"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "245",
-            "p_kindcode": "02",
-            "kindname": "햇양파"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "245",
-            "p_kindcode": "10",
-            "kindname": "수입"
+            "p_kindcode": "10"
         }
     ],
     "얼갈이배추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "215",
-            "p_kindcode": "00",
-            "kindname": "얼갈이배추"
+            "p_kindcode": "00"
         }
     ],
     "열무": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "233",
-            "p_kindcode": "00",
-            "kindname": "열무"
+            "p_kindcode": "00"
         }
     ],
     "오렌지": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "421",
-            "p_kindcode": "02",
-            "kindname": "수입"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "421",
-            "p_kindcode": "03",
-            "kindname": "네이블 미국"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "421",
-            "p_kindcode": "04",
-            "kindname": "발렌시아 미국"
+            "p_kindcode": "04"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "421",
-            "p_kindcode": "05",
-            "kindname": "네이블 EU"
+            "p_kindcode": "05"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "421",
-            "p_kindcode": "06",
-            "kindname": "네이블 호주"
+            "p_kindcode": "06"
         }
     ],
     "오이": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "223",
-            "p_kindcode": "01",
-            "kindname": "가시계통"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "223",
-            "p_kindcode": "02",
-            "kindname": "다다기계통"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "223",
-            "p_kindcode": "03",
-            "kindname": "취청"
+            "p_kindcode": "03"
         }
     ],
     "자몽": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "423",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "절임배추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "266",
-            "p_kindcode": "01",
-            "kindname": "봄"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "266",
-            "p_kindcode": "02",
-            "kindname": "여름(고랭지)"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "266",
-            "p_kindcode": "03",
-            "kindname": "가을"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "266",
-            "p_kindcode": "04",
-            "kindname": "월동"
+            "p_kindcode": "04"
         }
     ],
     "참깨": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "312",
-            "p_kindcode": "01",
-            "kindname": "백색(국산)"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "312",
-            "p_kindcode": "02",
-            "kindname": "중국"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "312",
-            "p_kindcode": "03",
-            "kindname": "인도"
+            "p_kindcode": "03"
         }
     ],
     "참다래": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "419",
-            "p_kindcode": "01",
-            "kindname": "국산"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "419",
-            "p_kindcode": "02",
-            "kindname": "그린 뉴질랜드"
+            "p_kindcode": "02"
         }
     ],
     "참외": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "222",
-            "p_kindcode": "00",
-            "kindname": "참외"
+            "p_kindcode": "00"
         }
     ],
     "찹쌀": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "112",
-            "p_kindcode": "01",
-            "kindname": "일반계"
+            "p_kindcode": "01"
         }
     ],
     "체리": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "425",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "콩": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "141",
-            "p_kindcode": "01",
-            "kindname": "흰 콩(국산)"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "141",
-            "p_kindcode": "02",
-            "kindname": "콩나물콩"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "141",
-            "p_kindcode": "03",
-            "kindname": "흰 콩(수입)"
+            "p_kindcode": "03"
         }
     ],
     "토마토": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "225",
-            "p_kindcode": "00",
-            "kindname": "토마토"
+            "p_kindcode": "00"
         }
     ],
     "파": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "246",
-            "p_kindcode": "00",
-            "kindname": "대파"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "246",
-            "p_kindcode": "02",
-            "kindname": "쪽파"
+            "p_kindcode": "02"
         }
     ],
     "파인애플": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "420",
-            "p_kindcode": "02",
-            "kindname": "수입"
+            "p_kindcode": "02"
         }
     ],
     "파프리카": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "256",
-            "p_kindcode": "00",
-            "kindname": "파프리카"
+            "p_kindcode": "00"
         }
     ],
     "팥": [
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "142",
-            "p_kindcode": "00",
-            "kindname": "붉은 팥(국산)"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "100",
             "p_itemcode": "142",
-            "p_kindcode": "01",
-            "kindname": "붉은 팥(수입)"
+            "p_kindcode": "01"
         }
     ],
     "팽이버섯": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "316",
-            "p_kindcode": "00",
-            "kindname": "팽이버섯"
+            "p_kindcode": "00"
         }
     ],
     "포도": [
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "01",
-            "kindname": "캠벨얼리"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "02",
-            "kindname": "거봉"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "03",
-            "kindname": "델라웨어"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "06",
-            "kindname": "MBA"
+            "p_kindcode": "06"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "07",
-            "kindname": "수입"
+            "p_kindcode": "07"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "08",
-            "kindname": "레드글로브 칠레(~23.5)"
+            "p_kindcode": "08"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "09",
-            "kindname": "레드글로브 페루(~23.5)"
+            "p_kindcode": "09"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "10",
-            "kindname": "톰슨 미국(~23.5)"
+            "p_kindcode": "10"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "11",
-            "kindname": "톰슨 호주(~23.5)"
+            "p_kindcode": "11"
         },
         {
             "p_itemcategorycode": "400",
             "p_itemcode": "414",
-            "p_kindcode": "12",
-            "kindname": "샤인머스켓"
+            "p_kindcode": "12"
         }
     ],
     "풋고추": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "242",
-            "p_kindcode": "00",
-            "kindname": "풋고추(녹광 등)"
+            "p_kindcode": "00"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "242",
-            "p_kindcode": "02",
-            "kindname": "꽈리고추"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "242",
-            "p_kindcode": "03",
-            "kindname": "청양고추"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "242",
-            "p_kindcode": "04",
-            "kindname": "오이맛고추"
+            "p_kindcode": "04"
         }
     ],
     "피마늘": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "01",
-            "kindname": "한지1접"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "02",
-            "kindname": "난지1접"
+            "p_kindcode": "02"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "03",
-            "kindname": "한지"
+            "p_kindcode": "03"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "04",
-            "kindname": "난지"
+            "p_kindcode": "04"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "06",
-            "kindname": "햇한지1접"
+            "p_kindcode": "06"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "07",
-            "kindname": "햇난지1접"
+            "p_kindcode": "07"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "08",
-            "kindname": "쪽마늘"
+            "p_kindcode": "08"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "21",
-            "kindname": "햇난지(대서)"
+            "p_kindcode": "21"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "22",
-            "kindname": "난지(대서)"
+            "p_kindcode": "22"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "23",
-            "kindname": "햇난지(남도)"
+            "p_kindcode": "23"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "244",
-            "p_kindcode": "24",
-            "kindname": "난지(남도)"
+            "p_kindcode": "24"
         }
     ],
     "피망": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "255",
-            "p_kindcode": "00",
-            "kindname": "청"
+            "p_kindcode": "00"
         }
     ],
     "호두": [
         {
             "p_itemcategorycode": "300",
             "p_itemcode": "318",
-            "p_kindcode": "00",
-            "kindname": "수입"
+            "p_kindcode": "00"
         }
     ],
     "호박": [
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "224",
-            "p_kindcode": "01",
-            "kindname": "애호박"
+            "p_kindcode": "01"
         },
         {
             "p_itemcategorycode": "200",
             "p_itemcode": "224",
-            "p_kindcode": "02",
-            "kindname": "쥬키니"
+            "p_kindcode": "02"
         }
     ]
 }

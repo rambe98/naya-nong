@@ -49,12 +49,6 @@ const Comments = () => {
     
     //댓글 추가
     const commentsAdd = async () => {
-        const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
-
-        if (!loginsuccess) {
-            alert('로그인이 필요합니다.');
-            return;
-        }
         if (!newComment.trim()) return alert("댓글 내용을 입력하세요.");
         try {
             await axios.post(`${API_BASE_URL}/comments/add`, {
@@ -64,7 +58,6 @@ const Comments = () => {
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-         
             alert("댓글이 작성되었습니다.")
             setNewComment("");
             fetchComments();

@@ -204,24 +204,4 @@
         font-size: 0.7rem; /* 더 작은 글씨 크기 */
         border-radius: 4px; /* 둥글기 조금 축소 */
     }
-
-    /* 정보 섹션 (작성자, 날짜, 조회수) */
-.postInfo {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap; /* 줄바꿈 지원 */
-    font-size: 14px;
-    color: #666666;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #ddd;
-}
-
-.postTitle {
-    font-size: 22px;
-    font-weight: bold;
-    color: #333333;
-    margin-bottom: 0;
-}
- 
 }

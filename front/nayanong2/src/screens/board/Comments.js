@@ -105,6 +105,11 @@ const Comments = () => {
     
     //대댓글 추가
     const replyAdd = async (parentId) => {
+        const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
+        if (!loginsuccess) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
         if (!newReply.trim()) return alert("답글 내용을 입력하세요.");
         try {
             await axios.post(`${API_BASE_URL}/pComment/addReply/${parentId}`, {

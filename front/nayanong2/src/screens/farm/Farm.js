@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "../../css/Farm.css";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";

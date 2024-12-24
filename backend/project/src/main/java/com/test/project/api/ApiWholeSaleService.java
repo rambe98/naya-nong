@@ -26,7 +26,7 @@ public class ApiWholeSaleService {
 	public ApiWholeSaleService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
-	// 전체 소매가격 데이터 조회
+	// 전체 도매가격 데이터 조회
 			public List<PriceDataDTO> getAllWholesalePriceData(String p_startday, String p_endday, String p_itemcategorycode,
 					String p_itemcode, String p_kindcode, String p_productrankcode, String p_countrycode, String p_returntype) {
 				try {
@@ -56,7 +56,7 @@ public class ApiWholeSaleService {
 				}
 			}
 
-			
+			//도매 평균 조회
 			public List<PriceDataDTO> getWholesalePriceData(String p_startday, String p_endday, String p_itemcategorycode,
 					String p_itemcode, String p_kindcode, String p_productrankcode, String p_countrycode, String p_returntype) {
 				try {
@@ -85,7 +85,8 @@ public class ApiWholeSaleService {
 					throw new RuntimeException("Error fetching price data", e);
 				}
 			}
-
+			
+			//오픈API 형식에 맞춘 데이터 요청
 			private List<PriceDataDTO> parseWholesalePriceData(String responseBody) {
 				List<PriceDataDTO> priceDataList = new ArrayList<>();
 				try {
@@ -110,7 +111,7 @@ public class ApiWholeSaleService {
 			}
 			
 
-			// 소매 평균 조회
+			// 도매 평균 조회
 			public List<PriceDataDTO> filterByCountynameWholesaleAverage(List<PriceDataDTO> priceDataList) {
 				List<PriceDataDTO> filteredList = new ArrayList<>();
 				for (PriceDataDTO dto : priceDataList) {

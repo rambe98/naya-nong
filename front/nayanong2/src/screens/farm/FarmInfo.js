@@ -248,7 +248,7 @@ const FarmInfo = () => {
       )}
 
       <div className="farmInfo-button-container">
-      <button
+        <button
           onClick={() => handleSearch("wholeSale")} // 도매가로 검색
         >
           도매가로 검색

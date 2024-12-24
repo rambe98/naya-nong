@@ -3,11 +3,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
   background-color: #ffffff;
   margin: 0 auto;
   position: relative;
   width: 100%; /* 너비 100% 설정 */
+  margin-top: 160px;
 }
 
 .loginContent {

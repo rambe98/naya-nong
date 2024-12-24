@@ -16,6 +16,7 @@ import "../../css/FarmInfo.css";
 import Graph from "./Graph";
 import { ko } from "date-fns/locale";
 import { API_BASE_URL } from '../../service/api-config';
+import { Circles } from "react-loader-spinner";
 
 const FarmInfo = () => {
   const [startDate, setStartDate] = useRecoilState(startDateStateAtom);
@@ -63,13 +64,6 @@ const FarmInfo = () => {
     { code: "3818", name: "김해" },
   ];
 
-  // priceType 상태가 변경될 때마다 handleSearch 실행
-  useEffect(() => {
-    // priceType 변경 시 검색 실행 대신 로그만 출력
-    console.log("priceType이 변경되었습니다:", priceType);
-  }, [priceType]);
-
-
   useEffect(() => {
     return () => {
       setSearchResults([]); // 검색 결과 초기화
@@ -105,17 +99,11 @@ const FarmInfo = () => {
       date.setDate(date.getDate() - 1); // 하루 빼기
       adjustedStartDate = date.toISOString().split("T")[0]; // ISO 문자열로 변환
     }
-  
-  
+
     const selectedItemCode =
       FarmData[selectedProduct]?.[0]?.p_itemcode || "";
 
-      const selectedKindCode = selectedKind || "";
-    
-    console.log("selectedKindCode:", selectedKindCode);
-    console.log("selectedKind:", selectedKind);
-    console.log("Available kinds:", FarmData[selectedProduct]);
-    
+    const selectedKindCode = selectedKind || "";
 
     const apiUrl =
       priceType === "retail"
@@ -127,12 +115,8 @@ const FarmInfo = () => {
       p_startday: adjustedStartDate,
       p_endday: endDate,
       p_itemcode: selectedItemCode,
-      p_kindcode: selectedKindCode, // FarmData에서 가져온 값
+      p_kindcode: selectedKindCode,
     };
-
-      
-    console.log("내가보낸데이터",requestData);
-
 
     try {
       const response = await axios.post(apiUrl, requestData);
@@ -144,21 +128,12 @@ const FarmInfo = () => {
         return;
       }
 
-      console.log("filteredResults", filteredResults);
-
       // 평균 가격 계산
       const total = filteredResults.reduce((sum, item) => sum + parseFloat(item.price || 0), 0);
       const average = total / (filteredResults.length || 1);
 
       // Recoil Atom에 평균 가격 저장
       setAveragePrice(average);
-      console.log("요청데이터", response);
-      console.log("평균데이터", filteredResults);
-
-      console.log("합계", total);
-
-      console.log("평균", average);
-
 
       // 제목 업데이트
       const regionName =
@@ -177,14 +152,15 @@ const FarmInfo = () => {
     }
   };
 
-
   return (
     <div className="farmInfo-container">
       <h2>소매 · 도매 날짜별 평균가격</h2>
-      {/* 조건부로 주말과 공휴일 메시지 표시 */}
-      {searchResults.length === 0 && !loading && (
+
+
+      {!loading && searchResults.length === 0 && (
         <p className="FarmInfo-warning-message">※주말과 공휴일은 조회가 불가합니다.</p>
       )}
+
       <div className="farmInfo-datePicker-container">
         <label className="farmInfo-datePicker-label">기간:</label>
         <DatePicker
@@ -243,10 +219,10 @@ const FarmInfo = () => {
 
         <div>
           <label>지역:</label>
-          <select   onChange={(e) => {
-      const value = e.target.value === "" ? "" : e.target.value; // 전체 선택 시 빈 문자열
-      setPriceRequestDTO({ ...priceRequestDTO, p_countrycode: value });
-    }}>
+          <select onChange={(e) => {
+            const value = e.target.value === "" ? "" : e.target.value; // 전체 선택 시 빈 문자열
+            setPriceRequestDTO({ ...priceRequestDTO, p_countrycode: value });
+          }}>
             <option value="">전체</option>
             {regions.map((region) => (
               <option key={region.code} value={region.code}>
@@ -257,6 +233,18 @@ const FarmInfo = () => {
           {!loading && error && <p className="FarmInfo-warning-message">{error}</p>}
         </div>
       </div>
+
+      {loading && (
+        <div className="farmInfo-loading">
+          <Circles
+            height="100"
+            width="100"
+            color="#3498db"
+            ariaLabel="loading-indicator"
+          />
+          <p>데이터 로딩 중...</p>
+        </div>
+      )}
 
       <div className="farmInfo-button-container">
         <button
@@ -277,12 +265,10 @@ const FarmInfo = () => {
         </button>
       </div>
 
-      {searchResults.length > 0 &&
+      {!loading && searchResults.length > 0 && (
         <div className="farmInfo-result-wrapper">
           <div className="farmInfo-result-container">
-            {loading ? (
-              <p>로딩 중...</p>
-            ) : error ? (
+            {error ? (
               <p>{error}</p>
             ) : (
               <>
@@ -298,7 +284,7 @@ const FarmInfo = () => {
             )}
           </div>
         </div>
-      }
+      )}
       {/* Graph 컴포넌트 */}
       {searchResults.length > 0 && <Graph />}
     </div>

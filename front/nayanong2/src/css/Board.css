@@ -322,44 +322,97 @@
   /* 메인 색상 테두리 */
 }
 
-/* 사이드바 컨테이너 */
-.boardSidebarContainer {
+
+/* Board.js , Notice.js sideBar --------------------------------------- */
+.boardSidebarList{
+  font-family: 'SSFlowerRoad', sans-serif;
+}
+
+.boardSidebarContainer,
+.boardSidebarContainer2,
+.boardSidebarContainer3 {
   position: fixed;
-  top: 80px;
-  /* 헤더 높이만큼 아래로 내림 */
-  left: 0;
-  width: 150px;
-  height: calc(100% - 80px);
-  /* 헤더 높이를 뺀 나머지 높이 */
-  background-color: #ffffff;
-  /* 연한 베이지 배경 */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+  left: 0;  /* 사이드바가 화면 왼쪽에 정확하게 붙도록 설정 */
+  width: 150px;  /* 사이드바 너비 */
+  background-color: #fff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  transform: translateX(-100%);
-  /* 초기 숨김 상태 */
   display: flex;
   flex-direction: column;
   padding: 20px;
   box-sizing: border-box;
+  transform: translateX(-200px);  /* 사이드바를 숨길 때 왼쪽으로 이동 */
+  transition: transform 0.3s ease-in-out; /* transform을 사용한 애니메이션 효과 */
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
 }
 
-/* 열림 상태 */
-.boardSidebarContainer.show {
-  transform: translateX(0);
-  /* 사이드바 열림 상태 */
+
+/* 첫 번째 사이드바 위치 */
+.boardSidebarContainer {
+  top: 250px;
 }
 
-/* 닫기 버튼 */
+/* 두 번째 사이드바 위치 */
+.boardSidebarContainer2 {
+  top: 330px;
+}
+
+/* 세 번째 사이드바 위치 */
+.boardSidebarContainer3 {
+  top: 400px;
+}
+
+/* 사이드바가 열릴 때 */
+.boardSidebarContainer.show,
+.boardSidebarContainer2.show,
+.boardSidebarContainer3.show {
+  transform: translateX(0); /* 사이드바가 왼쪽 끝으로 나타나도록 설정 */
+}
+
+/* 사이드바가 숨겨질 때 */
+.boardSidebarContainer.hide,
+.boardSidebarContainer2.hide,
+.boardSidebarContainer3.hide {
+  transform: translateX(-200px); /* 다시 숨길 때 왼쪽으로 200px 이동 */
+}
+
+/* 닫기 버튼 스타일 */
 .boardCloseSidebarButton {
   position: absolute;
-  top: 15px;
-  /* 헤더 아래 여백 */
-  right: 15px;
+  top: 5px;
+  right: 35px;
   background: none;
   border: none;
-  font-size: 14px;
+  font-size: 20px;
   cursor: pointer;
+  color: #333;
+  text-align: center;
+  font-family: 'SSFlowerRoad', sans-serif;
+}
+.boardCloseSidebarButton:hover {
+  color: #d4a373;  /* 메인 색상으로 변경 */
+  transform: scale(1.1);  /* 버튼을 살짝 확대 */
+}
+
+/* 링크 스타일 */
+.boardSidebarContainer2,
+.boardSidebarContainer3 {
+  text-decoration: none;
+  color: #333;
+  padding: 15px 5px;  /* 좌우 여백 줄이기 */
+  font-size: 16px;
+  display: block;
+  font-weight: 600;
+  transition: color 0.3s ease, padding-left 0.2s ease;
+  text-align: center;  /* 텍스트를 수평 중앙 정렬 */
+}
+
+/* 링크 호버 스타일 */
+.boardSidebarContainer2:hover,
+.boardSidebarContainer3:hover {
+  color: #d4a373;  /* 메인 색상 */
+  padding-left: 15px;  /* 호버 시 좌측 여백 추가 */
 }
 
 /* 리스트 스타일 */
@@ -368,33 +421,49 @@
   padding: 0;
   margin: 0;
   margin-top: 50px;
-  /* 닫기 버튼 아래 여백 */
   font-family: 'SSFlowerRoad', sans-serif;
 }
 
+/* 리스트 항목 스타일 */
 .boardSidebarContainer li {
-  margin-bottom: 30px;
-  /* 항목 간 간격 */
-  padding: 15px 0px 0px;
+  margin-bottom: 30px;  /* 항목 간 간격 */
+  padding: 10px 0;  /* 상하 여백 */
+  display: flex;
+  justify-content: center;  /* 수평 중앙 정렬 */
+  align-items: center;  /* 수직 중앙 정렬 */
 }
 
+/* 각 항목 내 링크 스타일 */
 .boardSidebarContainer li a {
-  text-decoration: none;
   font-size: 16px;
   color: #333;
-  /* 텍스트 색상 */
-  font-weight: bold;
+  font-weight: 600;
   transition: color 0.3s ease, transform 0.2s ease;
-  display: block; /* a 요소를 블록 요소로 변경 */
-  padding: 25px 0x; /* 좌우, 상하 여백을 추가하여 클릭 범위 확대 */
+  display: block;  /* a 요소를 블록 요소로 변경 */
+  padding: 10px 0;  /* 클릭 영역 확장 */
+  padding-left: 30px;  /* 왼쪽 여백을 늘림 */
+  text-decoration: none;
 }
 
+/* 링크 호버 스타일 */
 .boardSidebarContainer li a:hover {
-  color: #d4a373;
-  /* 메인 색상으로 변경 */
-  transform: translateX(5px);
-  /* 살짝 오른쪽으로 이동 */
+  color: #d4a373;  /* 메인 색상 */
+  transform: translateX(5px);  /* 오른쪽으로 미세하게 이동 */
 }
+.boardSidebarLink{
+  text-decoration: none;
+  color: #333;
+}
+.boardSidebarLink:visited {
+  color: #333; /* 클릭 후 색상을 기본 색상으로 유지 */
+  text-decoration: none; /* 밑줄 제거 */
+}
+/* 링크 호버 스타일 */
+.boardSidebarLink:hover {
+  color: #d4a373; /* 메인 색상 */
+  text-decoration: underline; /* 호버 시 밑줄 추가 */
+}
+
 
 /* 사이드바 하단 추가 정보 */
 .boardSidebarFooter {
@@ -611,5 +680,50 @@
     font-family: 'SSFlowerRoad', sans-serif;
     border-bottom: 1.5px solid #d4a373;
   }
-  
+
+
+/* Board.js , Notice.js ----------------------------------------------- */
+.boardSidebarContainer,
+.boardSidebarContainer2,
+.boardSidebarContainer3 {
+  position: fixed;
+  left: 0;  /* 사이드바가 화면 왼쪽에 정확하게 붙도록 설정 */
+  width: 70px;  /* 사이드바 너비 */
+  background-color: #fff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  transform: translateX(-200px);  /* 사이드바를 숨길 때 왼쪽으로 이동 */
+  transition: transform 0.3s ease-in-out; /* transform을 사용한 애니메이션 효과 */
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+}
+/* 링크 스타일 */
+.boardSidebarContainer2,
+.boardSidebarContainer3 {
+  text-decoration: none;
+  color: #333;
+  padding: 15px 5px;  /* 좌우 여백 줄이기 */
+  font-size: 10px;
+  display: block;
+  font-weight: 600;
+  transition: color 0.3s ease, padding-left 0.2s ease;
+  text-align: center;  /* 텍스트를 수평 중앙 정렬 */
+}
+/* 닫기 버튼 스타일 */
+.boardCloseSidebarButton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: #333;
+  text-align: center;
+  font-family: 'SSFlowerRoad', sans-serif;
+}
 }

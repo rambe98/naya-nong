@@ -38,7 +38,7 @@ const Board = () => {
     const toggleSidebar = () => {
         setIsSidebarVisible((prevState) => !prevState);
     };
-    
+
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
@@ -57,14 +57,14 @@ const Board = () => {
             if (response.status === 200) {
                 // 원본 데이터를 sortedPost로 복사
                 let sortedPost = response.data;
-    
+
                 // 작성자의 게시글과 다른 유저의 게시글 분리
                 const adminPost = sortedPost.filter(post => post.userNick === "관리자").reverse().slice(0, 3); // 공지사항 3개로 제한
                 const otherPost = sortedPost.filter(post => post.userNick !== "관리자");
-    
+
                 // 다른 유저의 게시글을 정렬
                 let sortedOtherPost = [...otherPost];
-    
+
                 switch (sortBy) {
                     case 'date':
                         sortedOtherPost = sortedOtherPost.sort((a, b) => {
@@ -82,10 +82,10 @@ const Board = () => {
                     default:
                         break;
                 }
-    
+
                 // 관리자 게시글을 최상단에 두고 나머지 게시글들을 정렬 후 합침
                 sortedPost = [...adminPost, ...sortedOtherPost];
-    
+
                 // 최종 업데이트
                 setPosts(sortedPost);
             }
@@ -96,7 +96,7 @@ const Board = () => {
             setLoading(false);
         }
     };
-    
+
 
 
     // 한 페이지에 렌더링되는 게시글의 수 설정
@@ -215,28 +215,42 @@ const Board = () => {
         getList();
     }, [sortBy]);
 
-    const sidebarClassName = isSidebarVisible && isVisible ? 'boardSidebarContainer show' : 'boardSidebarContainer hide';
+    const sidebarClassName = isSidebarVisible ? 'show' : 'hide';
 
     return (
         <div className="boardContainer">
-            {/* 사이드바 */}
             {isMobile && (
                 <h2 className="boardname">자유게시판</h2>
             )}
-            <div className={sidebarClassName}>
-                <button className="boardCloseSidebarButton" onClick={toggleSidebar}>
-                    ✖
-                </button>
-                <ul>
-                    <li>
-                        <Link to="/notice">공지사항</Link>
-                    </li>
-                    <li>
-                        <Link to="/board">자유게시판</Link>
-                    </li>
-                </ul>
+             {/* 사이드바 */}
+            <div className='boardSidebarList'>
+                <div className={`boardSidebarContainer ${sidebarClassName}`}>
+                    <button
+                        className="boardCloseSidebarButton"
+                        onClick={toggleSidebar}
+                    >
+                        CLOSE
+                    </button>
+                </div>
+                <div className={`boardSidebarContainer2 ${sidebarClassName}`}>
+                    <ul>
+                        <li>
+                            <Link to="/board" className="boardSidebarLink">
+                                자유게시판
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+                <div className={`boardSidebarContainer3 ${sidebarClassName}`}>
+                    <ul>
+                        <li>
+                            <Link to="/notice" className="boardSidebarLink">
+                                공지사항
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
             {/* 작성일 및 페이지당 항목 수 선택 */}
             {!isMobile && (
                 <div className="boardOptionsContainer">

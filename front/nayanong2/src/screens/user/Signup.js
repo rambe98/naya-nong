@@ -3,7 +3,6 @@ import "../../css/Signup.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { API_BASE_URL } from '../../service/api-config';
 import {
   formDataAtom,
   messageAtom,

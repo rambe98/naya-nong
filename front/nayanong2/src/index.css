@@ -1,47 +1,28 @@
-/* HTML과 Body 설정 */
-html, body {
-  height: 100%; /* 화면 전체 높이를 채움 */
+body {
   margin: 0;
-  padding: 0;
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-  box-sizing: border-box;
-  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
 }
 
-/* App 컨테이너 */
-.App {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* 화면 전체 높이를 차지 */
-}
-
-
-/* 로그인 컴포넌트 전용 클래스 */
-body.no-margin-top {
-  margin-top: 0; /* 로그인 컴포넌트에서는 여백 제거 */
-}
-
-main {
-  margin-top: 80px; /* 헤더 높이에 맞게 설정 */
-}
-
-/* 코드 폰트 설정 */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
-/* 사용자 정의 폰트 설정 */
 @font-face {
   font-family: 'SSFlowerRoad';
-  src: url('./assets/SSFlowerRoad1family/SSFlowerRoadRegular.ttf') format('truetype');
+  src: url('./assets/SSFlowerRoad1family/SSFlowerRoadRegular.ttf') format('truetype'); /* 예: 'SSFlowerRoad.ttf' */
   font-weight: normal;
   font-style: normal;
+}
+body {
+  margin-top: 80px; /* 헤더 높이만큼 여백 추가 */
+}
+
+body, html {
+  box-sizing: border-box;
+  overflow-x: hidden; /* 수평 스크롤 제거 */
 }

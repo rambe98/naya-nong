@@ -57,10 +57,10 @@ const WritePost = () => {
 
         // 제목과 내용이 비어 있으면 알림
         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
-            return alert('제목을 입력하세요');
+            return alert('제목을 입력하세요.');
         }
         if (!formData.bodDtail || formData.bodDtail.trim() === '') {
-            return alert('내용을 입력하세요');
+            return alert('내용을 입력하세요.');
         }
         const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
         try {
@@ -121,7 +121,7 @@ const WritePost = () => {
                 <input
                     type="text"
                     name="bodTitle"
-                    placeholder="제목을 입력해주세요"
+                    placeholder="제목을 입력해주세요."
                     className="writeInput"
                     value={formData.bodTitle}
                     onChange={handleChange}
@@ -131,7 +131,7 @@ const WritePost = () => {
                 {/* 내용 */}
                 <textarea
                     name="bodDtail"
-                    placeholder="내용을 입력해주세요"
+                    placeholder="내용을 입력해주세요."
                     className="writeInputtext"
                     value={formData.bodDtail}
                     onChange={handleChange}

@@ -14,6 +14,7 @@ import {
   messageAtom,
   smessageAtom,
 } from "../../recoil/UserRecoil";
+import { API_BASE_URL } from "../../service/api-config";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ const UserInfo = () => {
       const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
       try {
         // 요청 보내기
-        const response = await axios.get(`http://localhost:7070/users/${clientNum}`,
+        const response = await axios.get(`${API_BASE_URL}/users/${clientNum}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // 인증 토큰 추가
@@ -94,7 +95,7 @@ const UserInfo = () => {
   const handlePasswordClick = async () => {
     try {
       const token = localStorage.getItem("ACCESS_TOKEN");
-      const response = await axios.post("http://localhost:7070/users/verifypassword",
+      const response = await axios.post(`${API_BASE_URL}/users/verifypassword`,
         {
           clientNum: clientNum,
           userPwd: password,
@@ -134,7 +135,7 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       const response = await axios.put(
-        `http://localhost:7070/users/${clientNum}`, updatedUserInfo,
+        `${API_BASE_URL}/users/${clientNum}`, updatedUserInfo,
         {
           headers: {
             Authorization: `Bearer ${token}`, // 인증 토큰 추가
@@ -204,7 +205,7 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       //게시글 조회 (사용자가 작성한 게시글 목록 가져오기)
-      const boardResponse = await axios.get(`http://localhost:7070/board`, {
+      const boardResponse = await axios.get(`${API_BASE_URL}/board`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -220,7 +221,7 @@ const UserInfo = () => {
         if (boardUserNick === currentUserNick) {
           try {
             // 게시글 삭제 요청
-            const deleteBoardResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`, {
+            const deleteBoardResponse = await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -236,7 +237,7 @@ const UserInfo = () => {
         }
       }
       // 회원 탈퇴 요청 (회원 정보를 먼저 삭제)
-      const deleteUserResponse = await axios.delete(`http://localhost:7070/users/${clientNum}`, {
+      const deleteUserResponse = await axios.delete(`${API_BASE_URL}/users/${clientNum}`, {
         data: { clientNum, userPwd: password },
         headers: {
           Authorization: `Bearer ${token}`,

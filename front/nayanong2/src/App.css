@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.ScrollContainer {
+  height: auto; /* 자동 높이 */
+  min-height: calc(100vh - 80px); /* 헤더 높이를 뺀 최소 높이 */
+  overflow-y: auto;
+}

@@ -263,7 +263,13 @@ const PostDetail = () => {
                     <div className="likeSection">
                         <span
                             className="likeIcon"
-                            onClick={toggleLike}
+                            onClick={() => {
+                                if (!localStorageUserNick) {
+                                    alert("로그인이 필요합니다.");
+                                    return;
+                                }
+                                toggleLike(); // 로그인된 경우에만 호출
+                            }}
                             style={{ cursor: "pointer", fontSize: "1.5rem" }}
                         >
                             {icon === "filled" ? (

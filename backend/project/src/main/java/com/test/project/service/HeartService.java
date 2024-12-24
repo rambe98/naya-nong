@@ -103,4 +103,22 @@ public class HeartService {
 
         return likeCount;  // 좋아요 수 반환
     }
+    
+    //비로그인시 사용자에게 보여질 정보
+    @Transactional
+    public HeartDTO updateAndGetLikeCountWithoutUser(int bodNum) {
+        // 해당 게시물에 대한 좋아요 수 조회
+        int likeCount = heartRepository.countByBoard_BodNum(bodNum);
+
+        // 게시물 조회
+        BoardEntity boardEntity = boardRepository.findById(bodNum)
+                .orElseThrow(() -> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
+
+        HeartDTO heartDTO = new HeartDTO();
+        heartDTO.setLikeCount(likeCount);
+        // hIkon은 반환하지 않음
+
+        return heartDTO;
+    }
+
 }

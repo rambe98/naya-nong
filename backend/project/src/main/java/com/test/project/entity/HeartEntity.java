@@ -1,8 +1,5 @@
 package com.test.project.entity;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,4 +31,5 @@ public class HeartEntity {
 	@ManyToOne
 	@JoinColumn(name = "bod_num", referencedColumnName = "bodNum")
     private BoardEntity board;
+	private String hIkon;
 }

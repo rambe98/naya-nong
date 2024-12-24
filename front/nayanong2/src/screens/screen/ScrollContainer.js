@@ -12,14 +12,6 @@ const ScrollContainer = forwardRef(({ children }, ref) => {
       if (containerRef.current) {
         const scrollTop = containerRef.current.scrollTop;
         setScrollPosition(scrollTop); // Recoil 상태 업데이트
-
-        // 이전 스크롤 위치와 현재 스크롤 위치 비교
-        if (scrollTop > lastScrollTop) {
-          console.log("Scrolling down"); // 아래로 스크롤
-        } else {
-          console.log("Scrolling up"); // 위로 스크롤
-        }
-
         setLastScrollTop(scrollTop); // 현재 위치를 마지막 위치로 저장
       }
     };

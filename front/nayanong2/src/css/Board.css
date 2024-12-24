@@ -8,7 +8,7 @@
   /* 배경 흰색 */
   width: 100vw;
   padding: 20px;
-  overflow: scroll;
+  overflow: hidden;
   position: relative;
 }
 
@@ -494,8 +494,7 @@
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
-    overflow-x: hidden;
-    /* 수평 스크롤 제거 */
+    overflow: hidden;
   }
 
   /* 게시판 입력 컨테이너 */

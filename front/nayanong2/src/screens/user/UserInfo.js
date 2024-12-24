@@ -135,14 +135,13 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       const response = await axios.put(
-        `http://localhost:7070/users/${clientNum}`, updatedUserInfo,
+        `${API_BASE_URL}/users/${clientNum}`, updatedUserInfo,
         {
           headers: {
             Authorization: `Bearer ${token}`, // 인증 토큰 추가
           },
         }
       );
-      console.log("전송 데이터:", updatedUserInfo); // 전송 데이터 로그 확인
 
       if (response.status === 200) {
         const updatedUser = response.data;
@@ -205,7 +204,7 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       //게시글 조회 (사용자가 작성한 게시글 목록 가져오기)
-      const boardResponse = await axios.get(`http://localhost:7070/board`, {
+      const boardResponse = await axios.get(`${API_BASE_URL}/board`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -221,30 +220,23 @@ const UserInfo = () => {
         if (boardUserNick === currentUserNick) {
           try {
             // 게시글 삭제 요청
-            const deleteBoardResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`, {
+            const deleteBoardResponse = await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            });
-            if (deleteBoardResponse.status === 200) {
-              console.log(`게시글 번호 ${bodNum} 삭제 완료`);
-            }
-          } catch (error) {
-            console.error(`게시글 번호 ${bodNum} 삭제 실패`, error);
+            }) } catch (error) {
+              console.error(`게시글 번호 ${bodNum} 삭제 실패`, error);
+            };
           }
-        } else {
-          console.log(`게시글 번호 ${bodNum}는 삭제 대상이 아님 (작성자: ${boardUserNick}, 현재 사용자: ${currentUserNick})`);
-        }
       }
       // 회원 탈퇴 요청 (회원 정보를 먼저 삭제)
-      const deleteUserResponse = await axios.delete(`http://localhost:7070/users/${clientNum}`, {
+      const deleteUserResponse = await axios.delete(`${API_BASE_URL}/users/${clientNum}`, {
         data: { clientNum, userPwd: password },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (deleteUserResponse.status === 200) {
-        console.log("회원 탈퇴가 완료되었습니다.");
         // 탈퇴 후, 토큰 및 사용자 정보 삭제
         localStorage.removeItem("ACCESS_TOKEN");
         localStorage.removeItem("userNick");

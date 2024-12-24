@@ -19,17 +19,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor//모든 필드를 초기화하는 생성자를 자동으로 만들어줌
 @Builder//빌더 패턴을 자동으로 생성
 public class HeartEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int heartNum;
-	
-	@ManyToOne
-	@JoinColumn(name = "user_nick", referencedColumnName = "userNick")
+   
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   private int heartNum;
+   
+   @ManyToOne
+   @JoinColumn(name = "user_nick", referencedColumnName = "userNick")
     private NongEntity nong;
-	
-	@ManyToOne
-	@JoinColumn(name = "bod_num", referencedColumnName = "bodNum")
+   
+   @ManyToOne
+   @JoinColumn(name = "bod_num", referencedColumnName = "bodNum")
     private BoardEntity board;
-	private String hIkon;
+   private String hIkon;
 }

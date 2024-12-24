@@ -45,7 +45,7 @@ public class HeartService {
         heartDTO.setBodNum(bodNum);
         heartDTO.setUserNick(userNick);
         heartDTO.setHeartNum(0);  // HeartNum은 필요 없으면 0으로 설정
-        heartDTO.setHIkon("filled"); // 아이콘 상태 설정 ("filled"는 눌린 상태, "outline"은 기본 상태)
+        heartDTO.setHIkon(isHearted ? "filled" : "outline"); // 아이콘 상태 설정 ("filled"는 눌린 상태, "outline"은 기본 상태)
 
         // 좋아요 수 갱신
         boardEntity.setLikeCount(likeCount);

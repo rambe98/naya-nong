@@ -4,6 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { priceRequestDTOAtom, farmDataAtom, selectedItemAtom, priceDataAtom, startDateStateAtom, endDateStateAtom } from "../../recoil/FarmRecoil";
+import { API_BASE_URL } from "../../service/api-config";
 
 // p_startday의 날짜를 -1일 하는 함수
 const getPreviousDay = (startDateState) => {
@@ -81,9 +82,6 @@ const FarmList = () => {
             setSelectedItemState(searchTerm);
             setError(""); // 오류 메시지 초기화
             setSearchCompleted(true); // 검색 완료 상태 업데이트
-
-            // 첫 번째 검색 시 getAllPrice 바로 호출
-            getAllPrice();
         } else {
             setError("해당 품목을 찾을 수 없습니다.");
             setSearchCompleted(false); // 검색 완료 상태 초기화
@@ -93,24 +91,22 @@ const FarmList = () => {
     const getAllPrice = async () => {
         setLoading(true);
         setError(null);
-    
-        // URL 선택
+
         const apiUrl =
-            priceType === "retail" ? "http://localhost:7070/retail/price/all"
-                : priceType === "wholeSale" ? "http://localhost:7070/wholeSale/price/all"
-                    : "http://localhost:7070/retail/price/all";
-    
+            priceType === "retail" ? `${API_BASE_URL}/retail/price/all`
+                : priceType === "wholeSale" ? `${API_BASE_URL}/wholeSale/price/all`
+                    : `${API_BASE_URL}/retail/price/all`;
+
         try {
-            console.log("요청할 데이터:", priceRequestDTO.requests);
             const promises = priceRequestDTO.requests.map((request) =>
                 axios.post(apiUrl, request)
             );
-    
+
             const responses = await Promise.all(promises);
             let transformedData = responses.flatMap((response) => {
                 return response.data?.map((item) => {
                     if (!item) return null;
-    
+
                     let currentStartDay = item.p_startday || startDateState;
                     return {
                         date: item.yyyy && item.regday ? `${item.yyyy}-${item.regday.split('/').join('-')}` : "",
@@ -124,29 +120,24 @@ const FarmList = () => {
                     };
                 }).filter(item => item !== null);
             });
-            console.log("받은 데이터:", transformedData);
-    
+
             if (transformedData.length === 0) {
                 if (retryCount.current < 7) {
-                    // 날짜를 -1일 하는 부분
                     const newStartDateState = getPreviousDay(startDateState);
-                    console.log("새로운 시작 날짜:", newStartDateState);  // 로그로 확인
-                    setStartDateState(newStartDateState);  // 상태 변경
-    
+                    setStartDateState(newStartDateState);
                     retryCount.current += 1;
-    
-                    // 상태 변경 후 getAllPrice()가 호출되지 않도록 useEffect로 다루기
-                    return; // 리턴하여 재귀를 방지
+                    return getAllPrice();
+
                 } else {
                     setError("해당 품목을 찾을 수 없습니다.");
-                    setPriceDataState([]);
+                    setPriceDataState([])
                     return;
                 }
             }
-    
+
             setPriceDataState(transformedData);
             setMessage("");
-    
+
         } catch (error) {
             console.error("Error fetching data:", error);
             setPriceDataState([]);
@@ -155,18 +146,18 @@ const FarmList = () => {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
-        // startDateState가 변경될 때마다 getAllPrice 다시 실행
         if (priceRequestDTO.requests && priceRequestDTO.requests.length > 0) {
-            console.log("startDateState 변경 후 데이터 요청 시작:", startDateState);
             getAllPrice();
         }
-    }, [startDateState, priceRequestDTO]);
+    }, [priceRequestDTO]);
 
     const handleFocus = () => {
         setSearchCompleted(false);
     };
+
+
 
     return (
         <div className="farmListPage">

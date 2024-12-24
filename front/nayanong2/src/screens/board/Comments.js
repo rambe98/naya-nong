@@ -3,7 +3,7 @@ import axios from "axios";
 import '../../css/Comment.css';
 import { useRecoilValue } from "recoil";
 import { bodNumAtom } from "../../recoil/BoardRecoil";
-import { API_BASE_URL } from '../../service/api-config';
+import { API_BASE_URL } from '../../service/api-config'
 
 const Comments = () => {
     const bodNum = useRecoilValue(bodNumAtom); // 리코일 상태 구독
@@ -103,23 +103,29 @@ const Comments = () => {
         }
     };
     
-    //대댓글 추가
-    const replyAdd = async (parentId) => {
-        if (!newReply.trim()) return alert("답글 내용을 입력하세요.");
-        try {
-            await axios.post(`${API_BASE_URL}/pComment/addReply/${parentId}`, {
-                content: newReply,
-                userNick: localStorageUserNick,
-            }, {
-                headers: { Authorization: `Bearer ${token}` }, 
-            });
-            setNewReply("");
-            setReplyingTo(null);
-            fetchComments();
-        } catch (error) {
-            console.error("답글 추가 실패:", error);
-        }
-    };
+   //대댓글 추가
+   const replyAdd = async (parentId) => {
+    const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
+    if (!loginsuccess) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+    if (!newReply.trim()) return alert("답글 내용을 입력하세요.");
+    try {
+        await axios.post(`${API_BASE_URL}/pComment/addReply/${parentId}`, {
+            content: newReply,
+            userNick: localStorageUserNick,
+        }, {
+            headers: { Authorization: `Bearer ${token}` }, 
+        });
+        setNewReply("");
+        setReplyingTo(null);
+        fetchComments();
+    } catch (error) {
+        console.error("답글 추가 실패:", error);
+    }
+};
+
     
     // 대댓글 삭제
     const replyDelete = async (pcomId) => {

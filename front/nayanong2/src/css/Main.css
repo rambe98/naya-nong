@@ -8,7 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 30px;
+  padding: 20px;
   background-color: #FFFFFF;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, background-color 0.3s ease;
@@ -97,7 +97,7 @@
 
 .Header_mainButton {
   font-size: 16px;
-  padding: 20px 50px;
+  padding: 20px 30px;
   background-color: #FFFFFF;
   color: black;
   border: none;
@@ -135,8 +135,71 @@
 }
 
 
+/* 1670px-------------------------------------------------------------------------- */
+@media(max-width:1670px){
+  .Header_mainHeaderNav li a {
+    text-decoration: none;
+    color: black;
+    margin: 0px 20px 0px 80px; /* 기존 스타일 유지 */
+    padding: 30px 30px; /* 클릭 범위를 늘리기 위한 padding 추가 */
+    display: block; /* inline-block으로 설정하여 padding과 hover 효과를 적용 */
+    transition: color 0.3s ease;
+    font-family: 'SSFlowerRoad', sans-serif;
+  
+  }
+    .Header_HeaderHello {
+      font-size: 1rem;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      padding: 0 10px 0 10px;
+      font-family: 'SSFlowerRoad', sans-serif;
+      margin-bottom: 0px;
+    }
+    
+    .Header_HeaderHello .Header_highlight {
+      font-weight: bold;
+      color: #d4a373;
+      font-size: 10px;
+    }
+    .Header_mainButton {
+      font-size: 14px;
+      margin: 5px;
+      padding: 10px 40px;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+    
+    .Header_mainButton:hover {
+      background-color: #FFFFFF;
+      color: #d4a373;
+    
+    }
+    .Header_HeaderHello .Header_highlight {
+      font-weight: bold;
+      color: #d4a373;
+      font-size: 15px;
+    }
+    .Header_mainButton {
+      font-size: 16px;
+      padding: 10px 20px;
+      background-color: #FFFFFF;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+      font-family: 'SSFlowerRoad', sans-serif;
+    }
+    
+  }
 
-/* 1500px 이하-------------------------------------------------------------------------- */
+/* 1500px-------------------------------------------------------------------------- */
 @media(max-width:1500px){
   .Header_mainHeaderNav li a {
     text-decoration: none;

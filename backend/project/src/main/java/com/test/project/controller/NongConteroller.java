@@ -46,9 +46,12 @@ public class NongConteroller {
 	@PostMapping("/signup")
 	public ResponseEntity<?> adduser(@RequestBody NongDTO dto) {
 		try {
+			// 서비스 계층에 회원가입 요청 전달
 			NongDTO users = service.adduser(dto);
+			// 회원가입 성공 시 HTTP 201 반환
 			return ResponseEntity.status(HttpStatus.CREATED).body(users);
 		} catch (IllegalArgumentException e) {
+			// 잘못된 요청에 대한 예외 처리
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}// adduser end
@@ -65,7 +68,6 @@ public class NongConteroller {
 		try {
 			// 1. 인증 및 토큰 생성
 			String token = service.authenticateAndGenerateToken(userId, userPwd);
-
 			// 2. 사용자 정보 조회
 			NongEntity userEntity = service.showUser(userId); // userId로 사용자 조회
 			NongDTO responseDto = new NongDTO(userEntity);

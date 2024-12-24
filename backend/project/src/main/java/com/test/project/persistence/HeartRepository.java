@@ -15,7 +15,9 @@ public interface HeartRepository extends JpaRepository<HeartEntity, Integer> {
 	// 좋아요를 삭제하는 쿼리
     void deleteByNong_UserNickAndBoard_BodNum(String userNick, int bodNum);
     
-    int countByBoard_BodNum(int bodNum);  // 해당 게시물에 대한 좋아요 수 계산
-
+    // 해당 게시물에 대한 좋아요 수 계산
+    int countByBoard_BodNum(int bodNum);  
+    
+    // 유저정보 삭제 시 확인
     void deleteByNong(NongEntity nong);
 }

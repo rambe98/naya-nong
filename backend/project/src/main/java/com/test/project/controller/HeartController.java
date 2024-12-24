@@ -49,14 +49,14 @@ public class HeartController {
        try {
            // 좋아요 상태와 좋아요 수 갱신
            boolean liked = service.likeBoard(userNick, bodNum);
-           int likeCount = dto.getLikeCount(); // HeartDTO에서 likeCount 추출
-           String hICon = liked ? "filled" : "outline";  // liked 상태에 따라 hIkon 값 설정
+           int likeCount = service.updateAndGetLikeCount(bodNum);
+           String hikon = liked ? "filled" : "outline";  // liked 상태에 따라 hIkon 값 설정
            // 반환 값에 상태와 카운트 포함
            return ResponseEntity.ok().body(Map.of(
                "message", liked ? "좋아요가 추가되었습니다." : "좋아요가 취소되었습니다.",
                "liked", liked,  // 좋아요 상태
                "likeCount", likeCount,  // 좋아요 수
-               "hICon", hICon  // 좋아요 아이콘 상태
+               "hikon", hikon  // 좋아요 아이콘 상태
            ));
        } catch (IllegalArgumentException e) {
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(

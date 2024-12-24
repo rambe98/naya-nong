@@ -30,14 +30,13 @@ public class ParentCommentService {
 	@Autowired
 	private NongRepository nongRepository;
 	
-	//댓글 조회
+	//대댓글 조회
 		public List<ParentCommentDTO> showAllParentComment(Long comId) {
-			
 			List<ParentCommentEntity> comIdList = parentCommentRepository.findByCommentComId(comId);
 			return comIdList.stream().map(ParentCommentDTO :: new).collect(Collectors.toList());
-			
 		}
 
+	//대댓글 추가	
 	public ParentCommentDTO addComment(Long comId, String userNick, String content) {
 	    // 부모 댓글 찾기
 	    Optional<CommentEntity> parentCommentOptional = commentRepository.findByComId(comId);
@@ -66,7 +65,7 @@ public class ParentCommentService {
 	    return new ParentCommentDTO(savedReplyComment);
 	}
 	
-	// 댓글 삭제
+	//대댓글 삭제
 	public void deleteComment(Long pComId) {
 		ParentCommentEntity comment = parentCommentRepository.findById(pComId)
 				.orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));

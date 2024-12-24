@@ -29,74 +29,60 @@ public class NongService {
 
 	@Autowired
 	private NongRepository repository;
-
 	@Autowired 
 	private BoardRepository bodrepository;
-	
 	@Autowired
 	private CommentRepository conrepository;
-	
 	@Autowired
 	private ParentCommentRepository conconrepository;
-	
 	@Autowired
 	private HeartRepository heartrepository;
-	
 	@Autowired
 	private TokenProvider tokenProvider;
-	
     private final JavaMailSender mailSender;  // JavaMailSender 주입
-    
     @Autowired
     private EmailService emailService;  // EmailService 주입받기
 	
-	
-
 	// entity가 비었는지 확인
 	private void validate(final NongEntity entity) {
 		if (entity == null) {
 			throw new RuntimeException("Entity cannot be null.");
 		}
 	}// validate end
-	
-
 	// 조회
 	public List<NongDTO> showAllUsers() {
-		return repository.findAll().stream().map(NongDTO::new).collect(Collectors.toList());
+		return repository.findAll().stream()
+				.map(NongDTO::new).collect(Collectors.toList());
 	}// showAllUsers end
-
-	
 	// 개별 조회
 	public NongDTO showUser(int clientNum) {
-		NongEntity entity = repository.findById(clientNum).orElseThrow(() -> new RuntimeException("User not found"));
+		NongEntity entity = repository.findById(clientNum)
+				.orElseThrow(() -> new RuntimeException("User not found"));
 		return new NongDTO(entity);
 	}// showUser end
-	
 	// userId로 조회
 	public NongEntity showUser(String userId) {
 		return repository.findByUserId(userId)
-				.orElseThrow(() -> new RuntimeException("User not found with userId: " + userId));
+				.orElseThrow(() -> 
+				new RuntimeException("User not found with userId: " + userId));
 	}
-
 	// 추가
 	public NongDTO adduser(NongDTO dto) {
 		// DTO를 Entity로 변환
 		NongEntity entity = dto.toEntity(dto);
 		// 아이디 중복 체크
 		if (repository.existsByUserId(entity.getUserId())) {
-			throw new IllegalArgumentException("중복된 아이디가 있습니다.");
-		}
+			throw new IllegalArgumentException("중복된 아이디가 있습니다.");}
 		// 별명 중복 체크
 		if (repository.existsByUserNick(entity.getUserNick())) {
-			throw new IllegalArgumentException("중복된 닉네임이 있습니다.");
-		}
+			throw new IllegalArgumentException("중복된 닉네임이 있습니다.");}
 		// 이메일 중복 체크
 		if (repository.existsByUserEmail(entity.getUserEmail())) {
-			throw new IllegalArgumentException("중복된 이메일이 있습니다.");
-		}
+			throw new IllegalArgumentException("중복된 이메일이 있습니다.");}
 		// 중복이 없으면 새 사용자 저장
 		NongEntity savedEntity = repository.save(entity);
-		return new NongDTO(savedEntity); // 저장된 엔티티를 DTO로 변환하여 반환
+		// 저장된 엔티티를 DTO로 변환하여 반환
+		return new NongDTO(savedEntity); 
 	}// adduser end
 
 	// 수정

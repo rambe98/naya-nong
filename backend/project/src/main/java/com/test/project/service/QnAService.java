@@ -42,12 +42,14 @@ public class QnAService {
 		return repository.findAll().stream().map(QnADTO::new).collect(Collectors.toList());
 	}// showAllUsers end
 
+	
 	// 개별 조회
 	public QnADTO showQna(int qnaNum) {
 		QnAEntity entity = repository.findById(qnaNum).orElseThrow(() -> new RuntimeException("User not found"));
 		return new QnADTO(entity);
 	}
 
+	
 	// 추가
 	@Transactional
 	public QnADTO addQna(QnADTO dto) {

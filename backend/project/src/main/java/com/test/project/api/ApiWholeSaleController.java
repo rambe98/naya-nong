@@ -22,11 +22,11 @@ public class ApiWholeSaleController {
 	
 	  // 전체 도매가격 데이터 조회
     @PostMapping("/price/all")
-    public ResponseEntity<List<PriceDataDTO>> getAllRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
+    public ResponseEntity<List<PriceDataDTO>> getAllWholeSalePriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
         try {
         	// p_countrycode 필드에서만 <br> 태그 처리
-            String processedCountryCode = Jsoup.clean(
-                    HtmlUtils.htmlUnescape(priceRequestDTO.getP_countrycode()),
+            String processedCountryCode = Jsoup.clean(//Jsoup 라이브러리에서 제공하는 HTML 정제 기능
+                    HtmlUtils.htmlUnescape(priceRequestDTO.getP_countrycode()),//HTML 이스케이프 문자를 일반 텍스트로 변환
                     Safelist.none().addTags("br") // <br> 태그만 허용
             );
             // ApiService 호출하여 전체 데이터 리스트 얻기
@@ -49,7 +49,7 @@ public class ApiWholeSaleController {
     
     //도매 평균 조회
 	@PostMapping("/price")
-	public ResponseEntity<List<PriceDataDTO>> getRetailPriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
+	public ResponseEntity<List<PriceDataDTO>> getWholeSalePriceInfo(@RequestBody PriceRequestDTO priceRequestDTO) {
 		try {
 			// ApiService 호출하여 원본 데이터 리스트 얻기
 			List<PriceDataDTO> priceDataList = wholeSaleService.getWholesalePriceData(priceRequestDTO.getP_startday(),

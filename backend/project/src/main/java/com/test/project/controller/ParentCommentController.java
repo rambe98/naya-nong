@@ -23,18 +23,21 @@ public class ParentCommentController {
 	@Autowired
 	ParentCommentService service;
 	
+	//대댓글 조회
 	@GetMapping("/{comId}")
 	public ResponseEntity<List<ParentCommentDTO>> showAllParentComment(@PathVariable("comId") Long comId){
 		List<ParentCommentDTO> comment =  service.showAllParentComment(comId);
 		return ResponseEntity.ok(comment);
 	}
 	
+	//대댓글 추가
 	@PostMapping("/addReply/{comId}")
 	public ResponseEntity<ParentCommentDTO> addReply(@PathVariable("comId") Long comId, @RequestBody ParentCommentDTO dto){
 		ParentCommentDTO savedReply = service.addComment(comId, dto.getUserNick(), dto.getContent());
 	    return ResponseEntity.ok(savedReply);
 	}
 	
+	//대댓글 삭제
 	@DeleteMapping("/delete/{pComId}")
 	 public ResponseEntity<String> deleteComment(@PathVariable("pComId") Long pComId) {
         service.deleteComment(pComId);

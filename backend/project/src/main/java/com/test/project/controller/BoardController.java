@@ -87,12 +87,14 @@ public class BoardController {
         return ResponseEntity.ok(boards);
     }
    
+    //게시글 추가
    @PostMapping
    public ResponseEntity<?> addBoard(@RequestBody BoardDTO dto) {
       BoardDTO addBoard = service.addBoard(dto);
       return ResponseEntity.ok().body(addBoard);
    }// addBoard end
 
+   //게시글 수정
    @PutMapping("/{bodNum}")
    public ResponseEntity<?> updateBoard(@RequestBody BoardDTO dto) {
       BoardDTO updateBoard = service.updateBoard(dto);
@@ -100,6 +102,7 @@ public class BoardController {
    }// updateUsers end
    
 
+   //게시글 삭제
    @DeleteMapping("/{bodNum}")
    public ResponseEntity<?> deleteBoard(BoardDTO dto) {
       boolean isDeleted = service.deleteBoard(dto);

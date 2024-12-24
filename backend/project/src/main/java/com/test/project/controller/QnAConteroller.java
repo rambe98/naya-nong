@@ -22,6 +22,7 @@ public class QnAConteroller {
 	@Autowired
 	private QnAService service;
 
+	//조회
 	@GetMapping
 	public ResponseEntity<?> showAllQna() {
 		List<QnADTO> products = service.showAllQna();
@@ -29,13 +30,15 @@ public class QnAConteroller {
 	}// showAllusers end
 	
 
+	//QnA별 조회
 	@GetMapping("/{qnaNum}")
 	public ResponseEntity<?> showQna(@PathVariable("qnaNum") int qnaNum) {
 		QnADTO qna = service.showQna(qnaNum);
 		return ResponseEntity.ok(qna);
 	}// showAllusers end
 	
-
+	
+	//QnA 작성
 	@PostMapping
 	public ResponseEntity<?> addQna(@RequestBody QnADTO dto) {
 		QnADTO addqna = service.addQna(dto);

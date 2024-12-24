@@ -13,11 +13,6 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // 모바일 여부 확인
   const scrollPosition = useRecoilValue(scrollAtom); // Recoil 상태 구독
   const isVisible = scrollPosition < 80; // 스크롤이 80 이상이면 숨김
-  console.log("Header visibility:", isVisible); // 디버깅 로그
-  console.log("모바일메뉴오픈클로즈",isMobileMenuOpen);
-
-  
-
 
   // 로컬스토리지에서 로그인 상태 및 사용자 정보 가져오기
   const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;

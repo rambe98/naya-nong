@@ -13,9 +13,9 @@
 
 ## 🛠️ 기술 스택
 - **프론트엔드**: React
-- **백엔드**: java, spring, gradle
-- **데이터베이스**: Mysql
-- **배포**: AWS
+- **백엔드**: java, spring, gradle,yml,lombok,springBoot
+- **데이터베이스**: Mysql,RDS,DBeaver
+- **배포**: AWS,EC2,Nginx
 
 ## 👥 팀 소개 및 역할
 이 프로젝트는 4명의 팀원이 협업하여 개발되었습니다.

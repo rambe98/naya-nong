@@ -13,7 +13,7 @@
 
 ## 🛠️ 기술 스택
 - **프론트엔드**: React
-- **백엔드**: java, spring, gradle,yml,lombok,springBoot
+- **백엔드**: Java, Spring, Gradle,Yml,Lombok,SpringBoot
 - **데이터베이스**: Mysql,RDS,DBeaver
 - **배포**: AWS,EC2,Nginx
 

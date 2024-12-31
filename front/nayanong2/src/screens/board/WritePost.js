@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { clientNumAtom } from '../../recoil/UserRecoil';
+import { API_BASE_URL } from '../../service/api-config';
 
 const WritePost = () => {
     const navigate = useNavigate();
@@ -15,17 +16,6 @@ const WritePost = () => {
         bodTitle: '', // 제목
         bodDtail: '', // 내용
     });
-
-      //스크롤 없애기
-  useEffect(() => {
-    // body에 클래스 추가
-    document.body.classList.add('no-scroll');
-
-    // 언마운트 시 클래스 제거
-    return () => {
-      document.body.classList.remove('no-scroll');
-    };
-  }, []);
 
     // 날짜 상태 (작성일자)
     const [date, setDate] = useState('');
@@ -67,14 +57,14 @@ const WritePost = () => {
 
         // 제목과 내용이 비어 있으면 알림
         if (!formData.bodTitle || formData.bodTitle.trim() === '') {
-            return alert('제목을 입력하세요');
+            return alert('제목을 입력하세요.');
         }
         if (!formData.bodDtail || formData.bodDtail.trim() === '') {
-            return alert('내용을 입력하세요');
+            return alert('내용을 입력하세요.');
         }
         const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
         try {
-            const response = await axios.post('http://localhost:7070/board', formData, {
+            const response = await axios.post(`${API_BASE_URL}/board`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`, // 인증 토큰 추가
                   },
@@ -131,7 +121,7 @@ const WritePost = () => {
                 <input
                     type="text"
                     name="bodTitle"
-                    placeholder="제목을 입력해주세요"
+                    placeholder="제목을 입력해주세요."
                     className="writeInput"
                     value={formData.bodTitle}
                     onChange={handleChange}
@@ -141,7 +131,7 @@ const WritePost = () => {
                 {/* 내용 */}
                 <textarea
                     name="bodDtail"
-                    placeholder="내용을 입력해주세요"
+                    placeholder="내용을 입력해주세요."
                     className="writeInputtext"
                     value={formData.bodDtail}
                     onChange={handleChange}

@@ -252,11 +252,11 @@
   /* 약간 축소 */
 }
 
-/* 스크롤 비활성화 */
+/* 스크롤 비활성화
 body.no-scroll {
   overflow: hidden;
   height: 100%;
-}
+} */
 
 @media (max-width: 768px) {
   .userInfoContainer {
@@ -358,4 +358,5 @@ body.no-scroll {
     box-sizing: border-box;
     background-color: #ffffff;
   }
+
 }

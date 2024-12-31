@@ -14,6 +14,7 @@ import {
   messageAtom,
   smessageAtom,
 } from "../../recoil/UserRecoil";
+import { API_BASE_URL } from "../../service/api-config";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -37,24 +38,28 @@ const UserInfo = () => {
   const [isDeleteMode, setIsDeleteMode] = useState(false)// 회원탈퇴 모드 여부
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);//모바일모드
   
-  useEffect(() => {
-    const updateScrollBehavior = () => {
-      if (window.innerWidth <= 768) {
-        document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
-      } else {
-        document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
-      }
-    };
+  // useEffect(() => {
+  //   const updateScrollBehavior = () => {
+  //     if (window.innerWidth <= 768) {
+  //       document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
+  //     } else {
+  //       document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
+  //     }
+  //   };
   
-    // 초기 실행
-    updateScrollBehavior();
+  //   // 초기 실행
+  //   updateScrollBehavior();
   
-    // 리사이즈 이벤트 리스너 등록
-    window.addEventListener('resize', updateScrollBehavior);
+  //   // 리사이즈 이벤트 리스너 등록
+  //   window.addEventListener('resize', updateScrollBehavior);
   
-    // 정리: 리스너 제거
-    return () => window.removeEventListener('resize', updateScrollBehavior);
-  }, []);
+  //   // 페이지가 언마운트될 때 no-scroll 클래스 제거
+  //   return () => {
+  //     document.body.classList.remove('no-scroll'); // 클래스 제거
+  //     window.removeEventListener('resize', updateScrollBehavior); // 리스너 제거
+  //   };
+  // }, []);
+  
   
 
   // 사용자 정보 로드
@@ -63,7 +68,7 @@ const UserInfo = () => {
       const token = localStorage.getItem("ACCESS_TOKEN"); // 토큰 가져오기
       try {
         // 요청 보내기
-        const response = await axios.get(`http://localhost:7070/users/${clientNum}`,
+        const response = await axios.get(`${API_BASE_URL}/users/${clientNum}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // 인증 토큰 추가
@@ -90,7 +95,7 @@ const UserInfo = () => {
   const handlePasswordClick = async () => {
     try {
       const token = localStorage.getItem("ACCESS_TOKEN");
-      const response = await axios.post("http://localhost:7070/users/verifypassword",
+      const response = await axios.post(`${API_BASE_URL}/users/verifypassword`,
         {
           clientNum: clientNum,
           userPwd: password,
@@ -130,14 +135,13 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       const response = await axios.put(
-        `http://localhost:7070/users/${clientNum}`, updatedUserInfo,
+        `${API_BASE_URL}/users/${clientNum}`, updatedUserInfo,
         {
           headers: {
             Authorization: `Bearer ${token}`, // 인증 토큰 추가
           },
         }
       );
-      console.log("전송 데이터:", updatedUserInfo); // 전송 데이터 로그 확인
 
       if (response.status === 200) {
         const updatedUser = response.data;
@@ -200,7 +204,7 @@ const UserInfo = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     try {
       //게시글 조회 (사용자가 작성한 게시글 목록 가져오기)
-      const boardResponse = await axios.get(`http://localhost:7070/board`, {
+      const boardResponse = await axios.get(`${API_BASE_URL}/board`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -216,30 +220,23 @@ const UserInfo = () => {
         if (boardUserNick === currentUserNick) {
           try {
             // 게시글 삭제 요청
-            const deleteBoardResponse = await axios.delete(`http://localhost:7070/board/${bodNum}`, {
+            const deleteBoardResponse = await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            });
-            if (deleteBoardResponse.status === 200) {
-              console.log(`게시글 번호 ${bodNum} 삭제 완료`);
-            }
-          } catch (error) {
-            console.error(`게시글 번호 ${bodNum} 삭제 실패`, error);
+            }) } catch (error) {
+              console.error(`게시글 번호 ${bodNum} 삭제 실패`, error);
+            };
           }
-        } else {
-          console.log(`게시글 번호 ${bodNum}는 삭제 대상이 아님 (작성자: ${boardUserNick}, 현재 사용자: ${currentUserNick})`);
-        }
       }
       // 회원 탈퇴 요청 (회원 정보를 먼저 삭제)
-      const deleteUserResponse = await axios.delete(`http://localhost:7070/users/${clientNum}`, {
+      const deleteUserResponse = await axios.delete(`${API_BASE_URL}/users/${clientNum}`, {
         data: { clientNum, userPwd: password },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (deleteUserResponse.status === 200) {
-        console.log("회원 탈퇴가 완료되었습니다.");
         // 탈퇴 후, 토큰 및 사용자 정보 삭제
         localStorage.removeItem("ACCESS_TOKEN");
         localStorage.removeItem("userNick");

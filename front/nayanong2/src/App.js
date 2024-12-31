@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue} from 'recoil';
 import { clientNumAtom, loginsuccessAtom, loginsuccessSelector, clientNumSelector } from './recoil/UserRecoil';
 import { bodNumAtom } from '../src/recoil/BoardRecoil'
 import Login from './screens/user/Login';
@@ -15,10 +15,16 @@ import WritePost from './screens/board/WritePost'
 import PostDetail from './screens/board/PostDetail';
 import UpdatePost from './screens/board/UpdatePost';
 import Notice from './screens/board/Notice';
-import Farm from './screens/board/Farm';
+import Farm from './screens/farm/Farm';
+import Footer from './screens/Footer';
+import ScrollToTop from '../src/screens/screen/ScrollToTop';
+import ScrollContainer from '../src/screens/screen/ScrollContainer'
 
-function App() {
-  
+
+function App() {  
+    // ScrollContainer의 ref 생성
+    const scrollContainerRef = useRef(null);
+
   /*
    useRecoilState
    상태값을 읽을 수 있고 상태를 읽고 업데이트할 때 사용하며
@@ -52,21 +58,25 @@ function App() {
 
 
   return(
-    <Router>
-      <InnerApp />
+    <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+      <ScrollToTop containerRef={scrollContainerRef}/>
+      <InnerApp scrollContainerRef={scrollContainerRef} />
     </Router>
   )
 }
 
   // Router 내부에서만 useLocation 사용
-function InnerApp() {
+function InnerApp({scrollContainerRef}) {
   const location = useLocation();
-const isLoginPage = location.pathname === '/login';
+  const isLoginPage = location.pathname === '/login';
+  const showFooterPages = ['/'];
   
   return (
     <div className="App">
       {/* 로그인 페이지가 아닐 때만 Header 렌더링 */}
       {!isLoginPage && <Header />}
+      <ScrollContainer ref={scrollContainerRef}>
+        <main>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -81,6 +91,9 @@ const isLoginPage = location.pathname === '/login';
         <Route path="/notice" element={<Notice />} />
         <Route path="/" element={<Farm />} />
       </Routes>
+      </main>
+      {showFooterPages.includes(location.pathname) && <Footer />}
+      </ScrollContainer>
     </div>
   );
 }

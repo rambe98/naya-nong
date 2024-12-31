@@ -24,8 +24,8 @@ export const bodNumAtom = atom({
 })
 
 //검색결과 저장 
-export const searchResultsAtom = atom({
-    key: "searchResultsAtom",
+export const searchboardResultsAtom = atom({
+    key: "searchboardResultsAtom",
     default: [], 
 });
 

@@ -120,11 +120,10 @@
   font-weight: bold;
 }
 
-/* 스크롤 비활성화 */
-body.no-scroll {
-  overflow: hidden;
-  height: 100%;
+input[type="password"] {
+  -webkit-text-security: disc; /* Safari에서 비밀번호 표시 */
 }
+
 
 @media (max-width: 768px) {
   .signupContainer {

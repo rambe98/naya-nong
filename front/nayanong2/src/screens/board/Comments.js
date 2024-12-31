@@ -3,6 +3,7 @@ import axios from "axios";
 import '../../css/Comment.css';
 import { useRecoilValue } from "recoil";
 import { bodNumAtom } from "../../recoil/BoardRecoil";
+import { API_BASE_URL } from '../../service/api-config'
 
 const Comments = () => {
     const bodNum = useRecoilValue(bodNumAtom); // 리코일 상태 구독
@@ -24,7 +25,7 @@ const Comments = () => {
     // 댓글 조회
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`http://localhost:7070/comments/${bodNum}`, {
+            const response = await axios.get(`${API_BASE_URL}/comments/${bodNum}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
     
@@ -33,14 +34,12 @@ const Comments = () => {
             const commentsWithReplies = await Promise.all(
                 commentsData.map(async (comment) => {
                     const repliesResponse = await axios.get(
-                        `http://localhost:7070/pComment/${comment.comId}`,
+                        `${API_BASE_URL}/pComment/${comment.comId}`,
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
                     return { ...comment, replies: repliesResponse.data.reverse() || [] };
                 })
             );
-    
-            console.log("Fetched Comments with Replies:", commentsWithReplies); // 댓글 및 대댓글 확인
             setComments(commentsWithReplies);
         } catch (error) {
             console.error("댓글 및 대댓글 데이터 로드 실패:", error);
@@ -58,7 +57,7 @@ const Comments = () => {
         }
         if (!newComment.trim()) return alert("댓글 내용을 입력하세요.");
         try {
-            await axios.post(`http://localhost:7070/comments/add`, {
+            await axios.post(`${API_BASE_URL}/comments/add`, {
                 content: newComment,
                 userNick: localStorageUserNick,
                 bodNum: parseInt(bodNum),
@@ -79,7 +78,7 @@ const Comments = () => {
             const confirmed = window.confirm("댓글을 삭제하시겠습니까?");
             if (!confirmed) return;
     
-            await axios.delete(`http://localhost:7070/comments/delete/${comId}`, {
+            await axios.delete(`${API_BASE_URL}/comments/delete/${comId}`, {
                 headers: { Authorization: `Bearer ${token}` }, 
             });
             fetchComments();
@@ -91,7 +90,7 @@ const Comments = () => {
     const commentsPut = async (comId, updatedContent) => {
         if (!updatedContent.trim()) return alert("수정할 댓글 내용을 입력하세요.");
         try {
-            await axios.put(`http://localhost:7070/comments/update/${comId}`, {
+            await axios.put(`${API_BASE_URL}/comments/update/${comId}`, {
                 content: updatedContent,
             }, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -104,30 +103,36 @@ const Comments = () => {
         }
     };
     
-    //대댓글 추가
-    const replyAdd = async (parentId) => {
-        if (!newReply.trim()) return alert("답글 내용을 입력하세요.");
-        try {
-            await axios.post(`http://localhost:7070/pComment/addReply/${parentId}`, {
-                content: newReply,
-                userNick: localStorageUserNick,
-            }, {
-                headers: { Authorization: `Bearer ${token}` }, 
-            });
-            setNewReply("");
-            setReplyingTo(null);
-            fetchComments();
-        } catch (error) {
-            console.error("답글 추가 실패:", error);
-        }
-    };
+   //대댓글 추가
+   const replyAdd = async (parentId) => {
+    const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
+    if (!loginsuccess) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+    if (!newReply.trim()) return alert("답글 내용을 입력하세요.");
+    try {
+        await axios.post(`${API_BASE_URL}/pComment/addReply/${parentId}`, {
+            content: newReply,
+            userNick: localStorageUserNick,
+        }, {
+            headers: { Authorization: `Bearer ${token}` }, 
+        });
+        setNewReply("");
+        setReplyingTo(null);
+        fetchComments();
+    } catch (error) {
+        console.error("답글 추가 실패:", error);
+    }
+};
+
     
     // 대댓글 삭제
     const replyDelete = async (pcomId) => {
         try {
             const confirmed = window.confirm("답글을 삭제하시겠습니까?");
             if (!confirmed) return;
-            await axios.delete(`http://localhost:7070/pComment/delete/${pcomId}`, {
+            await axios.delete(`${API_BASE_URL}/pComment/delete/${pcomId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             fetchComments();

@@ -10,10 +10,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder//빌더 패턴을 자동으로 생성
+@Data//Getter,Setter를 쉽게 사용가능
+@NoArgsConstructor//기본 생성자를 자동 생성
+@AllArgsConstructor//모든 필드를 초기화하는 생성자를 자동으로 만들어줌
 public class CommentDTO {
 
 	private Long comId;

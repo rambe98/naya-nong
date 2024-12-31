@@ -4,8 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import '../../css/PostDetail.css';
 import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { bodNumAtom, searchResultsAtom } from "../../recoil/BoardRecoil"; // Recoil 상태 가져오기
+import { bodNumAtom, searchboardResultsAtom } from "../../recoil/BoardRecoil"; // Recoil 상태 가져오기
 import Comments from "./Comments"; // Comments 컴포넌트 추가
+import { API_BASE_URL } from '../../service/api-config';
 
 const PostDetail = () => {
     const navigate = useNavigate();
@@ -13,8 +14,8 @@ const PostDetail = () => {
     bodNum = parseInt(bodNum, 10); // 덮어쓰기 (정수형으로 변환)
     const setBodNum = useSetRecoilState(bodNumAtom); // Recoil 상태 업데이트 함수
     const localStorageUserNick = localStorage.getItem("userNick");
-    const searchResults = useRecoilValue(searchResultsAtom);
-    const resetSearchResults = useSetRecoilState(searchResultsAtom);
+    const searchResults = useRecoilValue(searchboardResultsAtom);
+    const resetSearchResults = useSetRecoilState(searchboardResultsAtom);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     useEffect(() => {
@@ -36,7 +37,9 @@ const PostDetail = () => {
         project: { userNick: "알 수 없음" },
     });
     const [likeCount, setLikeCount] = useState(0);
-    const [liked, setLiked] = useState(false);
+
+    //좋아요 색상 저장 관리리
+    const [icon, setIcon] = useState("outline");
     const [boards, setBoards] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -63,14 +66,14 @@ const PostDetail = () => {
         const getBoardData = async () => {
             const token = localStorage.getItem("ACCESS_TOKEN");
             try {
-                const boardsResponse = await axios.get("http://localhost:7070/board", {
+                const boardsResponse = await axios.get(`${API_BASE_URL}/board`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
                 setBoards(boardsResponse.data);
 
-                const postResponse = await axios.get(`http://localhost:7070/board/${bodNum}`, {
+                const postResponse = await axios.get(`${API_BASE_URL}/board/${bodNum}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -91,16 +94,11 @@ const PostDetail = () => {
 
     useEffect(() => {
         const currentArray = getCurrentArray();
-        console.log("useEffect: 현재 배열:", currentArray);
-        console.log("useEffect: 현재 bodNum:", bodNum);
-
         // currentIndex 설정
         const index = currentArray.findIndex((post) => post.bodNum === bodNum);
         if (index === -1) {
-            console.error("현재 bodNum이 배열에 없습니다:", bodNum, currentArray);
             setCurrentIndex(null);
         } else {
-            console.log("현재 게시글 인덱스:", index);
             setCurrentIndex(index); // 현재 게시글 인덱스 설정
         }
     }, [bodNum, searchResults, boards]);
@@ -114,8 +112,6 @@ const PostDetail = () => {
         const previousPost = currentArray[currentIndex - 1];
         if (previousPost) {
             navigate(`/board/${previousPost.bodNum}`);
-        } else {
-            console.error("이전 게시글을 찾을 수 없습니다.");
         }
     };
 
@@ -128,35 +124,8 @@ const PostDetail = () => {
         const nextPost = currentArray[currentIndex + 1];
         if (nextPost) {
             navigate(`/board/${nextPost.bodNum}`);
-        } else {
-            console.error("다음 게시글을 찾을 수 없습니다.");
         }
     };
-
-
-    useEffect(() => {
-        console.log("searchResults 상태:", searchResults);
-        console.log("boards 상태:", boards);
-        console.log("currentIndex 상태:", currentIndex);
-    }, [searchResults, boards, currentIndex]);
-
-    useEffect(() => {
-        const currentArray = getCurrentArray();
-        console.log("useEffect: 현재 배열:", currentArray);
-        console.log("useEffect: 현재 bodNum:", bodNum);
-
-        const index = currentArray.findIndex((post) => post.bodNum === bodNum);
-        if (index === -1) {
-            console.error("현재 bodNum이 배열에 없습니다:", bodNum, currentArray);
-            setCurrentIndex(null);
-        } else {
-            console.log("현재 게시글 인덱스:", index);
-            setCurrentIndex(index);
-        }
-    }, [bodNum, searchResults, boards]);
-
-
-
 
     // 페이지 이동 시 reset 호출
     const goToBoard = () => {
@@ -164,77 +133,71 @@ const PostDetail = () => {
         navigate("/board"); // 전체 리스트로 이동
     };
 
-
-    //좋아요 카운트 서버에서 가져오는 함수
-    const fetchLikeCount = async () => {
+    // 좋아요 상태 및 카운트 서버에서 가져오기
+    const fetchLikeData = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
+    
         try {
-            const response = await axios.get(`http://localhost:7070/heart/${bodNum}/likeCount`, {
+            const response = await axios.get(`${API_BASE_URL}/heart/${bodNum}/likeCount`, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // 인증 토큰
+                    Authorization: `Bearer ${token}`,
+                },
+                params: {
+                    userNick: localStorageUserNick,
                 },
             });
-            setLikeCount(response.data); // 서버에서 받은 좋아요 개수를 상태에 저장
+    
+            const { likeCount, hikon } = response.data;
+            setLikeCount(likeCount);
+            setIcon(hikon); // 정확한 필드 이름 사용
         } catch (error) {
-            console.error("좋아요 개수 불러오기 실패:", error);
+            console.error("좋아요 상태 및 개수 가져오기 실패:", error.response?.data || error.message);
         }
     };
+    
+    
+
+
+
+
+
 
     // 좋아요 토글
     const toggleLike = async () => {
         const token = localStorage.getItem("ACCESS_TOKEN");
-        console.log("현재 bodNum", bodNum);
-
-
-        if (!token) {
-            alert("로그인이 필요합니다.");
-            return;
-        }
-
+    
         try {
-            // 요청 데이터 로깅
-            console.log("요청 데이터:", { userNick: localStorageUserNick, bodNum: parseInt(bodNum) });
-
-            // 서버로 요청 전송
             const response = await axios.post(
-                "http://localhost:7070/heart",
+                `${API_BASE_URL}/heart`,
                 {
-                    userNick: localStorageUserNick, // 사용자 닉네임
-                    bodNum: parseInt(bodNum),      // 게시물 번호
+                    userNick: localStorageUserNick,
+                    bodNum: bodNum,
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`, // 인증 토큰
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
-
-            console.log("서버 응답:", response.data); // 서버 응답 로깅
-
-            // 서버 응답 처리
-            if (response.data === "좋아요가 추가되었습니다.") {
-                // 좋아요 추가
-                setLiked(true);
-                setLikeCount((prev) => prev + 1);
-            } else if (response.data === "좋아요가 취소되었습니다.") {
-                // 좋아요 취소
-                setLiked(false);
-                setLikeCount((prev) => Math.max(prev - 1, 0));
-            } else {
-                console.error("예상치 못한 서버 응답:", response.data);
-                alert("예상치 못한 문제가 발생했습니다. 다시 시도해주세요.");
-            }
+    
+            const { liked, likeCount, hikon } = response.data;
+    
+            // 서버 응답에 따라 상태 동기화
+            setIcon(hikon || (liked ? "filled" : "outline")); // hIcon 또는 liked를 기반으로 설정
+            setLikeCount(likeCount);
         } catch (error) {
-            // 오류 처리
             console.error("좋아요 처리 실패:", error.response?.data || error.message);
             alert("좋아요 처리 중 오류가 발생했습니다.");
         }
     };
+    
+    
+    
+
 
     // 페이지 로드 시 좋아요 개수 초기화
     useEffect(() => {
-        fetchLikeCount();
-
+        fetchLikeData();
     }, [bodNum]); // 게시글 번호가 변경될 때마다 실행
 
     // 게시글 삭제
@@ -247,7 +210,7 @@ const PostDetail = () => {
         }
         if (window.confirm("게시글을 삭제하시겠습니까?")) {
             try {
-                await axios.delete(`http://localhost:7070/board/${bodNum}`, {
+                await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("게시글이 삭제되었습니다.");
@@ -297,16 +260,28 @@ const PostDetail = () => {
                 )}
                 <div className="postContent">{board.bodDtail}</div>
                 <div className="likeSection postInfoicon">
-                    <div>
+                    <div className="likeSection">
                         <span
                             className="likeIcon"
-                            onClick={toggleLike}
+                            onClick={() => {
+                                if (!localStorageUserNick) {
+                                    alert("로그인이 필요합니다.");
+                                    return;
+                                }
+                                toggleLike(); // 로그인된 경우에만 호출
+                            }}
                             style={{ cursor: "pointer", fontSize: "1.5rem" }}
                         >
-                            <FaRegThumbsUp color="gray" />
+                            {icon === "filled" ? (
+                                <FaThumbsUp color="lightblue" /> // 좋아요 눌린 상태
+                            ) : (
+                                <FaRegThumbsUp color="gray" /> // 기본 상태
+                            )}
                         </span>
-                        좋아요: {likeCount}
+                        <span style={{ marginLeft: "0.5rem" }}>좋아요: {likeCount}</span>
                     </div>
+
+                    {/* 작성자가 관리자가 아니면 현재게시글 / 전체게시글 나타냄 */}
                     <div>
                         {board.project?.userNick === "관리자" ? (
                             <span></span>
@@ -315,6 +290,8 @@ const PostDetail = () => {
                         )}
                     </div>
                 </div>
+
+
                 <div className="postButtonLargeRow">
                     {board.project?.userNick !== "관리자" && (
                         <>

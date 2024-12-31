@@ -62,12 +62,12 @@ export const recentSevenDaysDataAtom = atom({
 export const farmDataAtom = atom({
     key: "farmDataAtom",
     default: itemMappings,
-})  
+})
 
 //선택된 아이템을 저장해주는 상태
 export const selectedItemAtom = atom({
-    key: "selectedItemAtom", // 고유 키
-    default: null, // 기본값은 null
+    key: "selectedItemAtom", 
+    default: null, 
 });
 
 //도매와 소매를 관리해주는 상태
@@ -76,8 +76,17 @@ export const priceTypeCodeStateAtom = atom({
     default: '',
 });
 
-//그래프의 하루가격 관리 상태
-export const graphPriceDataAtom = atom({
-    key: "graphPriceDataAtom", // 고유한 키
-    default: [], // 초기값: 빈 배열
+export const searchResultsAtom = atom({
+    key: "searchResultsAtom",
+    default: [], 
+});
+
+export const titleAtom = atom({
+    key: "titleAtom",
+    default: "평균 가격 결과", 
+  });
+
+  export const averagePriceAtom = atom({
+    key: "averagePriceAtom", 
+    default: 0, 
   });

@@ -19,18 +19,22 @@ import { API_BASE_URL } from '../../service/api-config';
 import { Circles } from "react-loader-spinner";
 
 const FarmInfo = () => {
-  const [startDate, setStartDate] = useRecoilState(startDateStateAtom);
-  const [endDate, setEndDate] = useRecoilState(endDateStateAtom);
-  const [priceRequestDTO, setPriceRequestDTO] = useRecoilState(priceRequestDTOAtom);
-  const [searchResults, setSearchResults] = useRecoilState(searchResultsAtom || []);
-  const [title, setTitle] = useRecoilState(titleAtom);
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [selectedKind, setSelectedKind] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [priceType, setPriceType] = useState("retail"); // 초기값 'retail'로 설정
-  const setAveragePrice = useSetRecoilState(averagePriceAtom);
+  //Recoil 상태관리
+  const [startDate, setStartDate] = useRecoilState(startDateStateAtom); //검색 시작 날짜 상태
+  const [endDate, setEndDate] = useRecoilState(endDateStateAtom); //검색 종료 날짜 상태
+  const [priceRequestDTO, setPriceRequestDTO] = useRecoilState(priceRequestDTOAtom); //API 요청 데이터 상태
+  const [searchResults, setSearchResults] = useRecoilState(searchResultsAtom || []); // 검색 결과 상태
+  const [title, setTitle] = useRecoilState(titleAtom); //결과 제목 상태
+  const setAveragePrice = useSetRecoilState(averagePriceAtom); //평균 가격 상태 업데이트 함수
 
+  //로컬 상태관리
+  const [selectedProduct, setSelectedProduct] = useState("");  //선택된 품목
+  const [selectedKind, setSelectedKind] = useState(""); //선택된 품종
+  const [loading, setLoading] = useState(false); //로딩상태
+  const [error, setError] = useState(null); //에러 상태
+  const [priceType, setPriceType] = useState("retail"); // 가격 타입 (도매/소매) 초기값 'retail'로 설정
+ 
+  //카테고리 목록
   const categories = [
     { code: "100", name: "식량작물" },
     { code: "200", name: "채소류" },
@@ -38,6 +42,7 @@ const FarmInfo = () => {
     { code: "400", name: "과일류" },
   ];
 
+  //지역 목록록
   const regions = [
     { code: "1101", name: "서울" },
     { code: "2100", name: "부산" },
@@ -64,38 +69,45 @@ const FarmInfo = () => {
     { code: "3818", name: "김해" },
   ];
 
+  //컴포넌트 언마운트 시 검색 결과 초기화
   useEffect(() => {
     return () => {
       setSearchResults([]); // 검색 결과 초기화
     };
-  }, [setSearchResults]);
+  }, [setSearchResults])
 
+  //선택된 카테고리에 속한 품목 필더링
   const products = Object.keys(FarmData).filter((key) => {
     return FarmData[key]?.some(
       (item) => item.p_itemcategorycode === priceRequestDTO.p_itemcategorycode
     );
   });
 
+  //선택된 품목에 속한 품종 필터링링
   const kinds = selectedProduct
     ? FarmData[selectedProduct]?.map((item) => ({
-      kindcode: item.p_kindcode,
-      kindname: item.kindname,
+      kindcode: item.p_kindcode, //품종 코드
+      kindname: item.kindname,   //품종 이름
     })) || []
     : [];
 
+  //검색 함수
   const handleSearch = async (type) => {
+    //품목과 품종이 선택되지 않았을 경우 경고 후 종료
     if (!selectedProduct || !selectedKind) {
       alert("품목이나 품종이 선택되지 않았습니다.");
       return; // 빈 값일 경우 서버 요청을 하지 않음
     }
 
-    // 검색 유형에 따라 priceType 설정
+     // 검색 유형(도매/소매)에 따라 가격 타입 설정
     setPriceType(type);
 
+    //로딩 및 에러 상태 초기화
     setLoading(true);
     setError(null);
     setSearchResults([]);
 
+    //시작일과 종료일이 같은 경우 시작일을 하루 전으로 보정정
     let adjustedStartDate = startDate;
     if (startDate === endDate) {
       const date = new Date(startDate);
@@ -103,16 +115,17 @@ const FarmInfo = () => {
       adjustedStartDate = date.toISOString().split("T")[0]; // ISO 문자열로 변환
     }
 
-    const selectedItemCode =
-      FarmData[selectedProduct]?.[0]?.p_itemcode || "";
-
+    //선택된 품목 및 품종 코드
+    const selectedItemCode = FarmData[selectedProduct]?.[0]?.p_itemcode || "";
     const selectedKindCode = selectedKind || "";
 
+    //도매/소매 API URL 설정정
     const apiUrl =
       type === "retail"
         ? `${API_BASE_URL}/retail/price/all`
         : `${API_BASE_URL}/wholeSale/price/all`;
 
+    //API 요청 데이터 생성성
     const requestData = {
       ...priceRequestDTO,
       p_startday: adjustedStartDate,
@@ -122,10 +135,12 @@ const FarmInfo = () => {
     };
 
     try {
+      //서버에 POST 요청
       const response = await axios.post(apiUrl, requestData);
+      // 응답 데이터에서 '평균' 항목 필터링
       const filteredResults = response.data.filter((item) => item.countyname === "평균");
       setSearchResults(filteredResults);
-
+      //검색 결과가 없을 경우 에러 상태 설정
       if (!filteredResults || filteredResults.length === 0) {
         setError("해당 품목을 찾을 수 없습니다.");
         return;
@@ -135,10 +150,10 @@ const FarmInfo = () => {
       const total = filteredResults.reduce((sum, item) => sum + parseFloat(item.price || 0), 0);
       const average = total / (filteredResults.length || 1);
 
-      // Recoil Atom에 평균 가격 저장
+      // 평균 가격을 Recoil 상태에 저장
       setAveragePrice(average);
 
-      // 제목 업데이트
+      // 결과 제목 업데이트
       const regionName =
         regions.find((region) => region.code === priceRequestDTO.p_countrycode)?.name || "전국";
       const productName = FarmData[selectedProduct]?.[0]?.itemname || selectedProduct || "전체";

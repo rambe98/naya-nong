@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import logo from "../../assets/logo.png";
 import "../../css/UserInfo.css";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import {
   formDataAtom,
-  confirmPwdAtom,
-  userNicksuccessAtom,
   validationMessageAtom,
   validationRegexAtom,
   validateForm,
@@ -21,7 +18,7 @@ const UserInfo = () => {
 
   const [password, setPassword] = useState(''); // 입력된 비밀번호
   const [userInfo, setUserInfo] = useRecoilState(formDataAtom); // userInfo의 초기값
-  const [userNick, setUserNick] = useState('');
+  const [userNick, setUserNick] = useState(''); //사용자의 닉네임을 저장하는 상태
 
 
   const [validationMessage] = useRecoilState(validationMessageAtom); // 메시지 Atom 불러오기
@@ -29,38 +26,13 @@ const UserInfo = () => {
   const [message, setMessage] = useRecoilState(messageAtom); // 클라이언트 메시지
   const [smessage, setSMessage] = useRecoilState(smessageAtom); // 서버 메시지
 
-  const clientNum = localStorage.getItem("clientNum")
+  const clientNum = localStorage.getItem("clientNum") //사용자 정보를 식별하기 위한 고유번호를 로컬스토리지에서 가져옴
 
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(false); //수정모드 활성/ 비활성 관리 상태
   const [backupUserInfo, setBackupUserInfo] = useState(null); // 백업 상태
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 여부
   const [isDeleteMode, setIsDeleteMode] = useState(false)// 회원탈퇴 모드 여부
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);//모바일모드
-  
-  // useEffect(() => {
-  //   const updateScrollBehavior = () => {
-  //     if (window.innerWidth <= 768) {
-  //       document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
-  //     } else {
-  //       document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
-  //     }
-  //   };
-  
-  //   // 초기 실행
-  //   updateScrollBehavior();
-  
-  //   // 리사이즈 이벤트 리스너 등록
-  //   window.addEventListener('resize', updateScrollBehavior);
-  
-  //   // 페이지가 언마운트될 때 no-scroll 클래스 제거
-  //   return () => {
-  //     document.body.classList.remove('no-scroll'); // 클래스 제거
-  //     window.removeEventListener('resize', updateScrollBehavior); // 리스너 제거
-  //   };
-  // }, []);
-  
-  
 
   // 사용자 정보 로드
   useEffect(() => {
@@ -78,7 +50,7 @@ const UserInfo = () => {
 
         // 서버에서 데이터 받아서 상태 업데이트
         if (response.data.clientNum) {
-          setUserInfo(response.data); // Recoil 상태 업데이트
+          setUserInfo(response.data); // Recoil FormData 업데이트
         } else {
           throw new Error("회원 정보를 불러올 수 없습니다.");
         }
@@ -88,196 +60,201 @@ const UserInfo = () => {
     };
 
     loadUserDetails(); // 함수 호출
-  }, [clientNum, setUserInfo]);
+  }, [clientNum, setUserInfo]); //clientNum(사용자 고유번호)와 Recoil FormData가 업데이트될때마다 실행
 
 
-  // 비밀번호 확인
+  // 비밀번호 확인 요청 함수
   const handlePasswordClick = async () => {
     try {
-      const token = localStorage.getItem("ACCESS_TOKEN");
-      const response = await axios.post(`${API_BASE_URL}/users/verifypassword`,
-        {
-          clientNum: clientNum,
-          userPwd: password,
+      const token = localStorage.getItem("ACCESS_TOKEN"); // 로컬스토리지에서 토큰 가져오기
+      const response = await axios.post(`${API_BASE_URL}/users/verifypassword`, {
+        clientNum: clientNum, // 사용자 고유 번호 전달
+        userPwd: password, // 입력된 비밀번호 전달
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // 인증 헤더 추가
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // 인증 토큰 추가
-          },
-        }
-      );
+      });
 
       if (response.status === 200) {
-        alert("비밀번호가 확인되었습니다.");
+        alert("비밀번호가 확인되었습니다."); // 비밀번호 일치 시 알림
         setEdit(true); // 수정 모드 활성화
         setShowModal(false); // 모달 닫기
       } else {
-        alert("비밀번호가 일치하지 않습니다.");
+        alert("비밀번호가 일치하지 않습니다."); // 비밀번호 불일치 시 알림
       }
     } catch (error) {
-      console.error(error);
-      alert("비밀번호가 일치하지 않습니다.");
+      console.error(error); // 오류 로그 출력
+      alert("비밀번호가 일치하지 않습니다."); // 예외 발생 시 알림
     }
   };
 
-  // 정보 저장
+
+  // 정보 저장 함수
   const handleSaveClick = async () => {
-    const isValid = validateForm(
+    const isValid = validateForm( // 유효성 검사 실행
       userInfo,
       validationMessage,
       validationRegex,
       setMessage
     );
 
-    if (!isValid) return;
+    if (!isValid) return; // 유효성 검사를 통과하지 못하면 종료
 
-    const updatedUserInfo = { ...userInfo, userPwd: password };
-    const token = localStorage.getItem("ACCESS_TOKEN");
+    const updatedUserInfo = { ...userInfo, userPwd: password }; // 사용자 정보와 비밀번호를 포함한 객체 생성
+    const token = localStorage.getItem("ACCESS_TOKEN"); // 로컬스토리지에서 토큰 가져오기
     try {
-      const response = await axios.put(
+      const response = await axios.put( // 사용자 정보 업데이트 요청
         `${API_BASE_URL}/users/${clientNum}`, updatedUserInfo,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 인증 토큰 추가
+            Authorization: `Bearer ${token}`, // 인증 헤더 추가
           },
         }
       );
 
-      if (response.status === 200) {
-        const updatedUser = response.data;
+      if (response.status === 200) { // 요청 성공 시
+        const updatedUser = response.data; // 서버에서 반환된 사용자 정보
 
-        setUserNick(updatedUser.userNick);
-        //로컬스토리지의 유저닉네임 업데이트
-        localStorage.setItem("userNick", updatedUser.userNick);
+        setUserNick(updatedUser.userNick); // 닉네임 상태 업데이트
+        localStorage.setItem("userNick", updatedUser.userNick); // 로컬스토리지의 닉네임 업데이트
 
-        alert("수정이 완료되었습니다.");
-        setEdit(false);
-        setPassword("");
-        setMessage(""); // 메시지 초기화
+        alert("수정이 완료되었습니다."); // 수정 완료 알림
+        setEdit(false); // 수정 모드 비활성화
+        setPassword(""); // 비밀번호 초기화
+        setMessage(""); // 클라이언트 메시지 초기화
         setSMessage(""); // 서버 메시지 초기화
-        window.location.reload();
+        window.location.reload(); // 페이지 새로고침
       }
     } catch (error) {
-      console.error("저장 실패:", error);
+      console.error("저장 실패:", error); // 오류 로그 출력
 
-      // 서버에서 반환된 메시지 처리
       if (error.response && error.response.status === 400) {
-        setSMessage(error.response.data); // 서버 메시지 설정
+        setSMessage(error.response.data); // 서버에서 반환된 메시지 설정
       } else {
-        setSMessage("저장 중 문제가 발생했습니다."); // 기본 오류 메시지
+        setSMessage("저장 중 문제가 발생했습니다."); // 기본 오류 메시지 설정
       }
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
 
-    if (name === "userPwd") {
-      setPassword(value);
-    } else {
-      setUserInfo((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-    setMessage(""); // 입력 중 클라이언트 메시지 초기화
-    setSMessage(""); // 입력 중 서버 메시지 초기화
-  };
+// 입력값 변경 핸들러 함수
+// 비밀번호 확인 요청 API로 전달해야하기 때문에 비밀번호는 다른 사용자 정보와는 다르게 관리함
+// 보안과 유지보수 관점에서 안전하고 명확하다.
+const handleInputChange = (e) => {
+  const { name, value } = e.target; // 입력된 폼 요소의 이름(name)과 값(value)을 가져옴
 
-  //수정모드 진입
-  const handleEditClick = () => {
-    setShowModal(true);
-    setBackupUserInfo({ ...userInfo });
-
-  };
-
-  //회원 탈퇴
-  const handleDelete = () => {
-    setIsDeleteMode(true)
-    setShowModal(true)
-    
+  if (name === "userPwd") {
+    setPassword(value); // 비밀번호 입력 시 password 상태 업데이트
+  } else {
+    setUserInfo((prev) => ({
+      ...prev, // 기존 사용자 정보 유지
+      [name]: value, // 변경된 값 업데이트
+    }));
   }
+  setMessage(""); // 클라이언트 에러 메시지 초기화
+  setSMessage(""); // 서버 에러 메시지 초기화
+};
 
 
-  //회원 탈퇴요청
-  const handleDeleteConfirm = async () => {
-    const token = localStorage.getItem("ACCESS_TOKEN");
-    try {
-      //게시글 조회 (사용자가 작성한 게시글 목록 가져오기)
-      const boardResponse = await axios.get(`${API_BASE_URL}/board`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const responseBoards = boardResponse.data;  // 게시글 목록
-      // 현재 로그인된 사용자의 userNick
-      const currentUserNick = localStorage.getItem("userNick");
-      // 게시글 삭제
-      for (let i = 0; i < responseBoards.length; i++) {
-        const board = responseBoards[i];
-        const bodNum = board.bodNum;
-        const boardUserNick = board.userNick;  // 게시글 작성자의 userNick
-        if (boardUserNick === currentUserNick) {
-          try {
-            // 게시글 삭제 요청
-            const deleteBoardResponse = await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }) } catch (error) {
-              console.error(`게시글 번호 ${bodNum} 삭제 실패`, error);
-            };
-          }
+// 수정 모드 진입 함수
+const handleEditClick = () => {
+  setShowModal(true); // 모달 창 표시
+  setBackupUserInfo({ ...userInfo }); // 현재 사용자 정보를 백업
+};
+
+// 회원 탈퇴 모드 진입 함수
+const handleDelete = () => {
+  setIsDeleteMode(true); // 회원 탈퇴 모드 활성화
+  setShowModal(true); // 모달 창 표시
+};
+
+
+
+// 회원 탈퇴 요청 함수
+const handleDeleteConfirm = async () => {
+  const token = localStorage.getItem("ACCESS_TOKEN"); // 로컬 스토리지에서 토큰 가져오기
+  try {
+    // 게시글 조회 (사용자가 작성한 게시글 목록 가져오기)
+    const boardResponse = await axios.get(`${API_BASE_URL}/board`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // 인증 헤더 추가
+      },
+    });
+    const responseBoards = boardResponse.data; // 게시글 목록 가져오기
+    const currentUserNick = localStorage.getItem("userNick"); // 현재 로그인된 사용자의 닉네임 가져오기
+
+    // 게시글 삭제
+    for (let i = 0; i < responseBoards.length; i++) {
+      const board = responseBoards[i];
+      const bodNum = board.bodNum; // 게시글 번호
+      const boardUserNick = board.userNick; // 게시글 작성자의 닉네임
+      if (boardUserNick === currentUserNick) {
+        try {
+          // 게시글 삭제 요청
+          const deleteBoardResponse = await axios.delete(`${API_BASE_URL}/board/${bodNum}`, {
+            headers: {
+              Authorization: `Bearer ${token}`, // 인증 헤더 추가
+            },
+          });
+        } catch (error) {
+          console.error(`게시글 번호 ${bodNum} 삭제 실패`, error); // 게시글 삭제 실패 로그 출력
+        }
       }
-      // 회원 탈퇴 요청 (회원 정보를 먼저 삭제)
-      const deleteUserResponse = await axios.delete(`${API_BASE_URL}/users/${clientNum}`, {
-        data: { clientNum, userPwd: password },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (deleteUserResponse.status === 200) {
-        // 탈퇴 후, 토큰 및 사용자 정보 삭제
-        localStorage.removeItem("ACCESS_TOKEN");
-        localStorage.removeItem("userNick");
-        localStorage.removeItem('clientNum');
-        localStorage.removeItem('userId');
-
-        alert("회원 탈퇴가 완료되었습니다.");
-        navigate('/board'); 
-      }
-    } catch (error) {
-      console.error("회원 탈퇴 중 오류 발생", error);
-      alert("회원 탈퇴에 실패했습니다.");
     }
-  };
 
+    // 회원 탈퇴 요청
+    const deleteUserResponse = await axios.delete(`${API_BASE_URL}/users/${clientNum}`, {
+      data: { clientNum, userPwd: password }, // 사용자 정보와 비밀번호 전달
+      headers: {
+        Authorization: `Bearer ${token}`, // 인증 헤더 추가
+      },
+    });
 
-
-
-  //취소버튼 
-  const handleCancelClick = () => {
-    if (backupUserInfo) {
-      setUserInfo({ ...backupUserInfo });
+    if (deleteUserResponse.status === 200) {
+      // 탈퇴 성공 시 토큰 및 사용자 정보 삭제
+      localStorage.removeItem("ACCESS_TOKEN");
+      localStorage.removeItem("userNick");
+      localStorage.removeItem('clientNum');
+      localStorage.removeItem('userId');
+      alert("회원 탈퇴가 완료되었습니다."); // 탈퇴 성공 알림
+      navigate('/'); // 메인 페이지로 이동
     }
-    setPassword("");
-    setEdit(false);
-    setMessage("");
-    setSMessage("");
-  };
+  } catch (error) {
+    console.error("회원 탈퇴 중 오류 발생", error); // 탈퇴 중 오류 로그 출력
+    alert("회원 탈퇴에 실패했습니다."); // 탈퇴 실패 알림
+  }
+};
 
 
-  //비밀번호 숨기기 / 보이기
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
 
-  //모달 취소버튼
-  const modalCancelClick = () => {
-    setPassword("");
-    setShowModal(false);
-    setIsDeleteMode(false)
-  };
+
+
+// 취소 버튼 클릭 시 동작
+const handleCancelClick = () => {
+  if (backupUserInfo) {
+    setUserInfo({ ...backupUserInfo }); // 백업된 사용자 정보로 복구
+  }
+  setPassword(""); // 비밀번호 초기화
+  setEdit(false); // 수정 모드 비활성화
+  setMessage(""); // 클라이언트 메시지 초기화
+  setSMessage(""); // 서버 메시지 초기화
+};
+
+// 비밀번호 숨기기/보이기 토글
+const togglePasswordVisibility = () => {
+   // 비밀번호 표시 상태를 반전  
+   // 이전 상태값(prev)이 true면 false로, false면 true로 변경
+   setShowPassword((prev) => !prev);
+};
+
+// 모달 취소 버튼 클릭 시 동작
+const modalCancelClick = () => {
+  setPassword(""); // 비밀번호 초기화
+  setShowModal(false); // 모달 창 닫기
+  setIsDeleteMode(false); // 회원 탈퇴 모드 비활성화
+};
+
 
 
   return (

@@ -101,9 +101,11 @@ const Board = () => {
 
     // 한 페이지에 렌더링되는 게시글의 수 설정
     // 페이지 변경
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
-
+        console.log(currentPage);
+        
         //페이지 업데이트시 스크롤을 상단을 위치
         window.scrollTo(0, 0)
     };

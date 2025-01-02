@@ -7,12 +7,13 @@ import { userIdAtom, userPwdAtom } from '../recoil/UserRecoil';
 import { scrollAtom } from '../recoil/ScrollRecoil';
 
 const Header = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // 모바일 메뉴 상태 관리
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // 모바일 여부 확인
-  const scrollPosition = useRecoilValue(scrollAtom); // Recoil 상태 구독
-  const isVisible = scrollPosition < 80; // 스크롤이 80 이상이면 숨김
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅
+  const location = useLocation(); // 현재 위치 정보를 얻기 위한 useLocation 훅
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // 모바일 메뉴의 열림/닫힘 상태 관리
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // 화면 너비가 768px 이하인지 여부 확인
+  const scrollPosition = useRecoilValue(scrollAtom); // Recoil 상태에서 스크롤 위치 값을 구독
+  const isVisible = scrollPosition < 80; // 스크롤 위치가 80 이하일 때 헤더를 표시하도록 설정
+
 
   // 로컬스토리지에서 로그인 상태 및 사용자 정보 가져오기
   const loginsuccess = localStorage.getItem("ACCESS_TOKEN") ? true : false;
@@ -23,49 +24,52 @@ const Header = () => {
   // 768px 이상넘어가면 햄버거아이콘 사라짐
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      setMobileMenuOpen(false); // 화면 크기 변경 시 모바일 메뉴 닫기
+      setIsMobile(window.innerWidth <= 768); // 화면 너비가 768px 이하인지 여부 업데이트
+      setMobileMenuOpen(false); // 화면 크기 변경 시 모바일 메뉴를 닫음
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    window.addEventListener('resize', handleResize); // 윈도우 크기 변경 이벤트 리스너 추가
+    return () => window.removeEventListener('resize', handleResize); // 컴포넌트 언마운트 시 이벤트 리스너 제거
+  }, []); // 의존성 배열이 비어 있어 컴포넌트 마운트 시 한 번만 실행
+
 
   // 스크롤 감지하여 모바일 메뉴 닫기
   useEffect(() => {
     const handleScroll = () => {
       if (isMobileMenuOpen && scrollPosition >= 80) {
-        setMobileMenuOpen(false);
+        setMobileMenuOpen(false); // 스크롤 위치가 80 이상일 때 모바일 메뉴 닫기
       }
     };
 
-    handleScroll();
+    handleScroll(); // 컴포넌트가 처음 렌더링될 때도 실행
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobileMenuOpen, scrollPosition]);
+    window.addEventListener('scroll', handleScroll); // 스크롤 이벤트 리스너 추가
+    return () => window.removeEventListener('scroll', handleScroll); // 컴포넌트 언마운트 시 이벤트 리스너 제거
+  }, [isMobileMenuOpen, scrollPosition]); // 모바일 메뉴 열림 상태와 스크롤 위치가 변경될 때 실행
+
 
   // 로그아웃 함수
   const handleLogout = () => {
-    resetUserId();
-    resetUserPwd();
-    localStorage.removeItem("ACCESS_TOKEN");
-    localStorage.removeItem("loginsuccess");
-    localStorage.removeItem("clientNum");
-    localStorage.removeItem("userNick");
-    localStorage.removeItem('userId');
-    alert('로그아웃 되었습니다.');
-    navigate('/');
+    resetUserId(); // Recoil 상태 초기화
+    resetUserPwd(); // Recoil 상태 초기화
+    localStorage.removeItem("ACCESS_TOKEN"); // 토큰 삭제
+    localStorage.removeItem("loginsuccess"); // 로그인 상태 삭제
+    localStorage.removeItem("clientNum"); // 사용자 고유번호 삭제
+    localStorage.removeItem("userNick"); // 닉네임 삭제
+    localStorage.removeItem('userId'); // 아이디 삭제
+    alert('로그아웃 되었습니다.'); // 로그아웃 알림
+    navigate('/'); // 홈 경로로 이동
   };
 
   // 정보 수정 이동 함수
   const handleLogInfo = () => {
-    const clientNum = localStorage.getItem("clientNum");
+    const clientNum = localStorage.getItem("clientNum"); // 사용자 고유번호 가져오기
     if (clientNum) {
-      navigate(`/userinfo/${clientNum}`);
+      navigate(`/userinfo/${clientNum}`); // 회원정보 수정 페이지로 이동
     } else {
-      alert('로그인 정보가 없습니다. 다시 로그인 해주세요.');
+      alert('로그인 정보가 없습니다. 다시 로그인 해주세요.'); // 로그인 정보 없을 때 알림
     }
   };
+
 
 
   return (

@@ -31,7 +31,11 @@ const FindUserId = () => {
         `${API_BASE_URL}/users/find-id`,
         { userEmail }
       );
+<<<<<<< HEAD
       setMessage(response.data); //서버에서 보내는 메시지로 메시지 상태 업데이트
+=======
+      setMessage(response.data); // 서버에서 반환된 메시지
+>>>>>>> 9049cda8736d39708ccb1c71054d4b0504740584
     } catch (error) {
       console.error('Error:', error);
       setMessage('오류가 발생했습니다. 다시 시도해 주세요.'); // 오류 발생 메시지 업데이트

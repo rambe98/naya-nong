@@ -273,6 +273,21 @@
     color: #333;
 }
 
+.loading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center; /* 가로 중앙 정렬 */
+    height: 50vh;
+    width: 100%; /* 전체 너비 */
+    margin-top: 10%;
+  }
+  
+  .loading p {
+    margin-left: 20px;
+    font-size: 16px;
+    color: #3498db;
+    margin-top: 5%;
+  }
 @media (max-width: 800px) {
     .marketGroupedPrices {
         display: flex;
@@ -295,6 +310,21 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         min-height: 10vh;
     }
+    .loading {
+        display: flex;
+        align-items: top;
+        justify-content: center; /* 가로 중앙 정렬 */
+        height: 50vh;
+        width: 100%; /* 전체 너비 */
+        margin-top: 10%;
+      }
+      
+      .loading p {
+        margin-left: 20px;
+        font-size: 16px;
+        color: #3498db;
+        margin-top: 5%;
+      }
 }
 
 

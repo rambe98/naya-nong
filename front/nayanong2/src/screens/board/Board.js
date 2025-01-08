@@ -106,10 +106,12 @@ const Board = () => {
 
 
     // 페이지 변경
+
     const handlePageChange = (page) => {
         //현재 페이지를 새 페이지로 설정
         setCurrentPage(page);
-
+        console.log(currentPage);
+        
         //페이지 업데이트시 스크롤을 상단을 위치
         window.scrollTo(0, 0)
     };

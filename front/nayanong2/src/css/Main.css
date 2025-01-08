@@ -14,7 +14,7 @@
   transition: transform 0.3s ease, background-color 0.3s ease;
   box-sizing: border-box;
   height: 80px;
-  width: calc(100vw - 16px); 
+  width: 100%;
 }
 
 .Header_show {

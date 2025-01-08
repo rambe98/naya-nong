@@ -3,8 +3,11 @@ import '../../css/Login.css';
 import logo from '../../assets/logo.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { signin } from '../../service/ApiService'
+<<<<<<< HEAD
 import { messageAtom } from '../../recoil/UserRecoil';
 import { useRecoilState } from 'recoil';
+=======
+>>>>>>> 9049cda8736d39708ccb1c71054d4b0504740584
 
 
 
@@ -18,7 +21,11 @@ function Login() {
   //사용자에게 비밀번호를 입력받는 상태관리
   const [userPwd, setUserPwd] = useState('');
   //사용자에게 보여질 메시지 상태관리
+<<<<<<< HEAD
   const [message, setMessage] = useRecoilState(messageAtom);
+=======
+  const [message, setMessage] = useState('');
+>>>>>>> 9049cda8736d39708ccb1c71054d4b0504740584
   //로딩 상태관리
   const [isLoading, setIsLoading] = useState(false);
 

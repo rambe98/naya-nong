@@ -17,11 +17,11 @@ const FarmList = () => {
     const [priceType, setPriceType] = useState(""); // 분류 상태
     const [searchTerm, setSearchTerm] = useState(""); // 입력된 검색어 상태
     const [searchCompleted, setSearchCompleted] = useState(false); // 검색 완료 상태
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState(null);
-    const [countryCode, setCountryCode] = useState("");
-    const itemMappings = useRecoilValue(farmDataAtom);
+    const [loading, setLoading] = useState(false); // 로딩 상태
+    const [message, setMessage] = useState(''); // 메세지 상태
+    const [error, setError] = useState(null);   // error 상태
+    const [countryCode, setCountryCode] = useState(""); // 지역코드의 상태 (" " = 전국) 
+    const itemMappings = useRecoilValue(farmDataAtom); //FarmData.json 에서 불러온 데이터
     const [priceRequestDTO, setPriceRequestDTO] = useRecoilState(priceRequestDTOAtom);
     const setSelectedItemState = useSetRecoilState(selectedItemAtom);
     const setPriceDataState = useSetRecoilState(priceDataAtom);

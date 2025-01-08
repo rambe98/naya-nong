@@ -12,20 +12,21 @@ import { API_BASE_URL } from '../../service/api-config';
 
 
 const Board = () => {
-    const navigate = useNavigate();
-    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-    const [posts, setPosts] = useState([]);
-    const [searchKeyword, setSearchKeyword] = useState("");
-    const [searchCategory, setSearchCategory] = useState("title");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [loading, setLoading] = useState(true);
-    const [sortBy, setSortBy] = useState('date');
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    const setSearchResults = useSetRecoilState(searchboardResultsAtom);
-    const scrollPosition = useRecoilValue(scrollAtom); // Scroll 상태
-    const isVisible = scrollPosition < 80; // 헤더 보임 여부
+    const navigate = useNavigate();  // 페이지 이동을 위한 useNavigate 훅
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);  // 사이드바 보이기 여부 상태
+    const [posts, setPosts] = useState([]);  // 게시글 목록 상태
+    const [searchKeyword, setSearchKeyword] = useState("");  // 검색어 상태
+    const [searchCategory, setSearchCategory] = useState("title");  // 검색 카테고리 상태 (기본값: 제목)
+    const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지 상태
+    const [itemsPerPage, setItemsPerPage] = useState(10);  // 페이지당 게시글 수
+    const [loading, setLoading] = useState(true);  // 로딩 상태
+    const [sortBy, setSortBy] = useState('date');  // 정렬 기준 상태 (기본값: 날짜순)
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);  // 모바일 여부 확인 (화면 크기 기준)
+    const setSearchResults = useSetRecoilState(searchboardResultsAtom);  // 검색 결과를 Recoil 상태에 설정하는 함수
+    const scrollPosition = useRecoilValue(scrollAtom);  // 스크롤 위치 상태
+    const isVisible = scrollPosition < 80;  // 헤더의 보임 여부 판단 (스크롤 위치 기준)
 
+    // 화면 크기 변화 시 모바일 여부 상태 변경
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth <= 768);
@@ -35,21 +36,26 @@ const Board = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // 사이드바 토글 함수
     const toggleSidebar = () => {
-        setIsSidebarVisible((prevState) => !prevState);
+        setIsSidebarVisible((prevState) => !prevState); //현재 상태를 반전
     };
 
 
+    // 정렬 방식 변경 함수
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
     };
 
+    // 게시글 목록 가져오는 함수
     const getList = async () => {
+        // 로컬스토리지에서 액세스 토큰 가져오기
         const token = localStorage.getItem('ACCESS_TOKEN')
         try {
             const response = await axios.get(`${API_BASE_URL}/board`,
                 {
                     headers: {
+                        // Authorization 헤더에 토큰 추가
                         Authorization: `Bearer ${token}`
                     }
                 }
@@ -59,24 +65,25 @@ const Board = () => {
                 let sortedPost = response.data;
 
                 // 작성자의 게시글과 다른 유저의 게시글 분리
-                const adminPost = sortedPost.filter(post => post.userNick === "관리자").reverse().slice(0, 3); // 공지사항 3개로 제한
+                // 공지사항 3개로 제한
+                const adminPost = sortedPost.filter(post => post.userNick === "관리자").reverse().slice(0, 3);
                 const otherPost = sortedPost.filter(post => post.userNick !== "관리자");
 
                 // 다른 유저의 게시글을 정렬
                 let sortedOtherPost = [...otherPost];
 
                 switch (sortBy) {
-                    case 'date':
+                    case 'date': // 최신순
                         sortedOtherPost = sortedOtherPost.sort((a, b) => {
                             const dateA = new Date(a.created_at);
                             const dateB = new Date(b.created_at);
                             return dateB - dateA;
-                        }).reverse(); // 최신순
+                        }).reverse(); 
                         break;
-                    case 'views':
+                    case 'views': //조회수순
                         sortedOtherPost = sortedOtherPost.sort((a, b) => b.views - a.views); // 조회수 순
                         break;
-                    case 'title':
+                    case 'title': //제목순
                         sortedOtherPost = sortedOtherPost.sort((a, b) => a.bodTitle.localeCompare(b.bodTitle)); // 제목순
                         break;
                     default:
@@ -86,7 +93,7 @@ const Board = () => {
                 // 관리자 게시글을 최상단에 두고 나머지 게시글들을 정렬 후 합침
                 sortedPost = [...adminPost, ...sortedOtherPost];
 
-                // 최종 업데이트
+                // 게시글 업데이트
                 setPosts(sortedPost);
             }
         } catch (error) {
@@ -98,28 +105,23 @@ const Board = () => {
     };
 
 
-
-    // 한 페이지에 렌더링되는 게시글의 수 설정
     // 페이지 변경
     const handlePageChange = (page) => {
+        //현재 페이지를 새 페이지로 설정
         setCurrentPage(page);
 
         //페이지 업데이트시 스크롤을 상단을 위치
         window.scrollTo(0, 0)
     };
-
-
-
     // 검색 함수
     const handleSearch = async () => {
         if (!searchKeyword.trim()) {
             alert("검색어를 입력해주세요.");
             return;
         }
-
         let url = "";
         let params = {};
-
+        // 검색 카테고리에 따라 API URL과 파라미터 설정
         switch (searchCategory) {
             case "title":
                 url = `${API_BASE_URL}/board/search/title`;
@@ -145,7 +147,6 @@ const Board = () => {
                 alert("잘못된 검색 범주입니다.");
                 return;
         }
-
         const token = localStorage.getItem("ACCESS_TOKEN");
         try {
             const response = await axios.get(url, {
@@ -154,8 +155,8 @@ const Board = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
             if (response.status === 200) {
+                // 관리자 게시글과 다른 사용지들의 게시글 구분
                 const adminPosts = response.data.filter((post) => post.userNick === "관리자").reverse();
                 const otherPosts = response.data.filter((post) => post.userNick !== "관리자");
 
@@ -173,16 +174,13 @@ const Board = () => {
                     default:
                         break;
                 }
-
                 const finalPosts = [...adminPosts, ...sortedOtherPosts];
-
                 if (finalPosts.length === 0) {
                     alert("검색 결과가 없습니다.");
                 }
-
                 setSearchResults(finalPosts); // 검색 결과를 Recoil 상태로 저장
                 setPosts(finalPosts); // 검색된 게시글 리스트 업데이트
-                setCurrentPage(1);
+                setCurrentPage(1); //검색 후 첫 페이지로 이동
             } else {
                 console.error("검색 실패", response.status);
                 setSearchResults([]); // 검색 결과 초기화
@@ -198,7 +196,7 @@ const Board = () => {
 
 
 
-
+    //한 페이지에 렌더링되는 게시글의 수 설정
     const totalPages = Math.ceil(posts.length / itemsPerPage);
 
     const currentPosts = posts.slice(
@@ -211,10 +209,12 @@ const Board = () => {
     //필터링된 배열의 길이를 반환한다. 즉, 관리자가 작성한 게시글의 개수를 계산함
     const adminCount = useMemo(() => posts.filter(post => post.userNick === "관리자").length, [posts]);
 
+    // 정렬 기준이 변경될 때마다 게시글 목록을 갱신하는 useEffect
     useEffect(() => {
         getList();
     }, [sortBy]);
 
+    // 사이드바의 보임/숨김 상태
     const sidebarClassName = isSidebarVisible ? 'show' : 'hide';
 
     return (
@@ -222,7 +222,7 @@ const Board = () => {
             {isMobile && (
                 <h2 className="boardname">자유게시판</h2>
             )}
-             {/* 사이드바 */}
+            {/* 사이드바 */}
             <div className='boardSidebarList'>
                 <div className={`boardSidebarContainer ${sidebarClassName}`}>
                     <button

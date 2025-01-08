@@ -39,7 +39,7 @@ const ScrollContainer = forwardRef(({ children }, ref) => {
         }
       }}
       className="ScrollContainer"
-      style={{ height: "100vh", overflowY: "auto", overflowX: "hidden" }}
+      style={{ height: "100vh", overflowY: "auto", overflowX: "hidden"}}
     >
       {children}
     </div>

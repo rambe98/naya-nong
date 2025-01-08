@@ -7,17 +7,18 @@ import { useRecoilState } from 'recoil';
 import { API_BASE_URL } from '../../service/api-config';
 
 const FindUserId = () => {
+  //서버 통신시 메시지 상태를 담당하는 Recoil 상태
   const [message, setMessage] = useRecoilState(smessageAtom);
+  //사용자에게 입력받는 이메일 상태관리
   const [userEmail, setUserEmail] = useState('');
+  //로딩 상태관리
   const [isLoading, setIsLoading] = useState(false);
+  //네비게이트
   const navigate = useNavigate();
 
-  // 스크롤 없애기
+  // 컴포넌트 언마운트 시 메시지 초기화
   useEffect(() => {
-    document.body.classList.add('no-scroll');
     return () => {
-      document.body.classList.remove('no-scroll');
-      // 컴포넌트 언마운트 시 메시지 초기화
       setMessage('');
     };
   }, []);
@@ -28,22 +29,18 @@ const FindUserId = () => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/users/find-id`,
-        { userEmail },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { userEmail }
       );
-      setMessage(response.data);
+      setMessage(response.data); //서버에서 보내는 메시지로 메시지 상태 업데이트
     } catch (error) {
       console.error('Error:', error);
-      setMessage('오류가 발생했습니다. 다시 시도해 주세요.');
+      setMessage('오류가 발생했습니다. 다시 시도해 주세요.'); // 오류 발생 메시지 업데이트
     } finally {
-      setIsLoading(false); // 로딩 상태 종료
+      setIsLoading(false); // 로딩 상태 종료 
     }
   };
 
+  //findUserId함수를 엔터키로 호출출
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       findUserId();

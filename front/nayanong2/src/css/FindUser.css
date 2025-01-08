@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   padding: 50px;
-  height: 100vh;
+  height: 100%;
   background-color: #FFFFFF; /* 배경 흰색 */
 }
 
@@ -90,12 +90,6 @@
   font-size: 14px;
   font-weight: bold;
   color: black; /* 검정 텍스트 */
-}
-
-/* 스크롤 비활성화 */
-body.no-scroll {
-  overflow: hidden;
-  height: 100%;
 }
 
 @media (max-width: 768px) {

@@ -36,32 +36,7 @@ const UserInfo = () => {
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 여부
   const [isDeleteMode, setIsDeleteMode] = useState(false)// 회원탈퇴 모드 여부
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);//모바일모드
   
-  // useEffect(() => {
-  //   const updateScrollBehavior = () => {
-  //     if (window.innerWidth <= 768) {
-  //       document.body.classList.remove('no-scroll'); // 768px 이하일 때 스크롤 활성화
-  //     } else {
-  //       document.body.classList.add('no-scroll'); // 768px 이상일 때 스크롤 비활성화
-  //     }
-  //   };
-  
-  //   // 초기 실행
-  //   updateScrollBehavior();
-  
-  //   // 리사이즈 이벤트 리스너 등록
-  //   window.addEventListener('resize', updateScrollBehavior);
-  
-  //   // 페이지가 언마운트될 때 no-scroll 클래스 제거
-  //   return () => {
-  //     document.body.classList.remove('no-scroll'); // 클래스 제거
-  //     window.removeEventListener('resize', updateScrollBehavior); // 리스너 제거
-  //   };
-  // }, []);
-  
-  
-
   // 사용자 정보 로드
   useEffect(() => {
     const loadUserDetails = async () => {

@@ -59,10 +59,11 @@ export const recentSevenDaysDataAtom = atom({
     default: [],
 });
 
+// JSON 파일에서 가져온 데이터가 기본값으로 설정
 export const farmDataAtom = atom({
     key: "farmDataAtom",
     default: itemMappings,
-})
+}) 
 
 //선택된 아이템을 저장해주는 상태
 export const selectedItemAtom = atom({
